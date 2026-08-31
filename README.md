@@ -27,6 +27,10 @@ prototypes of factions and nested inner worlds, rebuilt as a single
 reviewable file: the whole world — data and engine — lives in
 `index.html` and diffs cleanly in git.
 
+World governance is deliberately minimal and lives whole in
+[`WORLD.md`](./WORLD.md): the repo is the record, five spine facts
+bind, everything else is soft, and no hidden canon exists.
+
 ## The demo world
 
 Chapter One crosses the First Sound by ferry: a fare paid in coin
