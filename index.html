@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Kingdom of the Four Islands</title>
+<style>
+  :root {
+    --ground: #f6f2e8;
+    --panel: #ffffff;
+    --ink: #2b2620;
+    --dim: #6f675a;
+    --sea: #1d5f6e;
+    --sea-2: #e3eef0;
+    --gold: #8a6d1f;
+    --line: #d9d2c2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 17px/1.65 Georgia, "Times New Roman", serif;
+  }
+  header {
+    padding: 1.2rem 1.5rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+  }
+  header h1 { margin: 0 0 0.2rem; font-size: 1.5rem; letter-spacing: 0.02em; }
+  #chapter-line { margin: 0; color: var(--dim); font-style: italic; }
+  .layout {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    max-width: 68rem; margin: 0 auto; padding: 1.2rem 1.5rem 4rem;
+  }
+  main { flex: 1 1 40rem; min-width: 0; }
+  aside { flex: 0 0 17rem; position: sticky; top: 1rem; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 1rem;
+  }
+  .card h2 {
+    margin: 0 0 0.5rem; font-size: 0.8rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--sea);
+  }
+  .card ul { margin: 0; padding-left: 1.1rem; }
+  .card li { margin: 0.2rem 0; }
+  li.done { color: var(--dim); text-decoration: line-through; }
+  li.current { font-weight: bold; }
+  li.locked { color: var(--dim); font-style: italic; list-style: "· "; }
+  .beat-title {
+    margin: 1.6rem 0 0.4rem; font-size: 0.85rem; font-weight: bold;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+  }
+  .prose p { margin: 0.7rem 0; }
+  .chosen { color: var(--sea); font-style: italic; margin: 1rem 0 0.2rem; }
+  .chosen::before { content: "➤ "; }
+  .examined { color: var(--dim); }
+  .examined p, .company p { margin: 0.5rem 0; }
+  .company { color: var(--dim); }
+  button {
+    font: inherit; color: var(--ink); background: var(--sea-2);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.45rem 0.8rem; margin: 0.25rem 0.35rem 0.25rem 0;
+    cursor: pointer; text-align: left;
+  }
+  button:hover { border-color: var(--sea); }
+  .list-btn { display: block; width: 100%; background: var(--panel); }
+  .list-btn.current { border-color: var(--sea); font-weight: bold; }
+  .examine-row { margin-top: 0.8rem; color: var(--dim); }
+  .examine-row button { padding: 0.25rem 0.6rem; font-size: 0.92em; }
+  #endcard {
+    border: 1px solid var(--gold); border-radius: 8px;
+    background: var(--panel); padding: 1rem 1.2rem; margin-top: 1.6rem;
+  }
+  #endcard h2 { margin-top: 0; color: var(--gold); }
+  @media (max-width: 760px) {
+    .layout { flex-direction: column; }
+    aside { position: static; flex-basis: auto; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>The Kingdom of the Four Islands</h1>
+  <p id="chapter-line"></p>
+</header>
+<div class="layout">
+<main>
+  <div id="transcript"></div>
+  <div id="actions"></div>
+  <div id="endcard" hidden></div>
+</main>
+<aside>
+  <div class="card">
+    <h2>Chapters</h2>
+    <div id="chapters"></div>
+  </div>
+  <div class="card">
+    <h2>The Crossing</h2>
+    <ul id="questlog"></ul>
+  </div>
+  <div class="card">
+    <h2>Present</h2>
+    <ul id="presences"></ul>
+  </div>
+  <div class="card">
+    <h2>Companies</h2>
+    <div id="companies"></div>
+  </div>
+  <div class="card">
+    <h2>About</h2>
+    <p style="margin:0">A one-file browser quest engine: no server, no
+       build, no network. Progress saves to this browser only.</p>
+    <button id="restart" type="button" style="margin-top:0.6rem">
+      Restart this chapter</button>
+  </div>
+</aside>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   WORLD DATA — everything the player can meet lives in these
+   four structures. The engine below never needs editing to add
+   content; see README.md for the schema.
+   ============================================================ */
+
+const EXAMINE = {
+  ferry: {
+    label: "the ferry",
+    text: "Clinker-built and tar-black, broad enough for a cart and " +
+      "two nervous horses. The Guild mark is burned into her transom: " +
+      "an oar crossed with a sounding-line."
+  },
+  soundStone: {
+    label: "the sounding-stone",
+    text: "A knee-high stone at the quay's end, cup-marked by " +
+      "centuries of thrown pebbles. Travellers toss one in for a fair " +
+      "crossing. The cup is nearly full; somebody empties it, but " +
+      "nobody has ever seen it done."
+  },
+  fourLights: {
+    label: "the four islands",
+    text: "First Island ahead, low and green under its High Keep. " +
+      "Second and Third stand off to the west, trading haze between " +
+      "them. Fourth Island is a rumour on the southern horizon that " +
+      "the ferrymen do not point at."
+  },
+  tideBell: {
+    label: "the tide-bell",
+    text: "A buoy-hung bell out in the sound, rung by the water " +
+      "itself. The Guild says a crossing begun on its third ring " +
+      "comes home dry. Nobody counts rings aloud; it is considered " +
+      "pushy."
+  }
+};
+
+/* Companies: factions that nest (sub/of), keep a seat, carry a
+   quest, and hold members. Chapters choose which are shown via
+   CHAPTER_FACTIONS. */
+const FACTIONS = {
+  crown: {
+    name: "The Crown of the Four Islands",
+    seat: "the High Keep on First Island",
+    quest: "To hold four islands under one law and one tide-calendar.",
+    members: [
+      "the Warden of First Island — the Crown's eyes at the quay"
+    ],
+    sub: ["guild"]
+  },
+  guild: {
+    name: "The Ferrymen's Guild",
+    of: "crown",
+    seat: "every quay in the kingdom",
+    quest: "To cross on any tide, and be owed for it.",
+    members: [
+      "Old Marren — ferryman of the First Sound; collects fares and news",
+      "the tide-bell — an honorary member, per a charter nobody can find"
+    ]
+  }
+};
+
+const CHAPTER_FACTIONS = {
+  ch1: ["crown", "guild"]
+};
+
+const CHAPTERS = [
+{
+  saveId: "ch1",
+  title: "Chapter One — The Ferry Out",
+  sub: "a crossing of the First Sound, played by the tide",
+  end: {
+    title: "End of Chapter One",
+    text: [
+      "First Island rises ahead, and behind it the kingdom keeps " +
+      "its own counsel: three more islands, one of them unpointed-at.",
+      "The Second Island is not yet written. Add the next chapter " +
+      "to CHAPTERS and this card will offer the way on."
+    ],
+    nextLabel: null
+  },
+  heldLine: "The Second Island (held)",
+  beats: [
+  {
+    id: "quay",
+    log: "The quay at first light",
+    presences: ["Old Marren", "the ferry", "the tide"],
+    examine: ["ferry", "soundStone", "tideBell"],
+    enter: [
+      "The quay was older than the kingdom, which the kingdom did " +
+      "not like to hear. You came down its worn stairs at first " +
+      "light with your boots in your hand, the way the notice at " +
+      "the inn had advised — the steps drink their polish, it said, " +
+      "and charge for it — and found the ferry already waiting, and " +
+      "the ferryman already watching you, with the expression of a " +
+      "man who has seen every possible way of coming down those " +
+      "stairs and has ranked them.",
+      "“Fare's a coin,” said Old Marren, “or a piece of news I " +
+      "haven't got. Guild rates. I warn you, I've got most of it.”"
+    ],
+    choices: [
+      {
+        label: "Pay the coin.",
+        text: [
+          "You paid the coin. Marren bit it, nodded at whatever his " +
+          "teeth told him, and dropped it into a box that rattled " +
+          "with a hundred years of similar decisions.",
+          "“Aboard, then. Mind the thwart; it minds back.”"
+        ]
+      },
+      {
+        label: "Offer news instead.",
+        text: [
+          "You offered the news from the mainland: the bridge at " +
+          "Carrow is down again, and the toll-house with it, and " +
+          "nobody is sorry. Marren's face performed a slow sunrise.",
+          "“That,” he said, “is worth the crossing and a cup of " +
+          "what I keep under the stern seat. Aboard. Mind the " +
+          "thwart; it minds back.”"
+        ]
+      }
+    ]
+  },
+  {
+    id: "sound",
+    log: "The First Sound",
+    presences: ["Old Marren", "the sound", "the tide-bell"],
+    examine: ["tideBell", "fourLights", "ferry"],
+    enter: [
+      "The sound took the ferry the way a road takes a cart it " +
+      "knows: some ruts, no surprises. Out in the channel the " +
+      "tide-bell rang twice and thought about a third, and Marren " +
+      "leaned on his oar with the patience of a man who is paid " +
+      "the same either way.",
+      "The islands sorted themselves out of the haze as you went: " +
+      "First ahead, Second and Third off west — and, southward, a " +
+      "smudge that the charts called Fourth Island and Marren " +
+      "called nothing at all."
+    ],
+    choices: [
+      {
+        label: "Ask about Fourth Island.",
+        text: [
+          "“Fourth Island,” you said, and pointed. Marren did not " +
+          "follow the finger.",
+          "“There's three islands in this kingdom worth a fare,” he " +
+          "said, to the oar, “and one that pays its own way. You'll " +
+          "hear it named in the Keep, if the Warden likes you. Not " +
+          "from a ferryman. Guild rule.” He said it the way you say " +
+          "a thing that is not a Guild rule."
+        ]
+      },
+      {
+        label: "Let the silence do the asking.",
+        text: [
+          "You looked south and said nothing, which is a question " +
+          "in any language. Marren answered the water instead.",
+          "“Third ring's coming,” he said, as the bell obliged. " +
+          "“Dry crossing. You'll do well enough on First — and if " +
+          "anyone in the Keep asks what you saw to the south, you " +
+          "saw haze.” He watched you until you agreed with him."
+        ]
+      }
+    ]
+  },
+  {
+    id: "landfall",
+    log: "Landfall on First Island",
+    presences: ["the Warden", "the quay of First Island", "Old Marren"],
+    examine: ["fourLights", "soundStone"],
+    enter: [
+      "First Island received the ferry with a stone arm around a " +
+      "green harbour, and the Warden received you at the top of the " +
+      "water-stairs: grey, brisk, and carrying a ledger the way " +
+      "other people carry a walking-stick.",
+      "“Name, business, and how many rings when you crossed,” said " +
+      "the Warden, pen ready. “The Crown counts what the Guild " +
+      "won't say aloud.”"
+    ],
+    choices: [
+      {
+        label: "Answer all three, truthfully.",
+        text: [
+          "You gave your name, your business, and — to a small " +
+          "intake of breath from the ferry behind you — the count " +
+          "of rings. The Warden wrote all three without comment, " +
+          "and ruled a line under the day.",
+          "“Welcome to First Island,” the Warden said, closing the " +
+          "ledger. “The Keep is up the hill. The kingdom is bigger " +
+          "than it looks from the water — most things here are.”"
+        ]
+      }
+    ]
+  }
+  ]
+}
+];
+
+/* ============================================================
+   ENGINE — chapter picker, quest log, presences, companies,
+   examinables, choices, endcards, per-chapter localStorage
+   saves replayed from a structural history.
+   ============================================================ */
+
+const CURRENT_KEY = "four-islands-current";
+const saveKey = (i) => "four-islands-" + CHAPTERS[i].saveId;
+
+let currentChapter = 0;
+let state = { beat: 0, history: [] };
+/* history: {kind:"beat"|"chosen"|"examined"|"faction", beat, choice, key} —
+   saves hold structure, not prose; prose re-renders from the data. */
+
+const $ = (id) => document.getElementById(id);
+const beats = () => CHAPTERS[currentChapter].beats;
+
+function loadCurrentChapter() {
+  try {
+    const raw = localStorage.getItem(CURRENT_KEY);
+    const idx = CHAPTERS.findIndex((c) => c.saveId === raw);
+    if (idx >= 0) currentChapter = idx;
+  } catch (e) { /* fresh start */ }
+}
+function loadState() {
+  state = { beat: 0, history: [] };
+  try {
+    const s = JSON.parse(localStorage.getItem(saveKey(currentChapter)));
+    if (s && typeof s.beat === "number" && Array.isArray(s.history)) state = s;
+  } catch (e) { /* fresh start */ }
+}
+function saveState() {
+  try {
+    localStorage.setItem(saveKey(currentChapter), JSON.stringify(state));
+    localStorage.setItem(CURRENT_KEY, CHAPTERS[currentChapter].saveId);
+  } catch (e) { /* unsaved is still played */ }
+}
+
+function addParas(container, paras, cls) {
+  const div = document.createElement("div");
+  div.className = cls;
+  for (const p of paras) {
+    const el = document.createElement("p");
+    el.textContent = p;
+    div.appendChild(el);
+  }
+  container.appendChild(div);
+}
+
+function renderHistoryEntry(entry) {
+  const t = $("transcript");
+  if (entry.kind === "beat") {
+    const b = beats()[entry.beat];
+    if (!b) return;
+    const h = document.createElement("div");
+    h.className = "beat-title";
+    h.textContent = b.log;
+    t.appendChild(h);
+    addParas(t, b.enter, "prose");
+  } else if (entry.kind === "chosen") {
+    const b = beats()[entry.beat];
+    const c = b && b.choices[entry.choice];
+    if (!c) return;
+    const label = document.createElement("p");
+    label.className = "chosen";
+    label.textContent = c.label;
+    t.appendChild(label);
+    addParas(t, c.text, "prose");
+  } else if (entry.kind === "examined") {
+    if (!EXAMINE[entry.key]) return;
+    addParas(t, [EXAMINE[entry.key].text], "examined");
+  } else if (entry.kind === "faction") {
+    const f = FACTIONS[entry.key];
+    if (!f) return;
+    const h = document.createElement("div");
+    h.className = "beat-title";
+    h.textContent = f.name;
+    t.appendChild(h);
+    const lines = [];
+    if (f.of && FACTIONS[f.of]) lines.push("Of " + FACTIONS[f.of].name + ".");
+    lines.push("Seat: " + f.seat + ".");
+    lines.push("Quest: " + f.quest);
+    for (const m of f.members) lines.push(m + ".");
+    if (f.sub && f.sub.length) {
+      lines.push("Companies within: " +
+        f.sub.map((k) => FACTIONS[k].name).join("; ") + ".");
+    }
+    addParas(t, lines, "company");
+  }
+}
+
+function renderChapterLine() {
+  const ch = CHAPTERS[currentChapter];
+  $("chapter-line").textContent = ch.title + " · " + ch.sub;
+}
+
+function renderChapters() {
+  const box = $("chapters");
+  box.innerHTML = "";
+  CHAPTERS.forEach((ch, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "list-btn" + (i === currentChapter ? " current" : "");
+    btn.textContent = ch.title;
+    btn.addEventListener("click", () => switchChapter(i));
+    box.appendChild(btn);
+  });
+}
+
+function renderQuestLog() {
+  const ul = $("questlog");
+  ul.innerHTML = "";
+  const ch = CHAPTERS[currentChapter];
+  ch.beats.forEach((b, i) => {
+    if (i > state.beat) return; // stages ahead stay unspoiled
+    const li = document.createElement("li");
+    li.textContent = b.log;
+    li.className = i < state.beat ? "done" : "current";
+    ul.appendChild(li);
+  });
+  const li = document.createElement("li");
+  li.className = "locked";
+  li.textContent = ch.heldLine;
+  ul.appendChild(li);
+}
+
+function renderPresences() {
+  const ul = $("presences");
+  ul.innerHTML = "";
+  const bs = beats();
+  const b = bs[Math.min(state.beat, bs.length - 1)];
+  for (const p of b.presences) {
+    const li = document.createElement("li");
+    li.textContent = p;
+    ul.appendChild(li);
+  }
+}
+
+function renderCompanies() {
+  const box = $("companies");
+  box.innerHTML = "";
+  const ids = CHAPTER_FACTIONS[CHAPTERS[currentChapter].saveId] || [];
+  for (const key of ids) {
+    if (!FACTIONS[key]) continue;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "list-btn";
+    btn.textContent = FACTIONS[key].name;
+    btn.addEventListener("click", () => showFaction(key));
+    box.appendChild(btn);
+  }
+}
+
+function showFaction(key) {
+  const entry = { kind: "faction", key };
+  state.history.push(entry);
+  renderHistoryEntry(entry);
+  saveState();
+  scrollToEnd();
+}
+
+function renderEndcard() {
+  const card = $("endcard");
+  card.innerHTML = "";
+  const ch = CHAPTERS[currentChapter];
+  const h = document.createElement("h2");
+  h.textContent = ch.end.title;
+  card.appendChild(h);
+  for (const p of ch.end.text) {
+    const el = document.createElement("p");
+    el.textContent = p;
+    card.appendChild(el);
+  }
+  if (ch.end.nextLabel && currentChapter + 1 < CHAPTERS.length) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = ch.end.nextLabel;
+    btn.addEventListener("click", () => switchChapter(currentChapter + 1));
+    card.appendChild(btn);
+  }
+  card.hidden = false;
+}
+
+function renderActions() {
+  const box = $("actions");
+  box.innerHTML = "";
+  if (state.beat >= beats().length) {
+    renderEndcard();
+    return;
+  }
+  $("endcard").hidden = true;
+  const b = beats()[state.beat];
+
+  const choices = document.createElement("div");
+  b.choices.forEach((c, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = c.label;
+    btn.addEventListener("click", () => choose(i));
+    choices.appendChild(btn);
+  });
+  if (b.choices.length === 0) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = b.continueLabel || "Go on.";
+    btn.addEventListener("click", () => {
+      state.beat++;
+      saveState();
+      renderAll();
+      scrollToEnd();
+    });
+    choices.appendChild(btn);
+  }
+  box.appendChild(choices);
+
+  if (b.examine && b.examine.length) {
+    const row = document.createElement("div");
+    row.className = "examine-row";
+    const lead = document.createElement("span");
+    lead.textContent = "Look at: ";
+    row.appendChild(lead);
+    for (const key of b.examine) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = EXAMINE[key].label;
+      btn.addEventListener("click", () => examine(key));
+      row.appendChild(btn);
+    }
+    box.appendChild(row);
+  }
+}
+
+function scrollToEnd() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function examine(key) {
+  const entry = { kind: "examined", key };
+  state.history.push(entry);
+  renderHistoryEntry(entry);
+  saveState();
+  scrollToEnd();
+}
+
+function choose(i) {
+  const entry = { kind: "chosen", beat: state.beat, choice: i };
+  state.history.push(entry);
+  renderHistoryEntry(entry);
+  state.beat++;
+  if (state.beat < beats().length) {
+    const beatEntry = { kind: "beat", beat: state.beat };
+    state.history.push(beatEntry);
+    renderHistoryEntry(beatEntry);
+  }
+  saveState();
+  renderQuestLog();
+  renderPresences();
+  renderActions();
+  scrollToEnd();
+}
+
+function ensureOpened() {
+  if (state.history.length === 0) {
+    state.history.push({ kind: "beat", beat: 0 });
+    saveState();
+  }
+}
+
+function switchChapter(i) {
+  if (i === currentChapter) return;
+  currentChapter = i;
+  loadState();
+  ensureOpened();
+  saveState();
+  renderAll();
+  window.scrollTo({ top: 0 });
+}
+
+function renderAll() {
+  $("transcript").innerHTML = "";
+  for (const entry of state.history) renderHistoryEntry(entry);
+  renderChapterLine();
+  renderChapters();
+  renderQuestLog();
+  renderPresences();
+  renderCompanies();
+  renderActions();
+}
+
+$("restart").addEventListener("click", () => {
+  if (!confirm("Restart this chapter? Its transcript will be cleared.")) return;
+  try { localStorage.removeItem(saveKey(currentChapter)); } catch (e) {}
+  state = { beat: 0, history: [{ kind: "beat", beat: 0 }] };
+  saveState();
+  renderAll();
+});
+
+loadCurrentChapter();
+loadState();
+ensureOpened();
+renderAll();
+</script>
+</body>
+</html>
