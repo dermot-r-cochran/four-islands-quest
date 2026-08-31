@@ -65,4 +65,11 @@ current data.
 
 ## License
 
-MIT — see `LICENSE`.
+Dual-licensed by section — see `CONTENT-LICENSE.md` for the full
+statement:
+
+- **Engine** (everything outside `index.html`'s WORLD DATA section)
+  — MIT, see `LICENSE`. Fork it freely.
+- **Demo world content** (the prose and data in the WORLD DATA
+  section) — CC BY 4.0. Build on it with attribution, or replace it
+  with your own world, which is then yours alone.
