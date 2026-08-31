@@ -1,6 +1,6 @@
 # WORLD.md — the record and its bindings
 
-Governance of the Kingdom of the Four Islands, kept deliberately
+Governance of the Kingdom of the Four Sounds, kept deliberately
 minimal. This whole file is the canon apparatus; there is no other.
 
 ## The rule
@@ -38,4 +38,4 @@ yourself is yours alone.
 
 ## Register
 
-The Four Islands stays general-audience.
+The Four Sounds stays general-audience.

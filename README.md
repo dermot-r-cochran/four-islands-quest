@@ -1,4 +1,7 @@
-# The Kingdom of the Four Islands
+# The Kingdom of the Four Sounds
+
+The kingdom is named for its waters; the repository keeps its
+founding name, `four-islands-quest` — there are still four islands.
 
 A one-file browser quest engine, with a small demo world aboard.
 Open `index.html` in any browser — no server, no build, no
