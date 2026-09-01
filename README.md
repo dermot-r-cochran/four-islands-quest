@@ -55,6 +55,14 @@ No browser, no JavaScript runtime, nothing to install — it parses the
 world's object literals rather than executing them. See
 [`teller/README.md`](./teller/README.md).
 
+## Forking it
+
+The demo ends where your world begins: replace the four data structures at
+the top of `index.html` and the engine below them needs no edits at all.
+[`CLAUDE.md`](./CLAUDE.md) is the house guide — the schema, the `saveId`
+rule, what not to add, and what to run before committing. It is written for
+Claude Code and reads perfectly well as documentation for a person.
+
 ## Checks
 
 CI runs on every push and pull request, and installs nothing — the engine
