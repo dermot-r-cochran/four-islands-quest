@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Everything here runs on the Python that ships with the runner.
+# The engine has no build and the tools have no dependencies, so CI
+# installs nothing — if that ever stops being true, something has gone
+# wrong with the repository rather than with this file.
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse gate
+        run: python3 -m compileall -q teller tools
+
+      - name: Validate the world data
+        run: python3 tools/validate.py
+
+      - name: The engine's literals parse
+        run: |
+          python3 - <<'PY'
+          import sys; sys.path.insert(0, "teller")
+          import questfile
+          data = questfile.load_quest(questfile.find_quest("."))
+          assert data["chapters"], "CHAPTERS did not parse"
+          print(f"{len(data['chapters'])} chapters parsed from index.html")
+          PY
+
+      - name: Play the quest end to end
+        run: |
+          set -o pipefail
+          { yes 1 | head -200; echo q; } > /tmp/in.txt
+          python3 teller/teller.py --quest < /tmp/in.txt > /tmp/out.txt
+          grep -q "End of" /tmp/out.txt || { cat /tmp/out.txt; exit 1; }
+          echo "playthrough reached an endcard"
+
+      - name: The shared tool stays world-agnostic
+        run: |
+          # teller/ is kept byte-identical with another repository, so it
+          # must never learn this world's vocabulary.
+          if grep -rniE "four sounds|marren|ferrymen|first island" teller/*.py; then
+            echo "the shared tool has picked up world-specific content"
+            exit 1
+          fi
+          echo "tool carries no world content"
+
+      - name: No stray build artifacts
+        run: |
+          if git ls-files | grep -E "__pycache__|\.pyc$|\.teller-progress\.json"; then
+            echo "build artifacts are tracked; add them to .gitignore"
+            exit 1
+          fi
+          echo "tree is clean"

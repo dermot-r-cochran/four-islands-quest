@@ -55,6 +55,24 @@ No browser, no JavaScript runtime, nothing to install — it parses the
 world's object literals rather than executing them. See
 [`teller/README.md`](./teller/README.md).
 
+## Checks
+
+CI runs on every push and pull request, and installs nothing — the engine
+has no build and the tools have no dependencies:
+
+```bash
+python3 -m compileall -q teller tools   # everything parses
+python3 tools/validate.py               # the world data holds together
+```
+
+`tools/validate.py` is the useful one. It reads the world out of
+`index.html` and fails on what is always wrong — a beat looking at an
+examinable that does not exist, two chapters sharing a `saveId`, a company
+referencing a company that isn't there, an endcard offering a chapter that
+follows nothing — and warns on judgement calls, like an examinable nothing
+looks at. CI also plays the quest end to end and checks that no build
+artifacts are tracked.
+
 ## Extending
 
 All content lives in four structures at the top of the script; the
