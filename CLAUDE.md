@@ -31,9 +31,16 @@ consequences of it:
   `teller/questfile.py` parses its literals without executing them — but
   round-tripping the file would lose formatting and comments and would put a
   program in a file a human edits. Author by hand or with an assistant.
-- Don't propose porting this onto a framework, engine, or server. The
-  single-file shape is the point; the engine descends from heavier prototypes
-  that were deliberately left behind.
+- Don't propose porting this onto a framework, engine, or server, and don't
+  propose an authoring or builder mode. The single-file shape is the point.
+  The reason is worth knowing, because it is why the heavier prototypes this
+  descends from were left behind: **when you author *through* a builder, the
+  artifact stops being your content and becomes the system's state** — not
+  diffable, not readable end to end, not reviewable as a story. And builders
+  are excellent at structure and useless at voice. A world that is mostly
+  structure earns one; this is a world of trivial structure and nothing but
+  voice, so the builder would have almost nothing to do while the document
+  still had everything.
 
 ## Commands
 
