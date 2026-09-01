@@ -42,11 +42,31 @@ whose `## Log` becomes a record you can query with `a WORD` while reading.
 This repository has no such directory; the mode is there because the tool
 is written against the shape, not against this world.
 
+## Pictures
+
+The tool can offer pictures beside a story — but only ones the record
+itself names, in a fragment's header, in a log entry it cites, or in an
+optional `reference/fragments.json` sidecar. Nothing is matched by
+guesswork.
+
+This repository ships no pictures, so none are ever shown here. The
+capability travels with the shared code because the tool is written
+against the shape, not against any one world. `--images off` disables it
+outright; images are never decoded or interpreted, only handed to the
+terminal or the system viewer.
+
 ## What it does not do
 
 **It invents nothing.** There is no model here and no generation: every
 word it shows you is a word the author wrote. Authored branching is real
 and this plays it; what it cannot do is make a choice nobody wrote.
+
+## A shared tool
+
+`teller.py`, `questfile.py` and `images.py` are kept **byte-identical**
+with the copy in the author's other story repository, on the same
+discipline as any shared script: change one, land the same change in the
+other in the same piece of work. Nothing world-specific lives in them.
 
 ## Scope and licence
 

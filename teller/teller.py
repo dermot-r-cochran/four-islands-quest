@@ -25,7 +25,8 @@ import textwrap
 from dataclasses import dataclass, field
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import questfile  # noqa: E402  (sibling module, stdlib-only)
+import images  # noqa: E402  (sibling modules, stdlib-only)
+import questfile  # noqa: E402
 
 PROGRESS_FILE = ".teller-progress.json"
 
@@ -104,6 +105,7 @@ class Fragment:
     status: str
     header: str
     passages: list[str] = field(default_factory=list)
+    pictures: list[str] = field(default_factory=list)
 
     @property
     def approved(self) -> bool:
@@ -191,20 +193,66 @@ HELP = """\
   [enter]   the next passage           o        what this fragment leaves open
   n / b     next / previous fragment   a WORD   ask the record about a word
   g N       go to fragment N           l        list fragments
-  r         re-read this fragment      q        save and leave
+  v N       show the Nth picture       r        re-read this fragment
+  q         save and leave
 """
 
 
 class Teller:
-    def __init__(self, root: str, drafts: bool, pace: int) -> None:
+    def __init__(self, root: str, drafts: bool, pace: int,
+                 image_mode: str = "auto") -> None:
         self.root = root
         self.pace = max(1, pace)
+        self.image_mode = image_mode
         allf = load_fragments(root)
         self.fragments = allf if drafts else [f for f in allf if f.approved]
         self.log = load_log(root)
         self.idx = 0
         self.pos = 0
+        self._attach_pictures()
         self._load_progress()
+
+    # ---- pictures the record names --------------------------------
+    def _attach_pictures(self) -> None:
+        if self.image_mode == "off":
+            return
+        index = images.index_media(self.root)
+        if not index:
+            return
+        side = images.sidecar(self.root)
+        by_number = {e.number: e for e in self.log}
+        for f in self.fragments:
+            found = images.named_in(f.header, index)
+            for n in sorted({int(x) for x in
+                             re.findall(r"Logs?\s+(\d+)", f.header)}):
+                entry = by_number.get(n)
+                if not entry:
+                    continue
+                for path in images.named_in(entry.body, index):
+                    if path not in found:
+                        found.append(path)
+            for name in (side.get(f"{f.number:03d}", [])
+                         + side.get(str(f.number), [])):
+                path = index.get(name) or index.get(name.split("/")[-1])
+                if path and path not in found:
+                    found.append(path)
+            f.pictures = found
+
+    def view(self, arg: str) -> None:
+        pics = self.current.pictures
+        print()
+        if not pics:
+            print(dim("  the record names no picture for this fragment."))
+            print()
+            return
+        try:
+            path = pics[(int(arg) if arg.strip() else 1) - 1]
+        except (ValueError, IndexError):
+            print(dim("  show which? (v 1)"))
+            print()
+            return
+        print(dim("  " + images.show(path, self.image_mode)))
+        print()
 
     # ---- progress -------------------------------------------------
     def _load_progress(self) -> None:
@@ -231,6 +279,11 @@ class Teller:
         print(bold(f"Fragment {f.number:03d} — {f.title}"))
         tag = "ratified" if f.approved else "DRAFT — proposed, not canon"
         print(dim(f"  {tag} · {len(f.passages)} passages"))
+        if f.pictures:
+            items = " · ".join(
+                f"{i} {os.path.splitext(os.path.basename(p))[0]}"
+                for i, p in enumerate(f.pictures, 1))
+            print(dim(wrap("the record shows: " + items + "   (v N)", "  ")))
         print()
 
     def go(self, i: int) -> None:
@@ -342,6 +395,8 @@ class Teller:
             self.ask(arg)
         elif cmd in ("l", "list"):
             self.listing()
+        elif cmd in ("v", "view", "show"):
+            self.view(arg)
         elif cmd in ("r", "reread"):
             self.pos = 0
             self.announce()
@@ -612,6 +667,9 @@ def main() -> int:
     ap.add_argument("--pace", type=int, default=1,
                     help="passages revealed per keypress (default: 1)")
     ap.add_argument("--list", action="store_true", help="list fragments and exit")
+    ap.add_argument("--images", default="auto",
+                    choices=["auto", "inline", "open", "off"],
+                    help="how to show pictures the record names (default: auto)")
     ap.add_argument("--quest", action="store_true",
                     help="play the hand-authored chapters from quest/index.html")
     args = ap.parse_args()
@@ -628,7 +686,7 @@ def main() -> int:
             return 0
         QuestPlayer(root, data).run()
         return 0
-    t = Teller(root, args.drafts, args.pace)
+    t = Teller(root, args.drafts, args.pace, args.images)
     if args.list:
         for f in t.fragments:
             print(f.label)
