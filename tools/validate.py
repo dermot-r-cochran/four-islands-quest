@@ -3,7 +3,7 @@
 
 Checks whatever the repository actually contains: the quest engine's world
 data if there is a quest file, the fragments if there is a `scenes/`
-directory, or both. Standard library only — nothing to install, in CI or out.
+directory, the long-lived documents any repository keeps, or all of them. Standard library only — nothing to install, in CI or out.
 
 Failures are things that are always wrong (a beat pointing at an examinable
 that does not exist, two chapters sharing a save id). Warnings are judgement
@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -27,6 +28,22 @@ import questfile  # noqa: E402
 
 TITLE_RE = re.compile(
     r"^#\s*Fragment\s+(\d+)\s*[—-]\s*(.+?)\s*\((APPROVED[^)]*|DRAFT)\)\s*$")
+
+# Long-lived documents, and the first heading each must keep. An editing
+# script that writes to the wrong file handle clobbers one document with
+# another's contents, and every other check here still passes because the
+# result is a structurally fine Markdown file — so the cheapest guard is
+# that each document still says what it is. Entries marked append-only are
+# additionally checked against git for lost sections. Files a repository
+# does not have are skipped, so this table can name documents from either.
+DOCUMENTS = (
+    # path, expected first line, append-only
+    ("CLAUDE.md", "# CLAUDE.md", False),
+    ("private-canon.md", "# Private canon log", True),
+    ("CHANGELOG.md", "# Changelog", True),
+)
+
+SECTION_RE = re.compile(r"^###\s", re.M)
 
 fails: list[str] = []
 warns: list[str] = []
@@ -137,6 +154,49 @@ def check_quest(root: str) -> bool:
     return True
 
 
+def _committed(root: str, rel: str) -> str | None:
+    """The file as of HEAD, or None if git cannot say."""
+    try:
+        out = subprocess.run(["git", "show", f"HEAD:{rel}"], cwd=root,
+                             capture_output=True, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return out.stdout.decode("utf-8", "replace")
+
+
+def check_documents(root: str) -> bool:
+    """Each long-lived document still says what it is, and append-only ones
+    have not lost sections since the last commit."""
+    seen = False
+    for rel, heading, append_only in DOCUMENTS:
+        full = os.path.join(root, rel)
+        if not os.path.isfile(full):
+            continue
+        seen = True
+        with open(full, encoding="utf-8") as fh:
+            text = fh.read()
+        first = text.splitlines()[0].strip() if text.strip() else ""
+        if not first.startswith(heading):
+            fail(f"{rel} does not open with {heading!r} (found {first!r}) — "
+                 "it may have been overwritten with another file's contents")
+            continue
+        if not append_only:
+            continue
+        before = _committed(root, rel)
+        if before is None:
+            continue
+        was, now = (len(SECTION_RE.findall(before)),
+                    len(SECTION_RE.findall(text)))
+        if now < was:
+            fail(f"{rel} lost {was - now} section(s) since the last commit "
+                 f"({was} -> {now}) — append-only, so this is never right")
+    if seen:
+        kept = [r for r, _h, _a in DOCUMENTS
+                if os.path.isfile(os.path.join(root, r))]
+        print(f"  documents: {len(kept)} checked ({', '.join(kept)})")
+    return seen
+
+
 def check_fragments(root: str) -> bool:
     scenes = os.path.join(root, "scenes")
     if not os.path.isdir(scenes):
@@ -192,7 +252,8 @@ def main() -> int:
     args = ap.parse_args()
     root = os.path.abspath(args.repo)
     print(f"validating {root}")
-    found = [check_quest(root), check_fragments(root)]
+    found = [check_quest(root), check_fragments(root),
+             check_documents(root)]
     if not any(found):
         print("nothing to validate: no quest file and no scenes/ directory")
         return 1
