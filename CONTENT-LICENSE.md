@@ -6,8 +6,9 @@ forked freely while the demo world's writing carries attribution.
 ## Engine — MIT
 
 Everything outside the WORLD DATA section of `index.html` — the
-engine script, page markup, styles, and repository scaffolding — is
-licensed under the MIT License. See `LICENSE`.
+engine script, page markup, styles, the `teller/` terminal player, and
+repository scaffolding — is licensed under the MIT License. See
+`LICENSE`.
 
 ## Demo world content — CC BY 4.0
 

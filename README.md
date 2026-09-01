@@ -41,6 +41,20 @@ or news, a tide-bell nobody counts aloud, three islands worth a
 fare and a fourth that pays its own way. The endcard holds **The
 Second Island** open — the demo ends where your world begins.
 
+## Playing in a terminal
+
+`teller/` is a second player for the same world: a dependency-free Python
+CLI that reads the chapters straight out of `index.html` and runs them in
+a terminal, choices, examinables, companies and all.
+
+```bash
+python3 teller/teller.py --quest
+```
+
+No browser, no JavaScript runtime, nothing to install — it parses the
+world's object literals rather than executing them. See
+[`teller/README.md`](./teller/README.md).
+
 ## Extending
 
 All content lives in four structures at the top of the script; the
