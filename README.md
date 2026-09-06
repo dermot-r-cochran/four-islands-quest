@@ -5,7 +5,9 @@ founding name, `four-islands-quest` — there are still four islands.
 
 A one-file browser quest engine, with a small demo world aboard.
 Open `index.html` in any browser — no server, no build, no
-dependencies, no network. Progress saves to that browser's
+dependencies, no network — or play it as served from `main` at
+https://dermot-r-cochran.github.io/four-islands-quest/ , which is the
+same file and nothing else. Progress saves to that browser's
 localStorage only, per chapter, and the page degrades to a fresh
 start when storage is unavailable.
 
@@ -93,6 +95,10 @@ python3 -m compileall -q teller tools sandbox   # everything parses
 python3 tools/validate.py                       # the world data holds together
 python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 ```
+
+A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
+every push to `main`: it copies that one file into a staging directory and
+hands it to Pages, and installs nothing either.
 
 `tools/validate.py` is the useful one. It reads the world out of
 `index.html` and fails on what is always wrong — a beat looking at an

@@ -2,3 +2,4 @@
 .ecosystem-state.json
 __pycache__/
 *.pyc
+_site/

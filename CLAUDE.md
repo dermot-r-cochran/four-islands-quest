@@ -74,6 +74,13 @@ parse gate, the sandbox's `--check`, a full scripted playthrough, a guard
 that the shared tool stays world-agnostic, and a check that no build
 artifacts are tracked. CI installs nothing, and should stay that way.
 
+`.github/workflows/pages.yml` publishes `index.html` to GitHub Pages on
+every push to `main` (https://dermot-r-cochran.github.io/four-islands-quest/).
+It stages that one file and nothing else — the site is the quest; the
+tools, the sandbox and the docs stay in the repository — and it installs
+nothing either. Saves on the site live in that origin's localStorage, under
+the same `four-islands-` keys as anywhere else.
+
 ## The world data
 
 `index.html`, between the `WORLD DATA` and `ENGINE` banners.
