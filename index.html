@@ -369,33 +369,39 @@ function addParas(container, paras, cls) {
     div.appendChild(el);
   }
   container.appendChild(div);
+  return div;
 }
 
+/* Renders one history entry into the transcript and returns the first
+   element it added, so the page can scroll to what is new rather than
+   to the bottom — which, on a narrow screen, is the sidebar. */
 function renderHistoryEntry(entry) {
   const t = $("transcript");
   if (entry.kind === "beat") {
     const b = beats()[entry.beat];
-    if (!b) return;
+    if (!b) return null;
     const h = document.createElement("div");
     h.className = "beat-title";
     h.textContent = b.log;
     t.appendChild(h);
     addParas(t, b.enter, "prose");
+    return h;
   } else if (entry.kind === "chosen") {
     const b = beats()[entry.beat];
     const c = b && b.choices[entry.choice];
-    if (!c) return;
+    if (!c) return null;
     const label = document.createElement("p");
     label.className = "chosen";
     label.textContent = c.label;
     t.appendChild(label);
     addParas(t, c.text, "prose");
+    return label;
   } else if (entry.kind === "examined") {
-    if (!EXAMINE[entry.key]) return;
-    addParas(t, [EXAMINE[entry.key].text], "examined");
+    if (!EXAMINE[entry.key]) return null;
+    return addParas(t, [EXAMINE[entry.key].text], "examined");
   } else if (entry.kind === "faction") {
     const f = FACTIONS[entry.key];
-    if (!f) return;
+    if (!f) return null;
     const h = document.createElement("div");
     h.className = "beat-title";
     h.textContent = f.name;
@@ -410,7 +416,9 @@ function renderHistoryEntry(entry) {
         f.sub.map((k) => FACTIONS[k].name).join("; ") + ".");
     }
     addParas(t, lines, "company");
+    return h;
   }
+  return null;
 }
 
 function renderChapterLine() {
@@ -478,9 +486,9 @@ function renderCompanies() {
 function showFaction(key) {
   const entry = { kind: "faction", key };
   state.history.push(entry);
-  renderHistoryEntry(entry);
+  const el = renderHistoryEntry(entry);
   saveState();
-  scrollToEnd();
+  scrollToNew(el);
 }
 
 function renderEndcard() {
@@ -529,9 +537,17 @@ function renderActions() {
     btn.textContent = b.continueLabel || "Go on.";
     btn.addEventListener("click", () => {
       state.beat++;
+      let el = null;
+      if (state.beat < beats().length) {
+        const beatEntry = { kind: "beat", beat: state.beat };
+        state.history.push(beatEntry);
+        el = renderHistoryEntry(beatEntry);
+      }
       saveState();
-      renderAll();
-      scrollToEnd();
+      renderQuestLog();
+      renderPresences();
+      renderActions();
+      scrollToNew(el || $("endcard"));
     });
     choices.appendChild(btn);
   }
@@ -554,22 +570,27 @@ function renderActions() {
   }
 }
 
-function scrollToEnd() {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+/* Bring what was just added to the top of the view, so the reader lands
+   on the new text with the next choices below it. Scrolling to the page
+   bottom overshot: on a narrow screen the sidebar stacks under the story,
+   so the bottom of the page was the About card, not the choices. */
+function scrollToNew(el) {
+  if (!el || !el.scrollIntoView) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function examine(key) {
   const entry = { kind: "examined", key };
   state.history.push(entry);
-  renderHistoryEntry(entry);
+  const el = renderHistoryEntry(entry);
   saveState();
-  scrollToEnd();
+  scrollToNew(el);
 }
 
 function choose(i) {
   const entry = { kind: "chosen", beat: state.beat, choice: i };
   state.history.push(entry);
-  renderHistoryEntry(entry);
+  const el = renderHistoryEntry(entry);
   state.beat++;
   if (state.beat < beats().length) {
     const beatEntry = { kind: "beat", beat: state.beat };
@@ -580,7 +601,7 @@ function choose(i) {
   renderQuestLog();
   renderPresences();
   renderActions();
-  scrollToEnd();
+  scrollToNew(el);
 }
 
 function ensureOpened() {
