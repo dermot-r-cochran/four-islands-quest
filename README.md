@@ -28,7 +28,9 @@ transcript. Two sidebar systems frame the story:
 The engine descends from the author's earlier Evennia-based
 prototypes of factions and nested inner worlds, rebuilt as a single
 reviewable file: the whole world — data and engine — lives in
-`index.html` and diffs cleanly in git.
+`index.html` and diffs cleanly in git. An Evennia runner may yet
+stand beside that file, for what one file cannot do; the condition
+is in `CLAUDE.md`.
 
 World governance is deliberately minimal and lives whole in
 [`WORLD.md`](./WORLD.md): the repo is the record, five spine facts

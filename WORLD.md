@@ -19,6 +19,10 @@ The few facts that make this world this world:
 - The tide-bell is not counted aloud.
 - Fourth Island is not pointed at by ferrymen.
 - Companies keep a seat and carry a quest.
+- Time can be travelled, and no established past event is ever
+  altered by it: what the record holds of the past stays as it
+  holds it. A traveller may witness it, learn from it, and bring
+  back what was never written down; the written stays written.
 
 Everything else is soft: free to be extended, revised, or
 contradicted by a better idea in a later chapter.
@@ -28,6 +32,10 @@ contradicted by a better idea in a later chapter.
 Deliberate mysteries are unspecified in fact, not merely in text.
 There is nothing behind Fourth Island until it is written; an
 absence in the record is an absence in the world.
+
+The same line bounds time travel. *Established* means on `main`
+and nothing more: the unwritten past is open to a traveller, and
+the written past is fixed for one.
 
 ## Who writes the world
 
