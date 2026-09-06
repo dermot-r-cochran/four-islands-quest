@@ -2,7 +2,8 @@
 
 A mini ecosystem of the Kingdom of the Four Sounds, one tide at a time.
 Not a chapter and not a player: a small living model of the waters the
-kingdom is named for, and of the two companies that work them every tide.
+kingdom is named for, and of the two companies that work them every tide
+— and, in its own edition, of Fourth Island, which nobody points at.
 
 ```bash
 python3 sandbox/ecosystem.py                       # one tide-cycle, seed 1
@@ -11,7 +12,8 @@ python3 sandbox/ecosystem.py --quiet               # the summary only
 python3 sandbox/ecosystem.py --ledger              # the Warden's ledger after the run
 python3 sandbox/ecosystem.py --json                # the final state, for tools
 python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page
-python3 sandbox/ecosystem.py --check               # the invariants hold
+python3 sandbox/ecosystem.py --edition fourth      # Fourth Island's own account
+python3 sandbox/ecosystem.py --check               # the invariants hold, both editions
 ```
 
 ## What it needs
@@ -127,7 +129,8 @@ page in the quest's palette, with the companies on the water at its head
 and a link back to the quest. It leaves the Warden's ledger out, since
 the bell is not counted aloud, and `--check` fails if a page ever shows
 it. The Pages workflow runs this once a day with the date as the seed, so
-every reader sees the same Sounds for the same day, at `/sounds/`.
+every reader sees the same Sounds for the same day, at `/sounds/`, and
+the same Fourth Island at `/fourth/`; each page points at the other.
 
 ## Between visits
 
@@ -152,12 +155,30 @@ the sandbox can carry, and `--check` proves it.
 
 ## Fourth Island
 
-Listed, and not simulated. `WORLD.md` holds one line of it — a few
-hermits, and nothing more — and the sandbox holds it to exactly that: no
-populations, no events, a summary line that says *not simulated — a few
-hermits, and nothing else is written of it*. Gulls that go south leave the record; the ones that come back do
-not say where they were. `--check` fails if a run ever puts anything on
-Fourth Island or names it in a chronicle line.
+Its own edition, `--edition fourth`, running the ground `WORLD.md` wrote
+for it: one island south of the three, alone, the Sounds ending on its
+northern shore and open sea beyond; a hill with a stony shore, cliffs, a
+wood and pools; gulls on the cliffs, goats on the crags, rabbits and
+harriers on the hill, squirrels and sparrowhawks in the wood,
+dragonflies over the pools, shellfish on the shore and the Sounds'
+herring off it. No narrows join it to anything, so nothing crosses on
+foot: no deer, no wolves, no foxes, and nothing kept.
+
+**The hermits are a presence, never a count.** They gather on the shore
+in fair weather and take a goat now and then; their smoke shows on a
+calm tide. There is no ferry, so no fare, no Guild and no Warden, and
+nobody counts a tide aloud — the kingdom's one tide-calendar is borrowed
+for the numbering. The account is what a hermit might have noticed, in
+its own words for the same events, and a quiet tide there has several
+ways of being quiet. `--check` fails if the account ever mentions the
+ferry, a fare, the Guild, the Warden, a ledger or a quay, counts the
+bell, or counts the hermits.
+
+**In the Sounds edition it is listed and not simulated**, because
+ferrymen do not point at it, and `--check` fails if that run ever puts
+anything on it or names it in a chronicle line. Gulls that go south
+leave the ferryman's record; on Fourth Island gulls come in off the sea;
+neither account ties the two, though `WORLD.md` does.
 
 ## Data and engine
 
