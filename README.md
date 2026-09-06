@@ -77,7 +77,10 @@ python3 sandbox/ecosystem.py                  # one tide-cycle
 python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going between visits
 ```
 
-It is not a chapter and not a player. Fourth Island, which the ferrymen
+It keeps a year with four seasons, each species breeding in its own,
+and every species carries a role in the biosphere — what grows, what
+feeds, what hunts, what picks up after — which the pages list. It is not
+a chapter and not a player. Fourth Island, which the ferrymen
 do not point at, is its own edition — `--edition fourth` — running the
 ground `WORLD.md` wrote for it in an account a hermit might have
 noticed: no ferry, no ledger, and the hermits never counted. See

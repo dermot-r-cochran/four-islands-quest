@@ -113,6 +113,35 @@ chasing each other up and down — which is what a small water and three
 small hills do. A pack can die out and a herd can crash; nothing in it
 is tuned to be pretty.
 
+## The year
+
+The sandbox keeps a year of 730 tides, two a day, and the springs and
+neaps keep their own 28-tide count inside it — the tide words are
+*springs*, *neaps* and *middling*, the sailors' plurals, so that a
+season called spring is never mistaken for a tide. Winter opens the
+year; spring comes in on the first of March, summer on the first of
+June, autumn on the first of September, and the chronicle says so on
+the tide each comes in. A season sets the odds of the weather (winter
+blows and storms, summer is mostly calm), the level the bloom settles
+toward, how fast the grazing, the shore and the wood grow, and how
+hard hunger bites. Every species breeds in its own seasons — fawns and
+kids in spring, gulls and puffins fledging through spring and summer,
+seal pups in autumn, the wood's mast in autumn, dragonflies hatching
+only in the warm half — and the puffins are at sea for the winter,
+neither fed nor lost. `--date` starts a run on that day of the year, so
+the page for a September morning is an autumn cycle.
+
+## Who does what
+
+Every species carries a role, and the page lists them under it: what
+**grows** (the bloom, the grazing, the wood, the shellfish beds), what
+**feeds** on it, what **hunts** and keeps the feeders in check, what
+**picks up after** the hunters and the tide, and what **is kept** by
+the Keep. The roles are not only labels: a deer or a goat the wolves
+bring down is carrion on the next tide, and the gulls and the foxes
+feed on it — *gulls on the wolves' kill* is the line — which is what
+the scavengers are for.
+
 ## Two ledgers
 
 The chronicle is the ferryman's voice: one line a tide, what happened

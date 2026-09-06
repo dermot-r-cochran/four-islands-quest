@@ -207,6 +207,17 @@ events and a pool of ways a quiet tide can be quiet. The Sounds edition
 lists Fourth Island and does not simulate it, because ferrymen do not
 point at it.
 
+It keeps **a year of 730 tides with four seasons** (Dermot's direction,
+2026-09-06: *seasons and weather*): each season sets the weather's odds,
+the bloom's level, how fast the plants grow and how hard hunger bites, and
+every species breeds in its own seasons — the tide words are *springs*,
+*neaps* and *middling* so a season called spring is never a tide.
+`--date` starts a run on that day of the year, which is what the daily
+pages use. Every species carries **a biosphere role** (the same
+direction: *biosphere roles*) — grows, feeds, hunts, picks up after, is
+kept — listed on each page, and carrion from the wolves' kills feeds the
+scavengers, so the roles do work as well as name things.
+
 What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
 grows a bloom, herring, shellfish, gulls, seals and puffins against each
 other on the water and, on the hills, the grazing (`browse` in the data,

@@ -57,6 +57,40 @@ import sys
 # ============================================================
 
 TIDES_PER_CYCLE = 28   # two tides a day; springs a fortnight apart
+YEAR_TIDES = 365 * 2   # two tides a day, and the springs keep their own count
+
+# The seasons, by the first tide of each in the year (the year opens in
+# winter; spring comes in on the first of March, summer on the first of
+# June, autumn on the first of September), and what each does: the odds
+# of the weather, how much the big tides stir the bloom, how fast the
+# grazing, the shore and the wood grow, and how hard hunger bites.
+SEASONS = [
+    {"name": "winter", "from": 0,
+     "weather": {"calm": 22, "fresh": 36, "blowing": 30, "storm": 12},
+     "bloom": 0.4, "grow": 0.35, "starve": 1.2},
+    {"name": "spring", "from": 59 * 2,
+     "weather": {"calm": 30, "fresh": 40, "blowing": 22, "storm": 8},
+     "bloom": 1.4, "grow": 1.3, "starve": 1.0},
+    {"name": "summer", "from": 151 * 2,
+     "weather": {"calm": 50, "fresh": 35, "blowing": 12, "storm": 3},
+     "bloom": 1.0, "grow": 1.0, "starve": 0.8},
+    {"name": "autumn", "from": 243 * 2,
+     "weather": {"calm": 30, "fresh": 38, "blowing": 22, "storm": 10},
+     "bloom": 0.8, "grow": 0.6, "starve": 1.0},
+]
+
+# Who does what in the biosphere. Each species below carries a role; the
+# page groups them by it. The plants are named here because they are
+# stocks rather than species.
+ROLES = [
+    ("grows",           "what everything else lives on"),
+    ("feeds",           "on the bloom, the shore, the grazing or the wood"),
+    ("hunts",           "and keeps the feeders in check"),
+    ("picks up after",  "the hunters and the tide"),
+    ("is kept",         "by the Keep, and fed when the hill is bare"),
+]
+PLANTS = {"the bloom": "sounds", "the grazing": "shore", "the wood": "shore",
+          "the shore's shellfish beds": "shore"}
 
 PLACES = {
     "sounds":   {"name": "the Sounds"},
@@ -71,101 +105,116 @@ SPECIES = {
     # The herring live in the Sounds and feed on the bloom. When the
     # Sounds run thin, a new shoal comes in from the open sea on a spring
     # tide — herring are travellers, and the kingdom is on their road.
-    "herring":   {"capacity": 4000, "rate": 0.6, "start": 1800, "shoal": 600,
-                  "thin_below": 500},
+    "herring":   {"capacity": 12000, "rate": 0.6, "start": 6000, "shoal": 1500,
+                  "thin_below": 1500, "role": "feeds"},
     # Shellfish on every written shore. They feed while the water is over
     # them, so the big tides suit them; spat settles on a bare shore at
     # the springs.
-    "shellfish": {"capacity": 800, "rate": 0.15, "start": 500, "spat": 40,
-                  "bare_below": 40},
+    "shellfish": {"capacity": 800, "rate": 0.15, "start": 500, "spat": 80,
+                  "bare_below": 150, "roots": 50, "role": "feeds",
+                  "breeds": ["spring", "summer"]},
     # Gulls nest on every written shore, fish the Sounds when the water
     # can be worked, turn to the shore when it cannot, and take the
     # scraps at First Island's quay. Fledging happens on the springs.
     "gulls":     {"start": {"first": 120, "second": 90, "third": 70, "fourth": 60},
-                  "cap": 400, "need": 1.0, "herring_take": 0.9,
-                  "shore_take": 0.6, "breed": 0.05, "breed_above": 0.9, "wear": 0.005,
-                  "hungry_below": 0.6, "starve": 0.1, "wander": 0.02,
-                  "wander_told": 3},
+                  "cap": 250, "need": 1.0, "herring_take": 0.7,
+                  "shore_take": 0.4, "breed": 0.03, "breed_above": 0.7, "wear": 0.0005,
+                  "hungry_below": 0.6, "starve": 0.02, "wander": 0.02,
+                  "wander_told": 3, "role": "picks up after",
+                  "breeds": ["spring", "summer"]},
     # Seals on the skerries, fishing the same herring.
-    "seals":     {"start": 12, "cap": 24, "fish_each": 4, "short": 0.2},
+    "seals":     {"start": 12, "cap": 24, "fish_each": 4, "short": 0.2,
+                  "role": "hunts", "breeds": ["autumn"]},
     # The hills: the grazing on every written island — browse, in the
     # keeper's word, which is the key here and never the reader's word,
     # since on a page it reads as a verb — eaten by the deer, the goats
     # and the rabbits. Nothing grazes below the roots, and a stripped
     # hill regrows from them, slowly.
-    "browse":    {"capacity": 3000, "rate": 0.06, "start": 2000, "roots": 100,
-                  "bare_below": 200},
+    "browse":    {"capacity": 6000, "rate": 0.05, "start": 4000, "roots": 300,
+                  "bare_below": 500},
     # Fallow deer on every written island, fawning when the hill feeds
     # them. First Island's are the Keep's to hunt, in fair weather, and
     # the Keep's huntsmen are that island's wolves. A few deer, a few
     # rabbits and a fox or two always survive: hills have corners.
-    "deer":      {"start": {"first": 24, "second": 36, "third": 30},
-                  "cap": 120, "need": 0.5, "breed": 0.015, "wear": 0.005,
+    "deer":      {"start": {"first": 30, "second": 60, "third": 60},
+                  "cap": 120, "need": 0.5, "breed": 0.012, "wear": 0.001,
                   "hungry_below": 1.0, "starve": 0.15, "remnant": 5, "hunt_above": 15,
-                  "hunted": 0.012, "table_told": 0.3},
+                  "hunted": 0.012, "table_told": 0.3, "role": "feeds",
+                  "breeds": ["spring", "summer"]},
     # Wolves, in packs, on the two islands with narrows between them. A
     # pack that dies out is replaced from across the narrows at a calm
     # neap, when the water between is narrowest.
-    "wolves":    {"start": {"second": 5, "third": 4}, "cap": 10, "hunt": 0.06,
-                  "need": 0.05, "easy_above": 30, "breed": 0.03, "short": 0.15,
-                  "cross_from": 6, "crossing": 2},
+    "wolves":    {"start": {"second": 3, "third": 3}, "cap": 8, "hunt": 0.03,
+                  "need": 0.05, "easy_above": 20, "breed": 0.02, "short": 0.03,
+                  "cross_from": 6, "crossing": 2, "role": "hunts",
+                  "breeds": ["spring"]},
     # Rabbits on every written island, grazing the same hill as the deer
     # and breeding the way rabbits do.
     "rabbits":   {"start": {"first": 120, "second": 100, "third": 90, "fourth": 80},
-                  "cap": 400, "need": 0.05, "breed": 0.04, "wear": 0.01,
+                  "cap": 400, "need": 0.03, "breed": 0.04, "wear": 0.003,
                   "hungry_below": 0.6, "starve": 0.2, "remnant": 10, "many_above": 300,
-                  "thin_below": 60},
+                  "thin_below": 60, "role": "feeds",
+                  "breeds": ["spring", "summer", "autumn"]},
     # Squirrels in the wood on every written island, living off the
     # wood itself; a storm shakes the nuts down and they do well after.
     "squirrels": {"start": {"first": 50, "second": 60, "third": 45, "fourth": 30},
-                  "cap": 150, "rate": 0.01, "wear": 0.004, "windfall": 0.03},
+                  "cap": 150, "rate": 0.01, "wear": 0.001, "windfall": 0.03,
+                  "mast": "autumn", "role": "feeds"},
     # Foxes on every written island: rabbits first, squirrels when they
     # can get them, the quay's scraps on First Island. They cross the
     # narrows the way the wolves do.
     "foxes":     {"start": {"first": 4, "second": 5, "third": 4}, "cap": 10,
                   "hunt": 0.12, "hunt_squirrels": 0.02, "need": 0.1,
-                  "easy_above": 150, "breed": 0.015, "short": 0.15, "remnant": 2,
-                  "cross_from": 6, "crossing": 2},
+                  "easy_above": 150, "breed": 0.015, "short": 0.05, "remnant": 2,
+                  "cross_from": 6, "crossing": 2, "role": "picks up after",
+                  "breeds": ["spring"]},
     # Cats at the Keep and the quay on First Island, kept rather than
     # wild: fed enough by the kitchens never to starve, hunting anyway.
     "cats":      {"start": {"first": 12}, "cap": 24, "kept": 8,
                   "hunt": 0.05, "hunt_squirrels": 0.02, "need": 0.04,
                   "easy_above": 100, "breed": 0.03, "wear": 0.002,
-                  "short": 0.1},
+                  "short": 0.1, "role": "is kept", "breeds": ["spring", "summer"]},
     # Wild goats on every written island. They graze the hill with the
     # deer, but the crags feed them what the hill does not — the sandbox
     # does not count crag-browse, only that goats always find some — and
     # the wolves take one now and then.
     "goats":     {"start": {"first": 8, "second": 14, "third": 16, "fourth": 12}, "cap": 40,
-                  "need": 0.3, "crags": 0.6, "breed": 0.01, "wear": 0.004,
-                  "hungry_below": 0.8, "starve": 0.15, "remnant": 3},
+                  "need": 0.3, "crags": 0.6, "breed": 0.012, "wear": 0.001,
+                  "hungry_below": 0.8, "starve": 0.15, "remnant": 3,
+                  "role": "feeds", "breeds": ["spring"]},
     # Puffins on the skerries, fishing the same herring as everything
     # else, fledging on the springs when the fishing has been good.
     "puffins":   {"start": 40, "cap": 200, "take": 0.3, "need": 0.3,
-                  "breed": 0.06, "breed_above": 0.8, "wear": 0.005,
-                  "hungry_below": 0.3, "starve": 0.05},
+                  "breed": 0.06, "breed_above": 0.8, "wear": 0.001,
+                  "hungry_below": 0.3, "starve": 0.05, "role": "hunts",
+                  "breeds": ["summer"], "away": ["winter"]},
     # Dragonflies over the pools on every written island: a calm spell
     # hatches them, a storm knocks them down, and the pools always hold
     # a few more.
     "dragonflies": {"start": 30, "cap": 300, "hatch": 0.35, "seed": 5,
                     "blown": {"calm": 0.0, "fresh": 0.02, "blowing": 0.1,
                               "storm": 0.5},
-                    "many_above": 150},
+                    "many_above": 150, "role": "hunts",
+                    "breeds": ["spring", "summer"]},
     # Two hunters of the small things, one over the moor and one in the
     # wood. Each lives on one prey the sandbox counts and on the small
     # birds and voles it does not, and fledges on the springs when fed.
     "harriers":  {"start": {"second": 3, "third": 3, "fourth": 2}, "cap": 8, "prey": "rabbits",
                   "hunt": 0.03, "base": 0.015, "need": 0.04, "easy_above": 150,
-                  "breed": 0.05, "short": 0.1, "remnant": 1},
+                  "breed": 0.05, "short": 0.1, "remnant": 1, "role": "hunts",
+                  "breeds": ["summer"]},
     "sparrowhawks": {"start": {"first": 2, "second": 2, "third": 2, "fourth": 1}, "cap": 6,
                      "prey": "squirrels", "hunt": 0.01, "base": 0.005, "need": 0.012,
-                     "easy_above": 100, "breed": 0.05, "short": 0.1, "remnant": 1},
+                     "easy_above": 100, "breed": 0.05, "short": 0.1, "remnant": 1,
+                     "role": "hunts", "breeds": ["summer"]},
     # The Keep's stock on First Island, kept like the cats: they graze the
     # hill when it has grazing and eat the Keep's hay when it does not.
     "ponies":    {"start": {"first": 8}, "cap": 14, "kept": 6, "need": 0.6,
-                  "hay": 0.7, "breed": 0.01, "wear": 0.002},
+                  "hay": 0.7, "breed": 0.01, "wear": 0.002, "role": "is kept",
+                  "breeds": ["spring"]},
     "alpacas":   {"start": {"first": 12}, "cap": 24, "kept": 10, "need": 0.25,
-                  "hay": 0.7, "breed": 0.012, "wear": 0.002},
+                  "hay": 0.7, "breed": 0.012, "wear": 0.002, "role": "is kept",
+                  "breeds": ["spring", "summer"]},
 }
 
 # Who crosses the narrows, and what the chronicle says when they do.
@@ -177,6 +226,7 @@ HUNTERS = [("harriers", "harrier_fledged", "harriers_short"),
 KEPT = [("ponies", "foal"), ("alpacas", "cria")]
 
 WEATHER = [("calm", 35), ("fresh", 40), ("blowing", 18), ("storm", 7)]
+BLOOM_LEVEL = 60       # the bloom in an ordinary season; each season scales it
 WORKABLE = {"calm": 1.0, "fresh": 0.8, "blowing": 0.4, "storm": 0.0}
 ABOARD = {"calm": (1, 4), "fresh": (1, 3), "blowing": (0, 2), "storm": (0, 1)}
 FARE_IN_NEWS = 0.3     # how often a passenger has news the ferryman hasn't got
@@ -190,16 +240,23 @@ GOOD_CATCH = 130
 # The companies the sandbox stands behind, by their keys in index.html.
 COMPANIES_ON_THE_WATER = ["guild", "crown"]
 
+# What a kill leaves for the scavengers, in the units they eat: a deer or
+# a goat left by the wolves feeds gulls (in fish) and foxes (in rabbits)
+# on the next tide.
+CARRION = {"gulls": 30, "foxes": 20, "goat": 0.4}
+
 # The hermits of Fourth Island: a presence, never a count. They gather on
 # the shore in fair weather and take a goat now and then (WORLD.md).
 HERMITS = {"island": "fourth",
            "gathering": {"calm": 8, "fresh": 4, "blowing": 0, "storm": 0},
-           "goat": 0.03, "smoke": 0.15}
+           "goat": 0.005, "smoke": 0.15}
 
 # What the chronicle says. The engine fills the braces and joins the
 # clauses; every word a player reads is here.
 LINES = {
-    "tide":        "Tide {tide} · {label} · {weather} — {clauses}.",
+    "tide":        "Tide {tide} · {season} · {label} · {weather} — {clauses}.",
+    "season_turn": "{season} came in",
+    "carrion":     "gulls on the wolves' kill on {place}",
     "quiet":       "nothing else worth a fare",
     "storm":       "a storm went through the Sounds",
     "shoal":       "a new shoal came into the Sounds on the flood",
@@ -271,6 +328,7 @@ PAGE = {
                 "The Warden's ledger is kept and not shown — the bell is not "
                 "counted aloud.",
     "chronicle": "The chronicle",
+    "roles":    "Who does what",
     "after":    "After the cycle",
     "back":     "Back to the quest",
     "foot":     "A mini ecosystem, run again each day from the repository's "
@@ -322,6 +380,7 @@ EDITIONS = {
             "hawk_fledged": "a sparrowhawk fledged in the wood",
             "hawks_short": "the sparrowhawks went short",
             "dragonflies": "dragonflies over the pools",
+            "carrion":     "gulls on a kill on the hill",
         },
         "page": {
             "title":    "Fourth Island",
@@ -377,7 +436,29 @@ def tide_range(t: int) -> float:
 
 
 def tide_label(r: float) -> str:
-    return "spring" if r > 0.85 else "neap" if r < 0.15 else "middling"
+    """The springs, the neaps, and the middling tides between — the
+    sailors' words, plural, so a season called spring is never a tide."""
+    return "springs" if r > 0.85 else "neaps" if r < 0.15 else "middling"
+
+
+def season_for(abs_tide: int) -> dict:
+    t = abs_tide % YEAR_TIDES
+    current = SEASONS[-1]
+    for season in SEASONS:
+        if t >= season["from"]:
+            current = season
+    return current
+
+
+def in_season(spec: dict, season: str) -> bool:
+    """Whether a species breeds in this season; one with no season listed
+    breeds in any."""
+    return season in spec.get("breeds", [season])
+
+
+def year_tide_for(date: datetime.date) -> int:
+    """The tide of the year a date falls on: two a day, from the first."""
+    return min((date.timetuple().tm_yday - 1) * 2, YEAR_TIDES - 1)
 
 
 def rng_for(seed: int, tide: int) -> random.Random:
@@ -386,13 +467,14 @@ def rng_for(seed: int, tide: int) -> random.Random:
     return random.Random(f"{seed}:{tide}")
 
 
-def fresh_state(seed: int, edition: str = "sounds") -> dict:
+def fresh_state(seed: int, edition: str = "sounds", year_tide: int = 0) -> dict:
     configure(edition)
     g = SPECIES["gulls"]
     return {
         "seed": seed,
         "edition": edition,
         "tide": 0,
+        "year_tide": year_tide,   # where in the year the run begins
         "bloom": 50,
         "herring": SPECIES["herring"]["start"],
         "shellfish": {k: SPECIES["shellfish"]["start"] for k in SHORES},
@@ -415,6 +497,7 @@ def fresh_state(seed: int, edition: str = "sounds") -> dict:
         "puffins": SPECIES["puffins"]["start"] if SKERRIES else 0,
         "south": 0,
         "gathered": 0,
+        "carrion": {k: 0.0 for k in SHORES},
         "flags": {"thin": False, "hungry": {k: False for k in SHORES},
                   "bare": {k: False for k in SHORES},
                   "deer_hungry": {k: False for k in SHORES},
@@ -451,19 +534,28 @@ def step(state: dict) -> str:
     """Advance one tide. Returns the chronicle line, which is also kept."""
     t = state["tide"]
     rng = rng_for(state["seed"], t)
-    r = tide_range(t)
+    abs_tide = state["year_tide"] + t
+    r = tide_range(abs_tide)
     label = tide_label(r)
-    weather = rng.choices([w for w, _ in WEATHER], [p for _, p in WEATHER])[0]
+    season = season_for(abs_tide)
+    sn = season["name"]
+    weather = rng.choices(list(season["weather"]), list(season["weather"].values()))[0]
     work = WORKABLE[weather]
-    spring = label == "spring"
+    spring = label == "springs"
+    grow, starve = season["grow"], season["starve"]
     events: list[str] = []
     flags = state["flags"]
 
+    if abs_tide % YEAR_TIDES == season["from"]:
+        events.append(LINES["season_turn"].format(season=sn))
     if weather == "storm":
         events.append(LINES["storm"])
 
-    # -- the bloom: stirred up by the big tides and by storms ---------
-    bloom = state["bloom"] + int(35 * r) - 20 + (10 if weather == "storm" else 0)
+    # -- the bloom: settles toward the season's level, stirred up by the
+    #    big tides and by storms ----------------------------------------
+    level = BLOOM_LEVEL * season["bloom"]
+    bloom = (state["bloom"] + int((level - state["bloom"]) * 0.1)
+             + int(12 * (r - 0.5)) + (10 if weather == "storm" else 0))
     state["bloom"] = clamp(bloom, 0, 100)
 
     # -- herring: grow on the bloom, then everything eats them --------
@@ -482,7 +574,8 @@ def step(state: dict) -> str:
                  if SKERRIES else 0)
     h -= seal_fish
     ps = SPECIES["puffins"]
-    puffin_fish = min(h, state["puffins"] * ps["take"] * work) if SKERRIES else 0
+    puffin_fish = (min(h, state["puffins"] * ps["take"] * work)
+                   if SKERRIES and sn not in ps["away"] else 0)
     h -= int(puffin_fish)
     catch = min(h, int(h * CATCH_SHARE * work), CATCH_MOST) if QUAY else 0
     h -= catch
@@ -526,35 +619,40 @@ def step(state: dict) -> str:
     for place in SHORES:
         g = gulls[place]
         s = shell[place]
-        s += int(shs["rate"] * (0.5 + r) * s * (1 - s / shs["capacity"]))
+        s += int(shs["rate"] * season["bloom"] * (0.5 + r) * s * (1 - s / shs["capacity"]))
         if weather == "storm":
             s -= s // 20
         shore_take = 0 if weather == "storm" else min(
-            s, int(g * gs["shore_take"] * (1.2 - work)))
+            max(0, s - shs["roots"]), int(g * gs["shore_take"] * (1.2 - work)))
         s -= shore_take
+        open_bed = max(0, s - shs["roots"])
         if place == QUAY:
-            gathered = min(s // 10, GATHERING[weather])
+            gathered = min(open_bed // 10, GATHERING[weather])
         elif place == HERMITS["island"]:
-            gathered = min(s // 10, HERMITS["gathering"][weather])
+            gathered = min(open_bed // 10, HERMITS["gathering"][weather])
         else:
             gathered = 0
         s -= gathered
         state["gathered"] += gathered
-        if s < shs["bare_below"] and spring:
+        if s < shs["bare_below"] and spring and in_season(shs, sn):
             s += shs["spat"]
         shell[place] = max(0, s)
 
         fish_share = gull_fish * g // total_gulls if total_gulls else 0
-        fed_on = fish_share + shore_take + (scraps if place == QUAY else 0)
+        carrion = state["carrion"][place]
+        picked = min(carrion * CARRION["gulls"], g * gs["need"]) if g else 0
+        if picked and rng.random() < 0.3:
+            events.append(LINES["carrion"].format(place=PLACES[place]["name"]))
+        fed_on = fish_share + shore_take + picked + (scraps if place == QUAY else 0)
         fed = fed_on / (g * gs["need"]) if g else 1.0
         born = 0
-        if g and fed >= gs["breed_above"] and spring and g < gs["cap"]:
+        if g and fed >= gs["breed_above"] and spring and in_season(gs, sn) and g < gs["cap"]:
             born = max(1, int(g * gs["breed"]))
             fledged.append(place)
         lost = int(g * gs["wear"])
         hungry = bool(g) and fed < gs["hungry_below"]
         if hungry:
-            lost += int(g * (gs["hungry_below"] - fed) * gs["starve"]) + 1
+            lost += rounded(g * (gs["hungry_below"] - fed) * gs["starve"] * starve, rng)
             if not flags["hungry"][place]:
                 newly_hungry.append(place)
         flags["hungry"][place] = hungry
@@ -596,7 +694,8 @@ def step(state: dict) -> str:
     seals = state["seals"]
     if seals and SKERRIES:
         fed = seal_fish / (seals * ss["fish_each"])
-        if fed >= 0.9 and spring and seals < ss["cap"] and rng.random() < 0.5:
+        if (fed >= 0.9 and spring and in_season(ss, sn) and seals < ss["cap"]
+                and rng.random() < 0.5):
             seals += 1
             events.append(LINES["pup"])
         elif fed < 0.5 and rng.random() < ss["short"]:
@@ -608,16 +707,16 @@ def step(state: dict) -> str:
 
     # -- puffins on the skerries ---------------------------------------
     pf = state["puffins"]
-    if pf and SKERRIES:
+    if pf and SKERRIES and sn not in ps["away"]:   # at sea for the winter
         fed = puffin_fish / (pf * ps["need"])
         born = 0
-        if fed >= ps["breed_above"] and spring and pf < ps["cap"]:
+        if fed >= ps["breed_above"] and spring and in_season(ps, sn) and pf < ps["cap"]:
             born = max(1, int(pf * ps["breed"]))
             events.append(LINES["puffins_fledged"])
         lost = rounded(pf * ps["wear"], rng)
         hungry = fed < ps["hungry_below"]
         if hungry:
-            lost += rounded(pf * (ps["hungry_below"] - fed) * ps["starve"], rng)
+            lost += rounded(pf * (ps["hungry_below"] - fed) * ps["starve"] * starve, rng)
             if not flags["puffins_hungry"]:
                 events.append(LINES["puffins_hungry"])
         flags["puffins_hungry"] = hungry
@@ -638,7 +737,7 @@ def step(state: dict) -> str:
     for place in SHORES:
         name = PLACES[place]["name"]
         b, d, w = browse[place], deer[place], wolves[place]
-        b += int(bs["rate"] * b * (1 - b / bs["capacity"]))
+        b += int(bs["rate"] * grow * b * (1 - b / bs["capacity"]))
         graze = min(max(0, b - bs["roots"]), d * ds["need"])
         b -= int(graze)
         # the Keep's stock grazes the same hill while it has grazing, and
@@ -676,16 +775,18 @@ def step(state: dict) -> str:
         hunting = w * ws["hunt"] * (ease + 0.3 * ease_g) * (1.5 - 0.5 * work)
         kills = min(d, rounded(w * ws["hunt"] * ease * (1.5 - 0.5 * work), rng))
         kills_g = min(gt, rounded(w * ws["hunt"] * 0.3 * ease_g, rng))
+        state["carrion"][place] = kills + kills_g * CARRION["goat"]
         hunted = 0
         if place == QUAY and weather == "calm" and d > ds["hunt_above"]:
             hunted = min(d - ds["hunt_above"], rounded(d * ds["hunted"], rng))
             if hunted and rng.random() < ds["table_told"]:
                 events.append(LINES["table"])
-        born = rounded(d * ds["breed"] * fed * lush * (1 - d / ds["cap"]), rng) if d else 0
+        born = (rounded(d * ds["breed"] * fed * lush * (1 - d / ds["cap"]), rng)
+                if d and in_season(ds, sn) else 0)
         lost = rounded(d * ds["wear"], rng) + kills + hunted
         hungry = bool(d) and fed < ds["hungry_below"]
         if hungry and d > ds["remnant"]:   # a few deer on a big hill always find enough
-            lost += rounded(d * (ds["hungry_below"] - fed) * ds["starve"], rng)
+            lost += rounded(d * (ds["hungry_below"] - fed) * ds["starve"] * starve, rng)
             if not flags["deer_hungry"][place]:
                 deer_hungry.append(place)
         flags["deer_hungry"][place] = hungry
@@ -695,7 +796,8 @@ def step(state: dict) -> str:
             # judged on the hunting, not on one tide's luck: a pack goes
             # short when the deer are few, not when a night goes badly
             fed_w = hunting / (w * ws["need"])
-            if fed_w >= 1.0 and w < ws["cap"] and rng.random() < ws["breed"]:
+            if (fed_w >= 1.0 and in_season(ws, sn) and w < ws["cap"]
+                    and rng.random() < ws["breed"]):
                 w += 1
                 events.append(LINES["cub"].format(place=name))
             elif fed_w < 0.5 and rng.random() < ws["short"]:
@@ -709,6 +811,7 @@ def step(state: dict) -> str:
         ease_r = min(1.0, r / fs["easy_above"]) ** 2
         ease_q = min(1.0, q / qs["cap"])
         fox_hunting = f * (fs["hunt"] * ease_r + fs["hunt_squirrels"] * ease_q)
+        fox_hunting += min(carrion * CARRION["foxes"], f * fs["need"]) if f else 0
         cat_hunting = c * (cs["hunt"] * ease_r + cs["hunt_squirrels"] * ease_q)
         hs_, ks_ = SPECIES["harriers"], SPECIES["sparrowhawks"]
         taken_r = min(r, rounded((f * fs["hunt"] + c * cs["hunt"]
@@ -718,10 +821,11 @@ def step(state: dict) -> str:
                                  * ease_q, rng))
 
         fed_r = nibble / (r * rs["need"]) if r else 1.0
-        born_r = rounded(r * rs["breed"] * fed_r * lush * (1 - r / rs["cap"]), rng) if r else 0
+        born_r = (rounded(r * rs["breed"] * fed_r * lush * (1 - r / rs["cap"]), rng)
+                  if r and in_season(rs, sn) else 0)
         lost_r = rounded(r * rs["wear"], rng) + taken_r
         if r > rs["remnant"] and fed_r < rs["hungry_below"]:
-            lost_r += rounded(r * (rs["hungry_below"] - fed_r) * rs["starve"], rng)
+            lost_r += rounded(r * (rs["hungry_below"] - fed_r) * rs["starve"] * starve, rng)
         r = max(rs["remnant"] if r else 0, r - lost_r + born_r)
         many, thin_r = r > rs["many_above"], r < rs["thin_below"]
         if many and not flags["rabbits_many"][place]:
@@ -731,7 +835,8 @@ def step(state: dict) -> str:
         flags["rabbits_many"][place], flags["rabbits_thin"][place] = many, thin_r
         rabbits[place] = r
 
-        q += rounded(qs["rate"] * q * (1 - q / qs["cap"]), rng)
+        mast = 2.0 if sn == qs["mast"] else 1.0
+        q += rounded(qs["rate"] * grow * mast * q * (1 - q / qs["cap"]), rng)
         if weather == "storm" and q:
             q += rounded(q * qs["windfall"], rng)
             windfalls.append(place)
@@ -740,7 +845,8 @@ def step(state: dict) -> str:
 
         if f:
             fed_f = (fox_hunting + (scraps * 0.1 if place == QUAY else 0)) / (f * fs["need"])
-            if fed_f >= 1.0 and f < fs["cap"] and rng.random() < fs["breed"]:
+            if (fed_f >= 1.0 and in_season(fs, sn) and f < fs["cap"]
+                    and rng.random() < fs["breed"]):
                 f += 1
                 events.append(LINES["fox_cubs"].format(place=name))
             elif fed_f < 0.5 and f > fs["remnant"] and rng.random() < fs["short"]:
@@ -750,7 +856,8 @@ def step(state: dict) -> str:
 
         if c:
             fed_c = cat_hunting / (c * cs["need"])
-            if fed_c >= 1.0 and c < cs["cap"] and rng.random() < cs["breed"]:
+            if (fed_c >= 1.0 and in_season(cs, sn) and c < cs["cap"]
+                    and rng.random() < cs["breed"]):
                 c += 1
                 events.append(LINES["kittens"])
             elif c > cs["kept"]:
@@ -766,13 +873,14 @@ def step(state: dict) -> str:
         # -- goats on the crags ------------------------------------------
         if gt:
             fed_g = max(gts["crags"], cropped / (gt * gts["need"]))
-            born_g = rounded(gt * gts["breed"] * fed_g * lush * (1 - gt / gts["cap"]), rng)
+            born_g = (rounded(gt * gts["breed"] * fed_g * lush * (1 - gt / gts["cap"]), rng)
+                      if in_season(gts, sn) else 0)
             if born_g and spring:
                 events.append(LINES["kid"].format(place=name))
             lost_g = rounded(gt * gts["wear"], rng) + kills_g
             hungry_g = fed_g < gts["hungry_below"]
             if hungry_g and gt > gts["remnant"]:
-                lost_g += rounded(gt * (gts["hungry_below"] - fed_g) * gts["starve"], rng)
+                lost_g += rounded(gt * (gts["hungry_below"] - fed_g) * gts["starve"] * starve, rng)
                 if not flags["goats_hungry"][place]:
                     events.append(LINES["goats_hungry"].format(place=name))
             flags["goats_hungry"][place] = hungry_g
@@ -788,7 +896,7 @@ def step(state: dict) -> str:
 
         # -- dragonflies over the pools -----------------------------------
         df = state["dragonflies"][place]
-        if weather == "calm":
+        if weather == "calm" and in_season(dfs, sn):
             df += rounded(dfs["hatch"] * df * (1 - df / dfs["cap"]), rng)
         df -= rounded(df * dfs["blown"][weather], rng)
         df = max(dfs["seed"], df)
@@ -806,7 +914,8 @@ def step(state: dict) -> str:
             prey = state[spec["prey"]][place]
             ease_p = min(1.0, prey / spec["easy_above"]) ** 2
             fed_h = (spec["hunt"] * ease_p + spec["base"]) / spec["need"]
-            if fed_h >= 1.0 and spring and n < spec["cap"] and rng.random() < spec["breed"]:
+            if (fed_h >= 1.0 and spring and in_season(spec, sn) and n < spec["cap"]
+                    and rng.random() < spec["breed"]):
                 n += 1
                 events.append(LINES[fledged_line].format(place=name))
             elif fed_h < 0.5 and n > spec["remnant"] and rng.random() < spec["short"]:
@@ -820,7 +929,8 @@ def step(state: dict) -> str:
             if not n:
                 continue
             fed_k = kept_fed.get(key, spec["hay"])
-            if fed_k >= 1.0 and n < spec["cap"] and rng.random() < spec["breed"]:
+            if (fed_k >= 1.0 and in_season(spec, sn) and n < spec["cap"]
+                    and rng.random() < spec["breed"]):
                 n += 1
                 events.append(LINES[line])
             elif n > spec["kept"]:
@@ -867,7 +977,7 @@ def step(state: dict) -> str:
     if not events:
         pool = LINES.get("quiet_pool")
         clauses.append(rng.choice(pool) if pool else LINES["quiet"])
-    line = LINES["tide"].format(tide=t + 1, label=label, weather=weather,
+    line = LINES["tide"].format(tide=t + 1, season=sn, label=label, weather=weather,
                                 clauses="; ".join(clauses))
     state["chronicle"].append(line)
     state["tide"] = t + 1
@@ -928,6 +1038,30 @@ def summary(state: dict) -> list[str]:
     return lines
 
 
+def roles(state: dict) -> list[tuple[str, str, list[str]]]:
+    """Who does what, for the places this edition holds: each role with
+    the plants and species present under it."""
+    ed = EDITIONS[EDITION]
+    out = []
+    for role, gloss in ROLES:
+        names = []
+        if role == "grows":
+            for plant, where in PLANTS.items():
+                if (where == "sounds" and "sounds" in ed["places"]) or (
+                        where == "shore" and SHORES):
+                    names.append(plant)
+        for key, spec in SPECIES.items():
+            if spec.get("role") != role:
+                continue
+            count = state.get(key, 0)
+            present = sum(count.values()) if isinstance(count, dict) else count
+            if present:
+                names.append(key)
+        if names:
+            out.append((role, gloss, names))
+    return out
+
+
 def ledger(state: dict) -> list[str]:
     lines = ["The Warden's ledger — what the Crown counts and the Guild "
              "will not say aloud.",
@@ -947,6 +1081,9 @@ def render_html(state: dict, companies_lines: list[str], date: str) -> str:
                        if "--ledger" not in line)
     also = (f' · <a href="{esc(PAGE["also_href"])}">{esc(PAGE["also"])}</a>'
             if PAGE.get("also") else "")
+    who = "\n".join(
+        f"<li><b>{esc(role)}</b> — {esc(gloss)}: {esc(', '.join(names))}</li>"
+        for role, gloss, names in roles(state))
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -990,6 +1127,10 @@ def render_html(state: dict, companies_lines: list[str], date: str) -> str:
 <h2>{esc(PAGE["after"])}</h2>
 <ul class="after">
 {after}
+</ul>
+<h2>{esc(PAGE["roles"])}</h2>
+<ul class="after">
+{who}
 </ul>
 <footer>{esc(PAGE["foot"])}</footer>
 </main>
@@ -1073,6 +1214,8 @@ def check() -> list[str]:
                 bad(f"seed {seed}: the chronicle counted the bell aloud: {line}")
             if "ferry crossed" not in line:
                 bad(f"seed {seed}: a tide without a crossing: {line}")
+            if not any(f" · {x['name']} · " in line for x in SEASONS):
+                bad(f"seed {seed}: a tide without a season: {line}")
             if PLACES["fourth"]["name"] in line:
                 bad(f"seed {seed}: the chronicle spoke of Fourth Island: {line}")
 
@@ -1104,12 +1247,26 @@ def check() -> list[str]:
     if PAGE["title"] not in page or a["chronicle"][-1].split(" — ")[0] not in page:
         bad("fourth: the page does not carry the account")
 
+    # a year turns through all four seasons, in order, from any start
+    s = fresh_state(6, "sounds", year_tide=200)
+    run(s, YEAR_TIDES)
+    turns = [m.group(1) for line in s["chronicle"]
+             for m in [re.search(r"\b(winter|spring|summer|autumn) came in\b", line)] if m]
+    order = [x["name"] for x in SEASONS]
+    i = order.index(season_for(200)["name"])
+    if turns != order[i + 1:] + order[:i + 1]:
+        bad(f"the year did not turn through its seasons in order: {turns}")
+    if not roles(s) or not any(role == "grows" for role, _, _ in roles(s)):
+        bad("the roles table is empty, or nothing grows")
+
     # the page says what the chronicle says, and nothing the Warden keeps
     s = fresh_state(2)
     run(s, TIDES_PER_CYCLE)
     page = render_html(s, ["On the water: a company — its quest"], "a day")
     if PAGE["title"] not in page or s["chronicle"][-1].split(" — ")[0] not in page:
         bad("the page does not carry the chronicle")
+    if PAGE["roles"] not in page:
+        bad("the page does not say who does what")
     if re.search(r"\brings?\b", page) or "--ledger" in page:
         bad("the page counted the bell aloud, or pointed at the Warden's ledger")
 
@@ -1156,7 +1313,10 @@ def main() -> int:
     ap.add_argument("--html", metavar="PATH",
                     help="write the chronicle and summary as a page to PATH")
     ap.add_argument("--date", default=None,
-                    help="the date the page names (default: today, UTC)")
+                    help="the date the run starts on and the page names "
+                         "(YYYY-MM-DD; default: today, UTC, for --html only)")
+    ap.add_argument("--roles", action="store_true",
+                    help="show who does what after the run")
     ap.add_argument("--repo", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), ".."),
         help="repository whose index.html names the companies")
@@ -1174,7 +1334,13 @@ def main() -> int:
 
     state = load_state(args.state) if args.state else None
     if state is None:
-        state = fresh_state(args.seed, args.edition)
+        start = None
+        if args.date:
+            start = datetime.date.fromisoformat(args.date)
+        elif args.html:
+            start = datetime.date.today()
+        state = fresh_state(args.seed, args.edition,
+                            year_tide_for(start) if start else 0)
 
     if args.history:
         if not args.state:
@@ -1214,6 +1380,10 @@ def main() -> int:
         print()
         for line in ledger(state):
             print(line)
+    if args.roles:
+        print()
+        for role, gloss, names in roles(state):
+            print(f"  {role} — {gloss}: {', '.join(names)}")
     return 0
 
 
