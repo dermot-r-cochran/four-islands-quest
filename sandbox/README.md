@@ -42,6 +42,8 @@ quest rather than keeping a second copy of it.
   largest colony on a calm tide.
 - **Seals** on the skerries between Second and Third, fishing the same
   herring.
+- **Puffins** on the skerries beside them, fishing the same herring
+  again and fledging on the springs when the fishing has been good.
 - **The ferry**, which crosses on any tide and is owed for it. Fares are
   paid in coin or in news; an empty crossing is logged as owed. What the
   passengers leave behind feeds the quay's gulls.
@@ -77,6 +79,23 @@ And on the hills above the shores:
   wild. The kitchens keep a floor under them, so they never starve out;
   above it they live or die by the hunting like anything else, and now
   and then there are kittens at the Keep.
+- **Wild goats** on every written island. They graze the hill with the
+  deer, but the crags feed them what the hill does not — the sandbox
+  does not count crag-browse, only that goats always find some — and
+  the wolves take one now and then.
+- **Hen harriers** over the moor on Second and Third, and
+  **sparrowhawks** in the wood on every written island. Each lives on
+  one prey the sandbox counts — rabbits for the harriers, squirrels for
+  the hawks — and on the small birds and voles it does not, and fledges
+  on the springs when fed.
+- **Dragonflies** over the pools on every written island. A calm spell
+  hatches them, a storm knocks them down, and the pools always hold a
+  few more. The chronicle says when they are over every pool in the
+  kingdom.
+- **Ponies and alpacas**, the Keep's stock on First Island, kept like
+  the cats: they graze the hill when it has grazing and eat the Keep's
+  hay when it does not, so they never go short; now and then there is a
+  foal in the stable or a cria among the alpacas.
 
 A few deer, a few rabbits and a fox or two always survive on a hill,
 however bad it gets: hills have corners. Wolves do not get that; a pack

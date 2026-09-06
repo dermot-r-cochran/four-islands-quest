@@ -65,10 +65,12 @@ world's object literals rather than executing them. See
 ecosystem of the waters the kingdom is named for, ticking one tide at
 a time. The bloom the tide stirs up, the herring that feed on it, the
 shellfish on three shores, the gulls that eat both, the seals on the
-skerries, and on the hills above them the browse, the deer and the
-rabbits that graze it, the wolves and foxes that hunt them, the squirrels
-in the wood and the Keep's cats — and, every tide, the ferry crossing and
-the Warden writing down what the Guild will not say aloud.
+skerries and the puffins beside them, and on the hills above them the
+browse, the deer, goats and rabbits that graze it, the wolves and foxes
+that hunt them, the harriers over the moor and the sparrowhawks in the
+wood, the squirrels, the dragonflies over the pools, and the Keep's cats,
+ponies and alpacas — and, every tide, the ferry crossing and the Warden
+writing down what the Guild will not say aloud.
 
 ```bash
 python3 sandbox/ecosystem.py                  # one tide-cycle
