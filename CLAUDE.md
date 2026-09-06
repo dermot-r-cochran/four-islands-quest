@@ -180,6 +180,18 @@ cannot land on the islands, which is their limit. The ferry starts from
 the old quay on the mainland shore and lands at First Island's
 water-stairs, as Chapter One has it.
 
+**This is its own world, and the mainland shore is unnamed** (Dermot's
+ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming
+the shore or joining the two records). The Kingdom of the Four Sounds is
+not the Kingdom of the Four Islands in the `star-rangers` repository, and
+the two never cross: *Difenland* and *Kalenjar* are regions of that other
+kingdom's islands, not this mainland, and that world has no mainland at
+all. Here, Carrow — the bridge that is down again in Chapter One — is the
+one place named on the shore, and the shore itself has no name, which is
+an absence in the record and not a gap to fill. The licences are part of
+the reason: the demo world is CC BY 4.0 and the other record is not, so a
+join would put one record's facts under the other's terms.
+
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
 
