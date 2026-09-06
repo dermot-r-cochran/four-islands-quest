@@ -169,7 +169,16 @@ the shoals, dolphins on the shoals, whales on the plankton for the summer
 and autumn and gone the rest of the year; and south of Fourth Island a
 coral reef with its own fish. Nobody keeps an account of the sea — the
 sandbox's third edition, `--edition sea`, is what might be seen from a
-deck. Where the whales go is absent, not hidden: don't write it.
+deck. Where the whales go is absent, not hidden: don't write it. The same
+section, and a new one, *The islands and the shore, so far*, carry the
+rest of that evening's directions (*bees and flowers, trees and fruits*;
+*floating sea trees in rafts*; *sea ostriches*; *fishing eagles*; *sea
+caves and coves*): blossom and bees setting the fruit, fishing eagles,
+coves and sea caves on the islands; rafts of sea trees and the sea
+ostriches that ride them on the open sea — big flightless birds that
+cannot land on the islands, which is their limit. The ferry starts from
+the old quay on the mainland shore and lands at First Island's
+water-stairs, as Chapter One has it.
 
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
@@ -220,8 +229,10 @@ facing open sea, no ferry, no ledger, no counted hermit, in an account a
 hermit might have noticed, with its own words for the same events and a
 pool of ways a quiet tide can be quiet; and **the open sea** (`--edition
 sea`) — plankton and shoals, dolphins and whales that come and go with
-the seasons, and the reef south of Fourth Island with its fish, as seen
-from a deck. The Sounds edition lists Fourth Island and does not simulate
+the seasons, and the reef south of Fourth Island with its fish, and the rafts of sea
+trees with the sea ostriches on them, as seen from a deck. On the
+islands, blossom, bees and the fruit they set, fishing eagles, and the
+coves and sea caves. The Sounds edition lists Fourth Island and does not simulate
 it, because ferrymen do not point at it.
 
 It keeps **a year of 730 tides with four seasons** (Dermot's direction,

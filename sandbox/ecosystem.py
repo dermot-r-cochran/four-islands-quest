@@ -88,21 +88,26 @@ SEASONS = [
 ROLES = [
     ("grows",           "what everything else lives on"),
     ("feeds",           "on what grows"),
+    ("pollinates",      "and sets the fruit"),
     ("hunts",           "and keeps the feeders in check"),
     ("picks up after",  "the hunters and the tide"),
     ("is kept",         "by the Keep, and fed when the hill is bare"),
 ]
 PLANTS = {"the bloom": "sounds", "the grazing": "shore", "the wood": "shore",
           "the shore's shellfish beds": "shore", "the worms in the turf": "shore",
-          "the berries": "shore", "the plankton": "sea", "the coral": "reef"}
+          "the berries": "shore", "the blossom": "shore", "the fruit": "shore",
+          "the plankton": "sea", "the coral": "reef", "the rafts of sea trees": "sea"}
 
 PLACES = {
     "sounds":   {"name": "the Sounds"},
-    "first":    {"name": "First Island", "shore": True, "quay": True},
-    "second":   {"name": "Second Island", "shore": True, "narrows": ["third"]},
-    "third":    {"name": "Third Island", "shore": True, "narrows": ["second"]},
+    "first":    {"name": "First Island", "shore": True, "quay": True, "coves": True},
+    "second":   {"name": "Second Island", "shore": True, "narrows": ["third"],
+                 "coves": True, "caves": True},
+    "third":    {"name": "Third Island", "shore": True, "narrows": ["second"],
+                 "coves": True, "caves": True},
     "skerries": {"name": "the skerries between Second and Third"},
-    "fourth":   {"name": "Fourth Island", "shore": True, "cliffs": True},
+    "fourth":   {"name": "Fourth Island", "shore": True, "cliffs": True,
+                 "coves": True, "caves": True},
     "sea":      {"name": "the open sea"},
     "reef":     {"name": "the reef south of Fourth Island"},
 }
@@ -249,6 +254,33 @@ SPECIES = {
                   "broke_told": 90},
     "reef fish": {"start": 800, "per_coral": 0.5, "rate": 0.03, "wear": 0.001,
                   "lives": "reef", "role": "feeds", "breeds": ["spring", "summer"]},
+    # Blossom on the hills in spring and summer; bees in it, which set the
+    # fruit; fruit in the woods in autumn, as much as the bees made. The
+    # deer, the squirrels and the small birds eat it, and so do the Keep's
+    # people and the hermits.
+    "flowers":   {"capacity": 2000, "set": 40, "seasons": ["spring", "summer"],
+                  "fade": 0.08},
+    "bees":      {"start": {"first": 20, "second": 24, "third": 18, "fourth": 10},
+                  "cap": 60, "need": 20, "breed": 0.04, "storm_loss": 0.01,
+                  "full_at": 30, "role": "pollinates", "breeds": ["spring", "summer"],
+                  "away": ["winter"]},
+    "fruit":     {"capacity": 1500, "set": 60, "ripen": ["autumn"], "poor_below": 0.5},
+    # Fishing eagles: a pair or two on every written island, fishing the
+    # Sounds and the water off the cliffs.
+    "fishing eagles": {"start": {"first": 1, "second": 2, "third": 2, "fourth": 2},
+                       "cap": 4, "fish_each": 3, "need": 3, "breed": 0.02,
+                       "short": 0.01, "role": "hunts", "breeds": ["summer"]},
+    # Rafts of floating sea trees form on the open sea in the warm seasons,
+    # drift, shelter fish, and break up in storms; and the sea ostriches —
+    # big flightless birds that live on the rafts, dive for fish, nest on
+    # the rafts and cannot land on the islands — ride them.
+    "rafts":     {"start": 6, "cap": 40, "form": 0.16,
+                  "seasons": ["summer", "autumn"],
+                  "break": 0.06, "sink": 0.002, "broke_told": 2},
+    "sea ostriches": {"start": 30, "cap": 120, "fish_each": 4, "need": 4,
+                      "per_raft": 8, "breed": 0.05, "storm_loss": 0.005,
+                      "lives": "sea", "role": "hunts",
+                      "breeds": ["summer", "autumn"]},
     "ponies":    {"start": {"first": 8}, "cap": 14, "kept": 6, "need": 0.6,
                   "hay": 0.7, "breed": 0.01, "wear": 0.002, "role": "is kept",
                   "breeds": ["spring"]},
@@ -367,6 +399,24 @@ LINES = {
     "in_berries_all": "the small birds were in the berries everywhere",
     "birds_hungry": "the small birds went hungry on {place}",
     "birds_hungry_all": "the small birds went hungry on every island",
+    "blossom":     "blossom on the hill on {place}",
+    "blossom_all": "blossom on every hill",
+    "bees":        "bees in the blossom on {place}",
+    "bees_all":    "bees in the blossom everywhere",
+    "fruit":       "fruit in the wood on {place}",
+    "fruit_all":   "fruit in every wood",
+    "poor_fruit":  "a poor fruit year on {place}",
+    "poor_fruit_all": "a poor fruit year everywhere",
+    "eagle":       "an eagle over the Sound with a fish",
+    "eaglets":     "eaglets on {place}",
+    "cove_fry":    "fry in the cove at low water on {place}",
+    "cove_fry_all": "fry in every cove at low water",
+    "caves":       "the seals were in the caves",
+    "raft":        "a raft of sea trees drifting west",
+    "rafts_broke": "the storm broke up the rafts",
+    "ostriches":   "sea ostriches standing on a raft as it went by",
+    "ostrich_chicks": "chicks among the sea ostriches on the rafts",
+    "ostriches_short": "the sea ostriches went short",
     "whales_back":  "the whales came back",
     "whales_gone":  "the whales went, wherever they go",
     "whales_blow":  "whales blowing to the south",
@@ -446,6 +496,14 @@ EDITIONS = {
             "hawks_short": "the sparrowhawks went short",
             "dragonflies": "dragonflies over the pools",
             "carrion":     "gulls on a kill on the hill",
+            "blossom":     "blossom on the hill",
+            "bees":        "bees in the blossom",
+            "fruit":       "fruit in the wood",
+            "poor_fruit":  "a poor fruit year",
+            "eagle":       "an eagle off the cliffs with a fish",
+            "eaglets":     "eaglets on the cliffs",
+            "cove_fry":    "fry in the cove at low water",
+            "caves":       "the sea was loud in the caves",
             "berries":     "berries in the wood",
             "in_berries":  "the small birds were in the berries",
             "birds_hungry": "the small birds went hungry",
@@ -606,6 +664,14 @@ def fresh_state(seed: int, edition: str = "sounds", year_tide: int = 0) -> dict:
         "small birds": {k: SPECIES["small birds"]["start"].get(k, 0) for k in SHORES},
         "worms": {k: SPECIES["worms"]["start"] for k in SHORES},
         "berries": {k: 0 for k in SHORES},
+        "flowers": {k: 0 for k in SHORES},
+        "bees": {k: SPECIES["bees"]["start"].get(k, 0) for k in SHORES},
+        "fruit": {k: 0 for k in SHORES},
+        "pollination": {k: [0.0, 0] for k in SHORES},   # summed index, tides
+        "fishing eagles": {k: SPECIES["fishing eagles"]["start"].get(k, 0) for k in SHORES},
+        "rafts": SPECIES["rafts"]["start"] if AT_SEA else 0,
+        "sea ostriches": SPECIES["sea ostriches"]["start"] if AT_SEA else 0,
+        "gathered_fruit": 0,
         "flags": {"thin": False, "hungry": {k: False for k in SHORES},
                   "bare": {k: False for k in SHORES},
                   "deer_hungry": {k: False for k in SHORES},
@@ -614,6 +680,10 @@ def fresh_state(seed: int, edition: str = "sounds", year_tide: int = 0) -> dict:
                   "goats_hungry": {k: False for k in SHORES},
                   "birds_hungry": {k: False for k in SHORES},
                   "shoals_thin": False,
+                  "blossom_told": {k: False for k in SHORES},
+                  "bees_told": {k: False for k in SHORES},
+                  "fruit_told": {k: False for k in SHORES},
+                  "fry_told": {k: False for k in SHORES},
                   "whales_home": season_for(year_tide)["name"] not in SPECIES["whales"]["away"],
                   "berries_told": {k: False for k in SHORES},
                   "in_berries_told": {k: False for k in SHORES},
@@ -694,6 +764,9 @@ def step(state: dict) -> str:
     puffin_fish = (min(h, state["puffins"] * ps["take"] * work)
                    if SKERRIES and sn not in ps["away"] else 0)
     h -= int(puffin_fish)
+    es = SPECIES["fishing eagles"]
+    eagle_fish = min(h, int(sum(state["fishing eagles"].values()) * es["fish_each"] * work))
+    h -= eagle_fish
     catch = min(h, int(h * CATCH_SHARE * work), CATCH_MOST) if QUAY else 0
     h -= catch
     state["landed"] += catch
@@ -857,6 +930,11 @@ def step(state: dict) -> str:
     berries_out: list[str] = []
     in_berries_out: list[str] = []
     birds_hungry: list[str] = []
+    blossom_out: list[str] = []
+    bees_out: list[str] = []
+    fruit_out: list[str] = []
+    poor_out: list[str] = []
+    fry_out: list[str] = []
     for place in SHORES:
         name = PLACES[place]["name"]
         b, d, w = browse[place], deer[place], wolves[place]
@@ -964,6 +1042,8 @@ def step(state: dict) -> str:
         rabbits[place] = r
 
         mast = 2.0 if sn == qs["mast"] else 1.0
+        if state["fruit"][place] > 200:
+            mast *= 1.5
         q += rounded(qs["rate"] * grow * mast * q * (1 - q / qs["cap"]), rng)
         if weather == "storm" and q:
             q += rounded(q * qs["windfall"], rng)
@@ -1010,6 +1090,85 @@ def step(state: dict) -> str:
         state["small birds"][place] = sb
         state["worms"][place] = max(0, wm)
         state["berries"][place] = max(0, br)
+
+        # -- the blossom, the bees, and the fruit they set ---------------
+        fls, bes, frs = SPECIES["flowers"], SPECIES["bees"], SPECIES["fruit"]
+        F, B, fr = state["flowers"][place], state["bees"][place], state["fruit"][place]
+        poll = state["pollination"][place]
+        if sn in fls["seasons"]:
+            F = min(fls["capacity"], F + int(fls["set"] * grow))
+            if not flags["blossom_told"][place]:
+                blossom_out.append(place)
+                flags["blossom_told"][place] = True
+            poll[0] += min(1.0, B / bes["full_at"])
+            poll[1] += 1
+        else:
+            F -= rounded(F * fls["fade"], rng)
+            flags["blossom_told"][place] = False
+        if B and sn not in bes["away"]:
+            fed_bee = min(1.0, F / (B * bes["need"])) if F else 0.0
+            if sn in fls["seasons"]:
+                if fed_bee > 0.5 and not flags["bees_told"][place]:
+                    bees_out.append(place)
+                    flags["bees_told"][place] = True
+                if (fed_bee >= 0.8 and in_season(bes, sn) and B < bes["cap"]
+                        and rng.random() < bes["breed"]):
+                    B += 1
+            if weather == "storm":
+                B -= rounded(B * bes["storm_loss"], rng)
+            B = max(1, B)
+        if sn == "winter":
+            flags["bees_told"][place] = False
+        if sn in frs["ripen"]:
+            index = (poll[0] / poll[1]) if poll[1] else 0.0
+            if not flags["fruit_told"][place]:
+                (poor_out if index < frs["poor_below"] else fruit_out).append(place)
+                flags["fruit_told"][place] = True
+            fr = min(frs["capacity"], fr + int(frs["set"] * index))
+        else:
+            if flags["fruit_told"][place] and sn == "winter":
+                flags["fruit_told"][place] = False
+                poll[0], poll[1] = 0.0, 0
+            fr -= rounded(fr * 0.1, rng)
+        eaten = min(fr, int(d * 0.2 + q * 0.03 + sb * 0.01))
+        fr -= eaten
+        if place == QUAY:
+            picked_fruit = min(fr // 10, 20)
+        elif place == HERMITS["island"]:
+            picked_fruit = min(fr // 10, 8)
+        else:
+            picked_fruit = 0
+        fr -= picked_fruit
+        state["gathered_fruit"] += picked_fruit
+        state["flowers"][place] = max(0, F)
+        state["bees"][place] = B
+        state["fruit"][place] = max(0, fr)
+
+        # -- fishing eagles ----------------------------------------------
+        E = state["fishing eagles"][place]
+        if E:
+            fed_e = work if state["herring"] > 0 else 0.0
+            if (fed_e >= 0.8 and spring and in_season(es, sn) and E < es["cap"]
+                    and rng.random() < es["breed"]):
+                E += 1
+                events.append(LINES["eaglets"].format(place=name))
+            elif fed_e < 0.3 and E > 1 and rng.random() < es["short"]:
+                E -= 1
+            elif weather in ("calm", "fresh") and rng.random() < 0.008:
+                events.append(LINES["eagle"])
+        state["fishing eagles"][place] = E
+
+        # -- the coves and the caves -------------------------------------
+        if PLACES[place].get("coves"):
+            if sn in ("spring", "summer") and spring and weather == "calm":
+                if not flags["fry_told"][place]:
+                    fry_out.append(place)
+                    flags["fry_told"][place] = True
+            elif sn == "winter":
+                flags["fry_told"][place] = False
+        if (PLACES[place].get("caves") and weather == "storm" and sn == "winter"
+                and rng.random() < 0.1):
+            events.append(LINES["caves"])
 
         if f:
             fed_f = (fox_hunting + (scraps * 0.1 if place == QUAY else 0)) / (f * fs["need"])
@@ -1113,7 +1272,12 @@ def step(state: dict) -> str:
                                (dragonflies_out, "dragonflies", "dragonflies_all"),
                                (berries_out, "berries", "berries_all"),
                                (in_berries_out, "in_berries", "in_berries_all"),
-                               (birds_hungry, "birds_hungry", "birds_hungry_all")):
+                               (birds_hungry, "birds_hungry", "birds_hungry_all"),
+                               (blossom_out, "blossom", "blossom_all"),
+                               (bees_out, "bees", "bees_all"),
+                               (fruit_out, "fruit", "fruit_all"),
+                               (poor_out, "poor_fruit", "poor_fruit_all"),
+                               (fry_out, "cove_fry", "cove_fry_all")):
         if len(places) == len(SHORES) > 1:
             events.append(LINES[every])
         else:
@@ -1169,7 +1333,7 @@ def sea_events(state, rng, sn, season, r, weather, spring, stir, events) -> None
     state["plankton"] = P
     # the shoals
     ss, S = SPECIES["shoals"], state["shoals"]
-    S += int(ss["rate"] * (P / 100) * S * (1 - S / ss["capacity"]))
+    S += int(ss["rate"] * (P / 100) * (1 + state["rafts"] / 100) * S * (1 - S / ss["capacity"]))
     ds, D = SPECIES["dolphins"], state["dolphins"]
     ease = min(1.0, S / ds["easy_above"]) ** 2
     taken = min(S, rounded(D * ds["fish_each"] * ease, rng))
@@ -1237,6 +1401,39 @@ def sea_events(state, rng, sn, season, r, weather, spring, stir, events) -> None
         if R > 0.8 * cap and weather == "calm" and rng.random() < 0.03:
             events.append(LINES["reef_fish"])
     state["reef fish"] = max(1, R) if R or C else 0
+    # the rafts of sea trees, and the sea ostriches that ride them
+    rf, K = SPECIES["rafts"], state["rafts"]
+    if sn in rf["seasons"] and weather == "calm" and K < rf["cap"] and rng.random() < rf["form"]:
+        K += 1
+    if weather == "storm":
+        lost = rounded(K * rf["break"], rng)
+        K -= lost
+        if lost >= rf["broke_told"]:
+            events.append(LINES["rafts_broke"])
+    elif sn == "winter":
+        K -= rounded(K * rf["sink"], rng)
+    elif K and weather in ("calm", "fresh") and rng.random() < 0.03:
+        events.append(LINES["raft"])
+    K = max(0, K)
+    state["rafts"] = K
+    os_, O = SPECIES["sea ostriches"], state["sea ostriches"]
+    if O:
+        nests = K * os_["per_raft"]
+        fed = min(1.0, S / ds["easy_above"])
+        if (fed >= 0.5 and in_season(os_, sn) and O < min(os_["cap"], nests)
+                and rng.random() < os_["breed"]):
+            O += 1
+            events.append(LINES["ostrich_chicks"])
+        if weather == "storm":
+            O -= rounded(O * os_["storm_loss"], rng)
+        if O > nests and sn == "winter" and rng.random() < 0.1:
+            O -= 1
+        if fed < 0.5 and rng.random() < 0.02:
+            O -= 1
+            events.append(LINES["ostriches_short"])
+        elif K and weather in ("calm", "fresh") and rng.random() < 0.04:
+            events.append(LINES["ostriches"])
+    state["sea ostriches"] = max(0, O)
 
 
 def run(state: dict, tides: int, out=None) -> None:
@@ -1276,6 +1473,9 @@ def summary(state: dict) -> list[str]:
             lines.append(f"  {'':<40} small birds {state['small birds'][key]}   "
                          f"worms {state['worms'][key]}   "
                          f"berries {state['berries'][key]}")
+            lines.append(f"  {'':<40} blossom {state['flowers'][key]}   "
+                         f"bees {state['bees'][key]}   fruit {state['fruit'][key]}   "
+                         f"fishing eagles {state['fishing eagles'][key]}")
         elif key == "skerries":
             lines.append(f"  {name:<40} seals {state['seals']}   "
                          f"puffins {state['puffins']}")
@@ -1284,6 +1484,8 @@ def summary(state: dict) -> list[str]:
             lines.append(f"  {name:<40} plankton {state['plankton']}   "
                          f"shoals {state['shoals']}   dolphins {state['dolphins']}   "
                          f"whales {whales}")
+            lines.append(f"  {'':<40} rafts of sea trees {state['rafts']}   "
+                         f"sea ostriches {state['sea ostriches']}")
         elif key == "reef":
             lines.append(f"  {name:<40} coral {state['coral']}   "
                          f"reef fish {state['reef fish']}")
@@ -1299,6 +1501,8 @@ def summary(state: dict) -> list[str]:
                      f"{state['landed']} herring.")
     if state["gathered"]:
         lines.append("  " + LINES["gathered"].format(n=state["gathered"]))
+    if state["gathered_fruit"]:
+        lines.append(f"  Fruit gathered: {state['gathered_fruit']}.")
     if FERRY:
         lines.append(f"  The Warden's ledger runs to {len(state['warden'])} lines; "
                      "--ledger shows it.")
@@ -1451,7 +1655,8 @@ def save_state(path: str, state: dict) -> None:
 
 COUNTED = ("gulls", "shellfish", "deer", "wolves", "browse", "rabbits",
            "squirrels", "foxes", "cats", "goats", "dragonflies", "harriers",
-           "sparrowhawks", "ponies", "alpacas", "small birds", "worms", "berries")
+           "sparrowhawks", "ponies", "alpacas", "small birds", "worms", "berries",
+           "flowers", "bees", "fruit", "fishing eagles")
 
 
 def check() -> list[str]:
@@ -1491,7 +1696,8 @@ def check() -> list[str]:
     for seed in range(1, 5):
         s = fresh_state(seed, "sea")
         run(s, YEAR_TIDES + 200)
-        for key in ("shoals", "dolphins", "whales", "coral", "reef fish", "plankton"):
+        for key in ("shoals", "dolphins", "whales", "coral", "reef fish", "plankton",
+                    "rafts", "sea ostriches"):
             if s[key] < 0:
                 bad(f"sea, seed {seed}: {key} went negative")
         text = "\n".join(s["chronicle"] + summary(s))

@@ -54,9 +54,11 @@ none; the ferrymen still do not point at the island.
   wood in the hill's lee and pools on its top. Gulls on the cliffs,
   goats on the crags, rabbits on the hill and harriers over it,
   squirrels and sparrowhawks in the wood, small birds in the hedges on
-  the worms and the berries, dragonflies over the pools, shellfish on
-  the shore and the Sounds' herring off it. No deer, no wolves, no
-  foxes, and nothing kept.
+  the worms and the berries, bees in the blossom and fruit in the wood
+  in a good year, fishing eagles off the cliffs, dragonflies over the
+  pools, shellfish on the shore and the Sounds' herring off it; coves
+  along its northern shore and sea caves under the cliffs. No deer, no
+  wolves, no foxes, and nothing kept.
 - The gulls that leave the three islands in a calm spell go there,
   and come back. The record follows them that far and no further.
 - A few human hermits, and no settlement. They are sailors: some came
@@ -69,6 +71,21 @@ none; the ferrymen still do not point at the island.
   They have no names and no number, and nobody has written why the
   ones who chose it chose it.
 
+## The islands and the shore, so far
+
+- Every island has coves along its shore, and where there are cliffs,
+  sea caves under them. Fry gather in the coves at low water in the warm
+  half of the year; in a winter storm the seals go into the caves.
+- Blossom on the hills in spring and summer, and bees in it; fruit in
+  the woods in autumn, as much as the bees made — a poor fruit year is
+  one the bees missed. The deer, the squirrels and the small birds eat
+  it, and so do the Keep's people and the hermits.
+- Fishing eagles, a pair or two on every island, fish the Sounds and
+  the water off Fourth Island's cliffs.
+- The ferry starts from the old quay on the mainland shore, below the
+  inn, and lands at the water-stairs of First Island; that is the whole
+  of its crossing, and the record has it from Chapter One.
+
 ## The open sea, so far
 
 - **The rest of the known world is open sea** (the author, 2026-09-06).
@@ -80,6 +97,10 @@ none; the ferrymen still do not point at the island.
   rest of the year, nobody knowing where.
 - South of Fourth Island, in shallower water, a coral reef with its own
   fish. The warm seasons grow it and the storms break it.
+- Rafts of floating sea trees form on the open sea in the warm seasons,
+  drift, shelter fish, and break up in storms. Sea ostriches ride them:
+  big flightless birds that live on the rafts, dive for fish, nest on
+  the rafts, and cannot land on the islands.
 - The sailors who come to Fourth Island came across all of this. Nobody
   keeps an account of the sea; what the record has of it is what might
   be seen from a deck.

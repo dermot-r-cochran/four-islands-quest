@@ -103,6 +103,16 @@ And on the hills above the shores:
   hatches them, a storm knocks them down, and the pools always hold a
   few more. The chronicle says when they are over every pool in the
   kingdom.
+- **Blossom, bees and fruit.** Blossom on the hills in spring and
+  summer; bees in it, which breed while it lasts and sleep the winter;
+  and fruit in the woods in autumn, as much as the bees made — a poor
+  fruit year is one the bees missed. The deer, the squirrels and the
+  small birds eat it, and the Keep's people and the hermits gather it.
+- **Fishing eagles**, a pair or two on every written island, fishing the
+  Sounds and the water off the cliffs.
+- **Coves and sea caves.** Fry gather in the coves at low water in the
+  warm half of the year; in a winter storm the seals go into the caves,
+  and on Fourth Island the sea is loud in them.
 - **Ponies and alpacas**, the Keep's stock on First Island, kept like
   the cats: they graze the hill when it has grazing and eat the Keep's
   hay when it does not, so they never go short; now and then there is a
@@ -196,7 +206,11 @@ feed on it, too many to count; the dolphins that live on the shoals;
 the whales that come in for the plankton in summer and autumn and go,
 wherever they go, for the rest of the year; and south of Fourth Island,
 in shallower water, the coral, which the warm seasons grow and the
-storms break, with the reef fish that live on it. Nobody keeps an
+storms break, with the reef fish that live on it; and the rafts of
+floating sea trees that form in the warm seasons, drift, shelter the
+shoals and break up in storms, with the sea ostriches that ride them —
+big flightless birds that dive for fish, nest on the rafts, and cannot
+land on the islands. Nobody keeps an
 account out here, so the voice is what a sailor might have told, had a
 sailor come in, and a quiet tide has its own ways of being quiet —
 *flat calm to the edge of the world*. `--check` fails if the account

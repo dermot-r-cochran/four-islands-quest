@@ -69,6 +69,7 @@ skerries and the puffins beside them, and on the hills above them the
 grazing, the deer, goats and rabbits that eat it, the wolves and foxes
 that hunt them, the harriers over the moor and the sparrowhawks in the
 wood, the squirrels, the small birds on the worms and the berries, the
+bees in the blossom and the fruit they set, the fishing eagles, the
 dragonflies over the pools, and the Keep's cats, ponies and alpacas —
 and, every tide, the ferry crossing and the Warden
 writing down what the Guild will not say aloud.
@@ -88,8 +89,9 @@ noticed: no ferry, no ledger, and the hermits never counted. See
 [`sandbox/README.md`](./sandbox/README.md).
 
 Beyond them all is the open sea, the rest of the known world — plankton
-and shoals, dolphins and whales, and the reef south of Fourth Island — in
-a third edition, `--edition sea`, seen from a deck.
+and shoals, dolphins and whales, the reef south of Fourth Island, and
+rafts of floating sea trees with sea ostriches riding them — in a third
+edition, `--edition sea`, seen from a deck.
 
 On the site each has a page: the Pages workflow runs one tide-cycle of
 each, seeded by the date, and publishes the Sounds at
