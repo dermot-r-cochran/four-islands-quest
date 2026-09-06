@@ -115,7 +115,7 @@ lines to keep the file readable — follow that.
 ## Governance
 
 **`WORLD.md` is the entire canon apparatus** and is deliberately minimal: the
-repo is the record, five spine facts bind, everything else is soft, no hidden
+repo is the record, six spine facts bind, everything else is soft, no hidden
 canon exists, and the register stays general-audience. Read it before writing
 world content, and keep it accurate if the spine changes.
 
