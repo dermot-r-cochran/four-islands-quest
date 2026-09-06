@@ -57,6 +57,24 @@ No browser, no JavaScript runtime, nothing to install — it parses the
 world's object literals rather than executing them. See
 [`teller/README.md`](./teller/README.md).
 
+## A sandbox
+
+`sandbox/` is a third thing beside the engine and the player: a mini
+ecosystem of the waters the kingdom is named for, ticking one tide at
+a time. The bloom the tide stirs up, the herring that feed on it, the
+shellfish on three shores, the gulls that eat both, the seals on the
+skerries — and, every tide, the ferry crossing and the Warden writing
+down what the Guild will not say aloud.
+
+```bash
+python3 sandbox/ecosystem.py                  # one tide-cycle
+python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going between visits
+```
+
+It is not a chapter and not a player; it invents nothing about Fourth
+Island, which it lists and does not simulate. See
+[`sandbox/README.md`](./sandbox/README.md).
+
 ## Forking it
 
 The demo ends where your world begins: replace the four data structures at
@@ -71,8 +89,9 @@ CI runs on every push and pull request, and installs nothing — the engine
 has no build and the tools have no dependencies:
 
 ```bash
-python3 -m compileall -q teller tools   # everything parses
-python3 tools/validate.py               # the world data holds together
+python3 -m compileall -q teller tools sandbox   # everything parses
+python3 tools/validate.py                       # the world data holds together
+python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 ```
 
 `tools/validate.py` is the useful one. It reads the world out of
@@ -80,8 +99,11 @@ python3 tools/validate.py               # the world data holds together
 examinable that does not exist, two chapters sharing a `saveId`, a company
 referencing a company that isn't there, an endcard offering a chapter that
 follows nothing — and warns on judgement calls, like an examinable nothing
-looks at. CI also plays the quest end to end and checks that no build
-artifacts are tracked.
+looks at. The sandbox's `--check` proves its own small set: no count goes
+negative, the ferry misses no tide, the chronicle never counts the bell
+aloud or speaks of Fourth Island, and a run continued from a save is the
+run played straight through. CI also plays the quest end to end and checks
+that no build artifacts are tracked.
 
 ## Extending
 

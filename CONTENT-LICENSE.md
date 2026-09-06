@@ -5,8 +5,9 @@ forked freely while the demo world's writing carries attribution.
 
 ## Engine — MIT
 
-Everything outside the WORLD DATA section of `index.html` — the
-engine script, page markup, styles, the `teller/` terminal player, and
+Everything outside the WORLD DATA sections of `index.html` and
+`sandbox/ecosystem.py` — the engine script, page markup, styles, the
+`teller/` terminal player, the sandbox's engine, `tools/`, and
 repository scaffolding — is licensed under the MIT License. See
 `LICENSE`.
 
@@ -15,8 +16,10 @@ repository scaffolding — is licensed under the MIT License. See
 The story content of the demo world — the prose and world data in
 `index.html`'s WORLD DATA section (`CHAPTERS`, `EXAMINE`, and
 `FACTIONS`: chapter text, choice text, examinable descriptions,
-company descriptions, and their names) — is licensed under the
-Creative Commons Attribution 4.0 International license (CC BY 4.0):
+company descriptions, and their names), together with the WORLD DATA
+section of `sandbox/ecosystem.py` (its places, species, and chronicle
+lines) — is licensed under the Creative Commons Attribution 4.0
+International license (CC BY 4.0):
 
 https://creativecommons.org/licenses/by/4.0/
 
@@ -31,6 +34,6 @@ if changes were made. Suggested attribution:
 ## The intended fork path
 
 Fork the engine, then either build on the demo world (with
-attribution, as above) or replace the WORLD DATA section wholesale
+attribution, as above) or replace the WORLD DATA sections wholesale
 with your own world — a world you write yourself is yours alone, and
 only the MIT engine terms apply to it.
