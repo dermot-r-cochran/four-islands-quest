@@ -35,7 +35,10 @@ jobs:
       - name: Play the quest end to end
         run: |
           set -o pipefail
-          { yes 1 | head -200; echo q; } > /tmp/in.txt
+          # Two hundred "1"s then "q": always take the first choice, then
+          # leave. Written as a loop rather than `yes 1 | head -200`, which
+          # dies of SIGPIPE under pipefail before the player ever runs.
+          { for _ in $(seq 200); do echo 1; done; echo q; } > /tmp/in.txt
           python3 teller/teller.py --quest < /tmp/in.txt > /tmp/out.txt
           grep -q "End of" /tmp/out.txt || { cat /tmp/out.txt; exit 1; }
           echo "playthrough reached an endcard"

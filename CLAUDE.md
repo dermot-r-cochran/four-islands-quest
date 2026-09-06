@@ -41,6 +41,22 @@ consequences of it:
   structure earns one; this is a world of trivial structure and nothing but
   voice, so the builder would have almost nothing to do while the document
   still had everything.
+- **Evennia is permitted where it helps, and only where it is not heavyweight
+  or overkill** (Dermot's direction, 2026-09-06 — which narrows the bullet
+  above rather than repealing it). The line it draws: `index.html` and the
+  tools stay dependency-free, framework-free and server-free; CI still
+  installs nothing; the one-file engine remains the canonical player and the
+  only authoring surface, so the builder reasoning above stands whole. An
+  Evennia runner may stand *beside* them the way `teller/` does — a separate
+  player of the same world data, in its own directory, optional to install,
+  reading `index.html` rather than replacing it — for what a single file
+  cannot do: several players in one world at once, a world that persists on
+  a server, presences that act between visits. The test is the direction's
+  own words. If the one-file engine or `teller` can already do the thing,
+  Evennia is overkill for it; if the thing needs Evennia's whole stack
+  present for one reader to open one chapter, it is too heavyweight. Nothing
+  has been built on this yet, and the first thing that is should be able to
+  say which of those two tests it passed.
 
 ## Commands
 
@@ -99,9 +115,19 @@ lines to keep the file readable — follow that.
 ## Governance
 
 **`WORLD.md` is the entire canon apparatus** and is deliberately minimal: the
-repo is the record, five spine facts bind, everything else is soft, no hidden
+repo is the record, six spine facts bind, everything else is soft, no hidden
 canon exists, and the register stays general-audience. Read it before writing
 world content, and keep it accurate if the spine changes.
+
+**Time travel is in the spine** (Dermot's direction, 2026-09-06): it exists,
+and it never alters an established past event. To the engine that costs
+nothing — a chapter set in the past is an ordinary chapter with its own
+`saveId`, its choices still converge, and nothing branches, which is exactly
+why a past that cannot be altered fits this engine and a past that could
+would not. To the content it binds: a past-set chapter may add what the
+record never wrote and may not contradict a spine fact or a chapter that
+stands on `main`. `tools/validate.py` cannot check it; it is a judgement the
+author makes before committing.
 
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
