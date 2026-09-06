@@ -69,6 +69,7 @@ skerries and the puffins beside them, and on the hills above them the
 grazing, the deer, goats and rabbits that eat it, the wolves and foxes
 that hunt them, the harriers over the moor and the sparrowhawks in the
 wood, the squirrels, the small birds on the worms and the berries, the
+bees in the blossom and the fruit they set, the fishing eagles, the
 dragonflies over the pools, and the Keep's cats, ponies and alpacas —
 and, every tide, the ferry crossing and the Warden
 writing down what the Guild will not say aloud.
@@ -87,12 +88,18 @@ ground `WORLD.md` wrote for it in an account a hermit might have
 noticed: no ferry, no ledger, and the hermits never counted. See
 [`sandbox/README.md`](./sandbox/README.md).
 
+Beyond them all is the open sea, the rest of the known world — plankton
+and shoals, dolphins and whales, the reef south of Fourth Island, and
+rafts of floating sea trees with sea ostriches riding them — in a third
+edition, `--edition sea`, seen from a deck.
+
 On the site each has a page: the Pages workflow runs one tide-cycle of
 each, seeded by the date, and publishes the Sounds at
-https://dermot-r-cochran.github.io/four-islands-quest/sounds/ and Fourth
-Island at https://dermot-r-cochran.github.io/four-islands-quest/fourth/ ,
-ticking both over once a day. The Warden's ledger is on neither page —
-the bell is not counted aloud.
+https://dermot-r-cochran.github.io/four-islands-quest/sounds/ , Fourth
+Island at https://dermot-r-cochran.github.io/four-islands-quest/fourth/
+and the open sea at https://dermot-r-cochran.github.io/four-islands-quest/sea/ ,
+ticking all three over once a day. The Warden's ledger is on none of
+them — the bell is not counted aloud.
 
 ## Forking it
 
@@ -115,8 +122,8 @@ python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 
 A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
 every push to `main` and once a day: it copies that one file into a staging
-directory, has the sandbox write the day's two chronicles beside it, and
-hands all three to Pages. It installs nothing either.
+directory, has the sandbox write the day's three chronicles beside it,
+and hands all four to Pages. It installs nothing either.
 
 `tools/validate.py` is the useful one. It reads the world out of
 `index.html` and fails on what is always wrong — a beat looking at an
