@@ -66,7 +66,7 @@ ecosystem of the waters the kingdom is named for, ticking one tide at
 a time. The bloom the tide stirs up, the herring that feed on it, the
 shellfish on three shores, the gulls that eat both, the seals on the
 skerries and the puffins beside them, and on the hills above them the
-browse, the deer, goats and rabbits that graze it, the wolves and foxes
+grazing, the deer, goats and rabbits that eat it, the wolves and foxes
 that hunt them, the harriers over the moor and the sparrowhawks in the
 wood, the squirrels, the dragonflies over the pools, and the Keep's cats,
 ponies and alpacas — and, every tide, the ferry crossing and the Warden
