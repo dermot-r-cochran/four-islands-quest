@@ -65,12 +65,21 @@ python3 tools/validate.py            # the world data holds together
 python3 -m compileall -q teller tools # everything parses
 python3 teller/teller.py --quest     # play it in a terminal
 python3 teller/teller.py --quest --list
+python3 sandbox/ecosystem.py         # the Sounds, one tide-cycle
+python3 sandbox/ecosystem.py --check # the sandbox's invariants hold
 ```
 
 Run `tools/validate.py` before committing — CI runs it too, along with the
-parse gate, a full scripted playthrough, a guard that the shared tool stays
-world-agnostic, and a check that no build artifacts are tracked. CI installs
-nothing, and should stay that way.
+parse gate, the sandbox's `--check`, a full scripted playthrough, a guard
+that the shared tool stays world-agnostic, and a check that no build
+artifacts are tracked. CI installs nothing, and should stay that way.
+
+`.github/workflows/pages.yml` publishes `index.html` to GitHub Pages on
+every push to `main` (https://dermot-r-cochran.github.io/four-islands-quest/).
+It stages that one file and nothing else — the site is the quest; the
+tools, the sandbox and the docs stay in the repository — and it installs
+nothing either. Saves on the site live in that origin's localStorage, under
+the same `four-islands-` keys as anywhere else.
 
 ## The world data
 
@@ -129,6 +138,13 @@ record never wrote and may not contradict a spine fact or a chapter that
 stands on `main`. `tools/validate.py` cannot check it; it is a judgement the
 author makes before committing.
 
+**Fourth Island has one written line** (Dermot's direction, 2026-09-06: *no
+major settlements except a few human hermits*), recorded in `WORLD.md`
+under the no-hidden-canon rule, outside the spine — soft, and the whole of
+what is written. Everything else behind the island is still absent, not
+hidden: don't give the hermits names, a number or a reason until a chapter
+does, and keep the sandbox's Fourth Island line to exactly that.
+
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
 
@@ -158,9 +174,72 @@ repository**. Two consequences:
 this repository does not have. That is not dead code; it is the other shape
 the tool supports.
 
+## The sandbox
+
+`sandbox/ecosystem.py` is a mini ecosystem of the Four Sounds (Dermot's
+direction, 2026-09-06: *ecosystem mini sandbox*) — a third thing beside the
+engine and `teller/`, standing beside them the way the Evennia bullet says a
+second player may: its own directory, optional, reading `index.html` (the
+companies it names come from `FACTIONS` through `questfile`) rather than
+replacing it. One file, standard library only, the same shape as
+`index.html`: a WORLD DATA section on top — places, species, the weather,
+and every line the chronicle can say — and an engine below it that adds no
+words. Re-voice or re-stock the sandbox by editing the data; the engine
+should not need touching for that.
+
+What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
+grows a bloom, herring, shellfish, gulls, seals and puffins against each
+other on the water and, on the hills, browse, fallow deer, wild goats,
+rabbits, squirrels, dragonflies, wolves, foxes, hen harriers, sparrowhawks
+and the Keep's cats, ponies and alpacas against each other (wolves on
+Second and Third, which have narrows between them, and foxes cross them
+too; harriers over the moor on those two; First Island's deer answer to
+the Keep's huntsmen instead, and its cats, ponies and alpacas are kept
+rather than wild — Dermot's directions, 2026-09-06: *add wolves and fallow
+deer*; *add foxes, rabbits, cats and squirrels*; *wild goats, hen
+harriers, sparrowhawks, dragonflies, puffins, ponies and alpacas*), and
+every tide has the ferry cross (on any tide, and owed for it — an empty
+crossing is logged as owed) and the Warden write a ledger line the
+chronicle never speaks: the bell's rings. `--state PATH` keeps a world
+going between visits; `--history` shows its chronicle; `--ledger` shows
+the Warden's. `--check` is its test and runs in CI.
+
+Three rules it lives under, all consequences of `WORLD.md`:
+
+- **Its data is soft world content.** It sits on `main`, so it is part of
+  the record, but nothing in it is spine: no chapter owes the sandbox its
+  numbers or its species, and a later chapter may contradict it freely.
+  It is bounded the other way — nothing in it may contradict a spine fact,
+  and `--check` pins the two it could: the ferry crosses every tide, and
+  the bell is never counted aloud in the chronicle.
+- **Fourth Island is listed and not simulated.** No hidden canon: the
+  sandbox holds no populations there, prints its one written line (*a few
+  hermits, and nothing else is written of it*) and no more, and `--check`
+  fails if a run ever puts anything on it or names it in a chronicle
+  line. Gulls that go south leave the record, and come back
+  without saying where they were.
+- **The written past stays written.** One random stream per tide, keyed
+  on seed and tide number, so a run continued from a save is the run
+  played straight through, and revisiting a saved chronicle never changes
+  a line of it. `--check` proves both. This is the spine's time-travel
+  fact in the smallest form the sandbox can carry.
+
+Which of the Evennia tests it passed: neither, because it is not the
+Evennia runner and does not use Evennia. It is *mini* on purpose — one
+reader, one file, nothing that needs several players at once or a server
+— so Evennia would have been too heavyweight for it by the direction's own
+test, and the bullet above still says nothing has been built on Evennia
+yet. If a runner is ever built, this is the kind of thing it would drive
+between visits; until then the sandbox proves the model without the stack.
+
+`sandbox/` is this world's own, not a shared tool: it is world-specific by
+design, is not kept byte-identical with anything, and is not covered by the
+world-agnostic guard.
+
 ## Before committing
 
-Run `python3 tools/validate.py`. It fails on what is always wrong — a beat
+Run `python3 tools/validate.py` (and `python3 sandbox/ecosystem.py --check`
+if you touched the sandbox). It fails on what is always wrong — a beat
 looking at an examinable that does not exist, two chapters sharing a
 `saveId`, a company referencing an absent company, an endcard offering a
 chapter that follows nothing — and warns on judgement calls, like an

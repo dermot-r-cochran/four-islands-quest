@@ -1,3 +1,5 @@
 .teller-progress.json
+.ecosystem-state.json
 __pycache__/
 *.pyc
+_site/

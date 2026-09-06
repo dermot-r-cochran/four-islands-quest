@@ -37,6 +37,13 @@ The same line bounds time travel. *Established* means on `main`
 and nothing more: the unwritten past is open to a traveller, and
 the written past is fixed for one.
 
+What is written of Fourth Island, so far, is one line (the author,
+2026-09-06): it holds no major settlements — a few human hermits,
+and nothing more. That is the whole of it. The hermits have no
+names, no number and no reason yet; the ferrymen still do not point
+at the island; and the line is soft, like everything outside the
+spine, until a chapter stands on it.
+
 ## Who writes the world
 
 The engine (MIT) welcomes code fixes. The world content (CC BY 4.0)
