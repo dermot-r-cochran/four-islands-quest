@@ -33,7 +33,7 @@ stand beside that file, for what one file cannot do; the condition
 is in `CLAUDE.md`.
 
 World governance is deliberately minimal and lives whole in
-[`WORLD.md`](./WORLD.md): the repo is the record, five spine facts
+[`WORLD.md`](./WORLD.md): the repo is the record, six spine facts
 bind, everything else is soft, and no hidden canon exists.
 
 ## The demo world
