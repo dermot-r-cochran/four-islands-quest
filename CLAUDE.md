@@ -78,8 +78,9 @@ artifacts are tracked. CI installs nothing, and should stay that way.
 every push to `main` and once a day
 (https://dermot-r-cochran.github.io/four-islands-quest/). It stages that
 one file, has the sandbox write the day's chronicle beside it at
-`/sounds/` (`--html`, seeded by the date, so the same day gives the same
-Sounds to everyone), and installs nothing. The tools and the docs stay in
+`/sounds/` and Fourth Island's account at `/fourth/` (`--html`, seeded by
+the date, so the same day gives the same Sounds and the same island to
+everyone), and installs nothing. The tools and the docs stay in
 the repository. Saves on the site live in that origin's localStorage, under
 the same `four-islands-` keys as anywhere else. The chronicle page is
 generated, never hand-edited, and never `index.html`.
@@ -141,12 +142,23 @@ record never wrote and may not contradict a spine fact or a chapter that
 stands on `main`. `tools/validate.py` cannot check it; it is a judgement the
 author makes before committing.
 
-**Fourth Island has one written line** (Dermot's direction, 2026-09-06: *no
-major settlements except a few human hermits*), recorded in `WORLD.md`
-under the no-hidden-canon rule, outside the spine — soft, and the whole of
-what is written. Everything else behind the island is still absent, not
-hidden: don't give the hermits names, a number or a reason until a chapter
-does, and keep the sandbox's Fourth Island line to exactly that.
+**Fourth Island's ground is written** (Dermot's direction, 2026-09-06: *no
+major settlements except a few human hermits*, then *write the fourth
+island ground in WORLD.md*), in `WORLD.md`'s own section, outside the
+spine — soft, and the whole of what is written: south of the three and
+alone, the Sounds ending on its northern shore and open sea beyond; one
+hill, a stony shore, cliffs, a wood and pools; gulls, goats, rabbits,
+harriers, squirrels, sparrowhawks, dragonflies, shellfish and the Sounds'
+herring; no deer, wolves, foxes or kept beasts; the gulls that leave the
+three islands go there and come back, and the record follows them that
+far. The hermits are sailors — some came ashore by choice, some the sea
+put there, and now and then one more arrives or is stranded (Dermot's
+direction, same day: *hermits as sailors who arrive or are stranded*) —
+who gather and take a goat now and then, keep no ledger and count no
+tide. Everything else is still absent, not hidden: **the hermits have no
+names and no number, the record never says which of them chose it, and
+nobody has written why** — never count them, name them or sort them — and
+the ferrymen still do not point at the island.
 
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
@@ -190,6 +202,29 @@ and every line the chronicle can say — and an engine below it that adds no
 words. Re-voice or re-stock the sandbox by editing the data; the engine
 should not need touching for that.
 
+It runs **two editions** on one engine (`EDITIONS` in the data): the
+**Sounds** — the three islands, the skerries, the ferry and the Warden, in
+the ferryman's voice — and **Fourth Island** (`--edition fourth`) — one
+island facing open sea, no ferry, no ledger, no counted hermit, in an
+account a hermit might have noticed, with its own words for the same
+events and a pool of ways a quiet tide can be quiet. The Sounds edition
+lists Fourth Island and does not simulate it, because ferrymen do not
+point at it.
+
+It keeps **a year of 730 tides with four seasons** (Dermot's direction,
+2026-09-06: *seasons and weather*): each season sets the weather's odds,
+the bloom's level, how fast the plants grow and how hard hunger bites, and
+every species breeds in its own seasons; small birds live on the worms in
+the turf and the berries the wood sets in autumn, and are what the
+sparrowhawks and the cats hunt (same day: *small birds eat worms and
+berries*) — the tide words are *springs*,
+*neaps* and *middling* so a season called spring is never a tide.
+`--date` starts a run on that day of the year, which is what the daily
+pages use. Every species carries **a biosphere role** (the same
+direction: *biosphere roles*) — grows, feeds, hunts, picks up after, is
+kept — listed on each page, and carrion from the wolves' kills feeds the
+scavengers, so the roles do work as well as name things.
+
 What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
 grows a bloom, herring, shellfish, gulls, seals and puffins against each
 other on the water and, on the hills, the grazing (`browse` in the data,
@@ -219,12 +254,14 @@ Three rules it lives under, all consequences of `WORLD.md`:
   It is bounded the other way — nothing in it may contradict a spine fact,
   and `--check` pins the two it could: the ferry crosses every tide, and
   the bell is never counted aloud in the chronicle.
-- **Fourth Island is listed and not simulated.** No hidden canon: the
-  sandbox holds no populations there, prints its one written line (*a few
-  hermits, and nothing else is written of it*) and no more, and `--check`
-  fails if a run ever puts anything on it or names it in a chronicle
-  line. Gulls that go south leave the record, and come back
-  without saying where they were.
+- **Fourth Island keeps its own account.** In the Sounds edition it is
+  listed and not simulated, and `--check` fails if that run ever puts
+  anything on it or names it in a chronicle line; in its own edition it
+  carries exactly what `WORLD.md` wrote of it and no more, and `--check`
+  fails if its account ever mentions the ferry, a fare, the Guild, the
+  Warden, a ledger or a quay, counts the bell, or counts the hermits.
+  Gulls that go south leave the ferryman's record; on Fourth Island they
+  come in off the sea, and neither account ties the two.
 - **The written past stays written.** One random stream per tide, keyed
   on seed and tide number, so a run continued from a save is the run
   played straight through, and revisiting a saved chronicle never changes

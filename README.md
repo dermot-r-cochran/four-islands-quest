@@ -68,8 +68,9 @@ shellfish on three shores, the gulls that eat both, the seals on the
 skerries and the puffins beside them, and on the hills above them the
 grazing, the deer, goats and rabbits that eat it, the wolves and foxes
 that hunt them, the harriers over the moor and the sparrowhawks in the
-wood, the squirrels, the dragonflies over the pools, and the Keep's cats,
-ponies and alpacas — and, every tide, the ferry crossing and the Warden
+wood, the squirrels, the small birds on the worms and the berries, the
+dragonflies over the pools, and the Keep's cats, ponies and alpacas —
+and, every tide, the ferry crossing and the Warden
 writing down what the Guild will not say aloud.
 
 ```bash
@@ -77,16 +78,21 @@ python3 sandbox/ecosystem.py                  # one tide-cycle
 python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going between visits
 ```
 
-It is not a chapter and not a player; it invents nothing about Fourth
-Island, which it lists with the one line `WORLD.md` holds of it and does
-not simulate. See
+It keeps a year with four seasons, each species breeding in its own,
+and every species carries a role in the biosphere — what grows, what
+feeds, what hunts, what picks up after — which the pages list. It is not
+a chapter and not a player. Fourth Island, which the ferrymen
+do not point at, is its own edition — `--edition fourth` — running the
+ground `WORLD.md` wrote for it in an account a hermit might have
+noticed: no ferry, no ledger, and the hermits never counted. See
 [`sandbox/README.md`](./sandbox/README.md).
 
-On the site it has a page of its own: the Pages workflow runs one
-tide-cycle seeded by the date and publishes the chronicle at
-https://dermot-r-cochran.github.io/four-islands-quest/sounds/ , ticking
-it over once a day. The Warden's ledger is not on the page — the bell is
-not counted aloud.
+On the site each has a page: the Pages workflow runs one tide-cycle of
+each, seeded by the date, and publishes the Sounds at
+https://dermot-r-cochran.github.io/four-islands-quest/sounds/ and Fourth
+Island at https://dermot-r-cochran.github.io/four-islands-quest/fourth/ ,
+ticking both over once a day. The Warden's ledger is on neither page —
+the bell is not counted aloud.
 
 ## Forking it
 
@@ -109,8 +115,8 @@ python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 
 A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
 every push to `main` and once a day: it copies that one file into a staging
-directory, has the sandbox write the day's chronicle beside it, and hands
-both to Pages. It installs nothing either.
+directory, has the sandbox write the day's two chronicles beside it, and
+hands all three to Pages. It installs nothing either.
 
 `tools/validate.py` is the useful one. It reads the world out of
 `index.html` and fails on what is always wrong — a beat looking at an

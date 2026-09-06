@@ -1,11 +1,12 @@
 name: Pages
 
 # Serves index.html from GitHub Pages on every push to main, and beside it
-# a page the sandbox writes: one tide-cycle of the Sounds, seeded by the
-# date, at /sounds/. Nothing is installed — the sandbox is standard
-# library — and the tools and the README stay in the repository. The
-# daily schedule re-runs the same job so the Sounds tick over once a day
-# for every reader; the same day gives the same Sounds to everyone.
+# two pages the sandbox writes, seeded by the date: one tide-cycle of the
+# Sounds at /sounds/, and Fourth Island's own account at /fourth/. Nothing
+# is installed — the sandbox is standard library — and the tools and the
+# README stay in the repository. The daily schedule re-runs the same job
+# so both tick over once a day for every reader; the same day gives the
+# same Sounds, and the same island, to everyone.
 # (GitHub pauses scheduled workflows after sixty days without a commit;
 # a push or a manual run wakes them.)
 
@@ -39,11 +40,13 @@ jobs:
           mkdir -p _site
           cp index.html _site/index.html
 
-      - name: Tick the Sounds over for today
+      - name: Tick the Sounds and Fourth Island over for today
         run: |
           python3 sandbox/ecosystem.py --check
           python3 sandbox/ecosystem.py --seed "$(date -u +%Y%m%d)" \
             --date "$(date -u +%F)" --html _site/sounds/index.html
+          python3 sandbox/ecosystem.py --edition fourth --seed "$(date -u +%Y%m%d)" \
+            --date "$(date -u +%F)" --html _site/fourth/index.html
 
       - uses: actions/configure-pages@v5
         with:
