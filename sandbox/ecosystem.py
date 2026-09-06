@@ -16,6 +16,7 @@ Crown's Warden writes down what the Guild will not say aloud.
     python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going between visits
     python3 sandbox/ecosystem.py --state .ecosystem-state.json --history   # the written past
     python3 sandbox/ecosystem.py --ledger              # the Warden's ledger, rings and all
+    python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page, for the site
     python3 sandbox/ecosystem.py --check               # the invariants hold
 
 Standard library only: nothing installed, fetched, or executed from
@@ -31,6 +32,8 @@ engine below it never needs editing to re-voice or re-stock the sandbox.
 from __future__ import annotations
 
 import argparse
+import datetime
+import html
 import json
 import math
 import os
@@ -236,6 +239,22 @@ LINES = {
     "numbers":     ["no", "one", "two", "three", "four", "five", "six"],
     "companies":   "On the water: {name} — {quest}",
     "not_written": "not simulated — {written}",
+}
+
+# The chronicle as a page. The engine fills the braces; the words are here.
+PAGE = {
+    "title":    "The Sounds",
+    "kicker":   "The Kingdom of the Four Sounds",
+    "lede":     "One tide-cycle of the waters the kingdom is named for, "
+                "ticked over on {date}. The chronicle is the ferryman's: one "
+                "line a tide, what happened and whether it was worth a fare. "
+                "The Warden's ledger is kept and not shown — the bell is not "
+                "counted aloud.",
+    "chronicle": "The chronicle",
+    "after":    "After the cycle",
+    "back":     "Back to the quest",
+    "foot":     "A mini ecosystem, run again each day from the repository's "
+                "sandbox; the same day gives the same Sounds to everyone.",
 }
 
 # ============================================================
@@ -785,6 +804,65 @@ def ledger(state: dict) -> list[str]:
     return lines
 
 
+def render_html(state: dict, companies_lines: list[str], date: str) -> str:
+    """The chronicle and summary as one self-contained page, in the quest's
+    own palette. No ledger: the rings stay with the Warden."""
+    esc = html.escape
+    head = "\n".join(f"<p class=\"company\">{esc(c)}</p>" for c in companies_lines)
+    lines = "\n".join(f"<li>{esc(line)}</li>" for line in state["chronicle"])
+    after = "\n".join(f"<li>{esc(line.strip())}</li>" for line in summary(state)[1:]
+                       if "--ledger" not in line)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(PAGE["title"])} · {esc(PAGE["kicker"])}</title>
+<style>
+  :root {{ --ground:#f6f2e8; --panel:#ffffff; --ink:#2b2620; --dim:#6f675a;
+           --sea:#1d5f6e; --gold:#8a6d1f; --line:#d9d2c2; }}
+  * {{ box-sizing: border-box; }}
+  body {{ margin:0; background:var(--ground); color:var(--ink);
+          font:17px/1.65 Georgia, "Times New Roman", serif; }}
+  header {{ padding:1.2rem 1.5rem .9rem; border-bottom:1px solid var(--line);
+            background:var(--panel); }}
+  header h1 {{ margin:0 0 .2rem; font-size:1.5rem; letter-spacing:.02em; }}
+  header p {{ margin:0; color:var(--dim); font-style:italic; }}
+  main {{ max-width:44rem; margin:0 auto; padding:1.2rem 1.5rem 4rem; }}
+  h2 {{ font-size:.8rem; letter-spacing:.14em; text-transform:uppercase;
+        color:var(--sea); margin:1.6rem 0 .5rem; }}
+  ul {{ padding-left:1.1rem; }}
+  li {{ margin:.35rem 0; }}
+  .company {{ color:var(--dim); margin:.3rem 0; }}
+  .after li {{ color:var(--dim); }}
+  a {{ color:var(--sea); }}
+  footer {{ color:var(--dim); font-size:.92em; margin-top:2rem;
+            border-top:1px solid var(--line); padding-top:.8rem; }}
+</style>
+</head>
+<body>
+<header>
+  <h1>{esc(PAGE["title"])}</h1>
+  <p>{esc(PAGE["kicker"])} · <a href="../">{esc(PAGE["back"])}</a></p>
+</header>
+<main>
+<p>{esc(PAGE["lede"].format(date=date))}</p>
+{head}
+<h2>{esc(PAGE["chronicle"])}</h2>
+<ul>
+{lines}
+</ul>
+<h2>{esc(PAGE["after"])}</h2>
+<ul class="after">
+{after}
+</ul>
+<footer>{esc(PAGE["foot"])}</footer>
+</main>
+</body>
+</html>
+"""
+
+
 def companies(root: str) -> list[str]:
     """Name the companies on the water, read from index.html. Absent
     file or absent company: nothing is said, and nothing is invented."""
@@ -862,6 +940,15 @@ def check() -> list[str]:
             if PLACES["fourth"]["name"] in line:
                 bad(f"seed {seed}: the chronicle spoke of Fourth Island: {line}")
 
+    # the page says what the chronicle says, and nothing the Warden keeps
+    s = fresh_state(2)
+    run(s, TIDES_PER_CYCLE)
+    page = render_html(s, ["On the water: a company — its quest"], "a day")
+    if PAGE["title"] not in page or s["chronicle"][-1].split(" — ")[0] not in page:
+        bad("the page does not carry the chronicle")
+    if re.search(r"\brings?\b", page) or "--ledger" in page:
+        bad("the page counted the bell aloud, or pointed at the Warden's ledger")
+
     # the same seed is the same world
     a, b = fresh_state(3), fresh_state(3)
     run(a, 40)
@@ -899,6 +986,10 @@ def main() -> int:
                     help="summary only, no chronicle")
     ap.add_argument("--json", action="store_true",
                     help="print the final state as JSON instead of prose")
+    ap.add_argument("--html", metavar="PATH",
+                    help="write the chronicle and summary as a page to PATH")
+    ap.add_argument("--date", default=None,
+                    help="the date the page names (default: today, UTC)")
     ap.add_argument("--repo", default=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), ".."),
         help="repository whose index.html names the companies")
@@ -926,15 +1017,25 @@ def main() -> int:
             print(line)
         return 0
 
-    if not args.json:
-        for line in companies(os.path.abspath(args.repo)):
+    quiet = args.quiet or args.json or bool(args.html)
+    company_lines = companies(os.path.abspath(args.repo))
+    if not quiet:
+        for line in company_lines:
             print(line)
         if state["tide"]:
             print(f"Continuing from tide {state['tide']}.")
         print()
-    run(state, args.tides, out=None if (args.quiet or args.json) else sys.stdout)
+    run(state, args.tides, out=None if quiet else sys.stdout)
     if args.state:
         save_state(args.state, state)
+
+    if args.html:
+        date = args.date or datetime.date.today().isoformat()
+        os.makedirs(os.path.dirname(os.path.abspath(args.html)), exist_ok=True)
+        with open(args.html, "w", encoding="utf-8") as fh:
+            fh.write(render_html(state, company_lines, date))
+        print(f"wrote {args.html}: {state['tide']} tides, seed {state['seed']}")
+        return 0
 
     if args.json:
         print(json.dumps(state, indent=1))

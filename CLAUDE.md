@@ -75,11 +75,14 @@ that the shared tool stays world-agnostic, and a check that no build
 artifacts are tracked. CI installs nothing, and should stay that way.
 
 `.github/workflows/pages.yml` publishes `index.html` to GitHub Pages on
-every push to `main` (https://dermot-r-cochran.github.io/four-islands-quest/).
-It stages that one file and nothing else — the site is the quest; the
-tools, the sandbox and the docs stay in the repository — and it installs
-nothing either. Saves on the site live in that origin's localStorage, under
-the same `four-islands-` keys as anywhere else.
+every push to `main` and once a day
+(https://dermot-r-cochran.github.io/four-islands-quest/). It stages that
+one file, has the sandbox write the day's chronicle beside it at
+`/sounds/` (`--html`, seeded by the date, so the same day gives the same
+Sounds to everyone), and installs nothing. The tools and the docs stay in
+the repository. Saves on the site live in that origin's localStorage, under
+the same `four-islands-` keys as anywhere else. The chronicle page is
+generated, never hand-edited, and never `index.html`.
 
 ## The world data
 
@@ -202,7 +205,9 @@ every tide has the ferry cross (on any tide, and owed for it — an empty
 crossing is logged as owed) and the Warden write a ledger line the
 chronicle never speaks: the bell's rings. `--state PATH` keeps a world
 going between visits; `--history` shows its chronicle; `--ledger` shows
-the Warden's. `--check` is its test and runs in CI.
+the Warden's; `--html PATH` writes the chronicle and summary as a page in
+the quest's palette, without the ledger, which is what Pages publishes
+daily. `--check` is its test and runs in CI.
 
 Three rules it lives under, all consequences of `WORLD.md`:
 
