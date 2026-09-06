@@ -17,7 +17,8 @@ Crown's Warden writes down what the Guild will not say aloud.
     python3 sandbox/ecosystem.py --state .ecosystem-state.json --history   # the written past
     python3 sandbox/ecosystem.py --ledger              # the Warden's ledger, rings and all
     python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page, for the site
-    python3 sandbox/ecosystem.py --check               # the invariants hold
+    python3 sandbox/ecosystem.py --edition fourth      # Fourth Island, its own account
+    python3 sandbox/ecosystem.py --check               # the invariants hold, both editions
 
 Standard library only: nothing installed, fetched, or executed from
 elsewhere. The companies it names are read out of `index.html` through
@@ -27,6 +28,12 @@ quest rather than keeping a second copy of it.
 The world data at the top is the sandbox's own and is soft content in
 WORLD.md's sense — bounded by the spine, owed nothing by any chapter. The
 engine below it never needs editing to re-voice or re-stock the sandbox.
+
+Two editions run on the same engine: the Sounds (the three islands, the
+skerries, the ferry and the Warden, in the ferryman's voice), and Fourth
+Island (one island facing open sea, no ferry, no ledger, in an account a
+hermit might have noticed). The Sounds edition lists Fourth Island and
+does not simulate it: ferrymen do not point at it.
 """
 
 from __future__ import annotations
@@ -44,8 +51,9 @@ import sys
 # ============================================================
 # WORLD DATA — the sandbox's own. CC BY 4.0, see CONTENT-LICENSE.md.
 # Soft content: bounded by the spine in WORLD.md, contradicted freely
-# by a better idea in a later chapter. Fourth Island is listed and not
-# simulated: what is written of it is in WORLD.md, and it is one line.
+# by a better idea in a later chapter. Fourth Island's ground is written
+# in WORLD.md and is its own edition here; the Sounds edition lists it
+# and does not simulate it.
 # ============================================================
 
 TIDES_PER_CYCLE = 28   # two tides a day; springs a fortnight apart
@@ -56,8 +64,7 @@ PLACES = {
     "second":   {"name": "Second Island", "shore": True, "narrows": ["third"]},
     "third":    {"name": "Third Island", "shore": True, "narrows": ["second"]},
     "skerries": {"name": "the skerries between Second and Third"},
-    "fourth":   {"name": "Fourth Island", "unwritten": True,
-                 "written": "a few hermits, and nothing else is written of it"},
+    "fourth":   {"name": "Fourth Island", "shore": True, "cliffs": True},
 }
 
 SPECIES = {
@@ -74,10 +81,11 @@ SPECIES = {
     # Gulls nest on every written shore, fish the Sounds when the water
     # can be worked, turn to the shore when it cannot, and take the
     # scraps at First Island's quay. Fledging happens on the springs.
-    "gulls":     {"start": {"first": 120, "second": 90, "third": 70},
+    "gulls":     {"start": {"first": 120, "second": 90, "third": 70, "fourth": 60},
                   "cap": 400, "need": 1.0, "herring_take": 0.9,
                   "shore_take": 0.6, "breed": 0.05, "breed_above": 0.9, "wear": 0.005,
-                  "hungry_below": 0.6, "starve": 0.1, "wander": 0.02},
+                  "hungry_below": 0.6, "starve": 0.1, "wander": 0.02,
+                  "wander_told": 3},
     # Seals on the skerries, fishing the same herring.
     "seals":     {"start": 12, "cap": 24, "fish_each": 4, "short": 0.2},
     # The hills: the grazing on every written island — browse, in the
@@ -103,13 +111,13 @@ SPECIES = {
                   "cross_from": 6, "crossing": 2},
     # Rabbits on every written island, grazing the same hill as the deer
     # and breeding the way rabbits do.
-    "rabbits":   {"start": {"first": 120, "second": 100, "third": 90},
+    "rabbits":   {"start": {"first": 120, "second": 100, "third": 90, "fourth": 80},
                   "cap": 400, "need": 0.05, "breed": 0.04, "wear": 0.01,
                   "hungry_below": 0.6, "starve": 0.2, "remnant": 10, "many_above": 300,
                   "thin_below": 60},
     # Squirrels in the wood on every written island, living off the
     # wood itself; a storm shakes the nuts down and they do well after.
-    "squirrels": {"start": {"first": 50, "second": 60, "third": 45},
+    "squirrels": {"start": {"first": 50, "second": 60, "third": 45, "fourth": 30},
                   "cap": 150, "rate": 0.01, "wear": 0.004, "windfall": 0.03},
     # Foxes on every written island: rabbits first, squirrels when they
     # can get them, the quay's scraps on First Island. They cross the
@@ -128,7 +136,7 @@ SPECIES = {
     # deer, but the crags feed them what the hill does not — the sandbox
     # does not count crag-browse, only that goats always find some — and
     # the wolves take one now and then.
-    "goats":     {"start": {"first": 8, "second": 14, "third": 16}, "cap": 40,
+    "goats":     {"start": {"first": 8, "second": 14, "third": 16, "fourth": 12}, "cap": 40,
                   "need": 0.3, "crags": 0.6, "breed": 0.01, "wear": 0.004,
                   "hungry_below": 0.8, "starve": 0.15, "remnant": 3},
     # Puffins on the skerries, fishing the same herring as everything
@@ -146,10 +154,10 @@ SPECIES = {
     # Two hunters of the small things, one over the moor and one in the
     # wood. Each lives on one prey the sandbox counts and on the small
     # birds and voles it does not, and fledges on the springs when fed.
-    "harriers":  {"start": {"second": 3, "third": 3}, "cap": 8, "prey": "rabbits",
+    "harriers":  {"start": {"second": 3, "third": 3, "fourth": 2}, "cap": 8, "prey": "rabbits",
                   "hunt": 0.03, "base": 0.015, "need": 0.04, "easy_above": 150,
                   "breed": 0.05, "short": 0.1, "remnant": 1},
-    "sparrowhawks": {"start": {"first": 2, "second": 2, "third": 2}, "cap": 6,
+    "sparrowhawks": {"start": {"first": 2, "second": 2, "third": 2, "fourth": 1}, "cap": 6,
                      "prey": "squirrels", "hunt": 0.01, "base": 0.005, "need": 0.012,
                      "easy_above": 100, "breed": 0.05, "short": 0.1, "remnant": 1},
     # The Keep's stock on First Island, kept like the cats: they graze the
@@ -182,6 +190,12 @@ GOOD_CATCH = 130
 # The companies the sandbox stands behind, by their keys in index.html.
 COMPANIES_ON_THE_WATER = ["guild", "crown"]
 
+# The hermits of Fourth Island: a presence, never a count. They gather on
+# the shore in fair weather and take a goat now and then (WORLD.md).
+HERMITS = {"island": "fourth",
+           "gathering": {"calm": 8, "fresh": 4, "blowing": 0, "storm": 0},
+           "goat": 0.03, "smoke": 0.15}
+
 # What the chronicle says. The engine fills the braces and joins the
 # clauses; every word a player reads is here.
 LINES = {
@@ -197,9 +211,9 @@ LINES = {
     "hungry_all":  "gulls went hungry on every shore",
     "failed":      "the last gulls left {place}",
     "returned":    "gulls settled {place} again",
-    "south":       "some gulls went south, and the record does not follow them",
-    "north":       "gulls came back from the south; where they had been, "
-                   "the record does not say",
+    "south":       "some gulls went south, and no ferryman looked after them",
+    "north":       "gulls came back from the south, and no ferryman asked "
+                   "where from",
     "pup":         "a pup on the skerries",
     "seals_short": "the seals went short",
     "haul_out":    "the seals hauled out at low water",
@@ -240,7 +254,11 @@ LINES = {
     "in_news":     "{n} paying in news",
     "numbers":     ["no", "one", "two", "three", "four", "five", "six"],
     "companies":   "On the water: {name} — {quest}",
-    "not_written": "not simulated — {written}",
+    "own_account": "not simulated here — it keeps its own account",
+    "off_record":  "off the record, somewhere south",
+    "gathered":    "Gathered on the shore: {n} shellfish.",
+    "hermits_goat": "a goat for the hermits' pot",
+    "smoke":       "smoke on the hill",
 }
 
 # The chronicle as a page. The engine fills the braces; the words are here.
@@ -257,14 +275,100 @@ PAGE = {
     "back":     "Back to the quest",
     "foot":     "A mini ecosystem, run again each day from the repository's "
                 "sandbox; the same day gives the same Sounds to everyone.",
+    "also":     "Fourth Island, which nobody points at",
+    "also_href": "../fourth/",
+}
+
+# Editions: which places the run holds, whether the ferry and the Warden
+# run, whether the skerries are in it, and the words that differ. The
+# engine reads these and adds nothing.
+EDITIONS = {
+    "sounds": {
+        "places": ["sounds", "first", "second", "third", "skerries", "fourth"],
+        "unsimulated": ["fourth"],   # ferrymen do not point at it
+        "ferry": True, "skerries": True, "lines": {}, "page": {},
+    },
+    "fourth": {
+        "places": ["sounds", "fourth"],   # the Sounds end on its northern shore
+        "unsimulated": [],
+        "ferry": False, "skerries": False,
+        "lines": {
+            "quiet":       "nothing anyone would tell",
+            "quiet_pool":  ["nothing anyone would tell",
+                            "the tide came up the stones and went down again",
+                            "gulls on the cliffs, and the sea beyond them",
+                            "the goats were on the crags at low water",
+                            "rabbits out on the hill at dusk",
+                            "a hawk over the wood, once",
+                            "the pools were still",
+                            "the wood was loud with the wind"],
+            "storm":       "a storm came over the hill",
+            "fledged":     "gulls fledged on the cliffs",
+            "hungry":      "gulls went hungry on the cliffs",
+            "failed":      "the last gulls left the cliffs",
+            "returned":    "gulls settled the cliffs again",
+            "south":       "some gulls went off over the sea, and nobody followed them",
+            "north":       "gulls came in off the sea, from wherever they had been",
+            "off_record":  "off over the sea, somewhere",
+            "bare":        "the goats and the rabbits have stripped the hill",
+            "greened":     "the hill greened again",
+            "rabbits_many": "rabbits everywhere on the hill",
+            "rabbits_thin": "the rabbits thinned",
+            "goats_hungry": "the goats went hungry",
+            "kid":         "kids on the crags",
+            "windfall":    "the storm shook the nuts down in the wood",
+            "harrier_fledged": "a harrier fledged over the hill",
+            "harriers_short": "the harriers went short",
+            "hawk_fledged": "a sparrowhawk fledged in the wood",
+            "hawks_short": "the sparrowhawks went short",
+            "dragonflies": "dragonflies over the pools",
+        },
+        "page": {
+            "title":    "Fourth Island",
+            "lede":     "One tide-cycle of Fourth Island, which the ferrymen do "
+                        "not point at, ticked over on {date}. Nobody there "
+                        "keeps a ledger or counts a tide aloud; the kingdom's "
+                        "tide-calendar is borrowed for the numbering, and the "
+                        "account is what a hermit might have noticed. The "
+                        "record follows the gulls this far and no further.",
+            "foot":     "A mini ecosystem, run again each day from the "
+                        "repository's sandbox; the same day gives the same "
+                        "island to everyone.",
+            "also":     "The Sounds",
+            "also_href": "../sounds/",
+        },
+    },
 }
 
 # ============================================================
 # ENGINE — MIT, see LICENSE. Reads the data above; adds no words.
 # ============================================================
 
-SHORES = [k for k, p in PLACES.items() if p.get("shore")]
-QUAY = next(k for k, p in PLACES.items() if p.get("quay"))
+_BASE_LINES = dict(LINES)
+_BASE_PAGE = dict(PAGE)
+EDITION = "sounds"
+SHORES: list[str] = []
+QUAY: str | None = None
+FERRY = True
+SKERRIES = True
+
+
+def configure(edition: str) -> None:
+    """Point the engine at one edition: its shores, its quay if any, whether
+    the ferry and the skerries are in it, and its words."""
+    global EDITION, SHORES, QUAY, FERRY, SKERRIES, LINES, PAGE
+    ed = EDITIONS[edition]
+    EDITION = edition
+    SHORES = [k for k in ed["places"]
+              if PLACES[k].get("shore") and k not in ed["unsimulated"]]
+    QUAY = next((k for k in SHORES if PLACES[k].get("quay")), None)
+    FERRY = ed["ferry"]
+    SKERRIES = ed["skerries"]
+    LINES = {**_BASE_LINES, **ed["lines"]}
+    PAGE = {**_BASE_PAGE, **ed["page"]}
+
+
+configure("sounds")
 
 
 def tide_range(t: int) -> float:
@@ -282,16 +386,18 @@ def rng_for(seed: int, tide: int) -> random.Random:
     return random.Random(f"{seed}:{tide}")
 
 
-def fresh_state(seed: int) -> dict:
+def fresh_state(seed: int, edition: str = "sounds") -> dict:
+    configure(edition)
     g = SPECIES["gulls"]
     return {
         "seed": seed,
+        "edition": edition,
         "tide": 0,
         "bloom": 50,
         "herring": SPECIES["herring"]["start"],
         "shellfish": {k: SPECIES["shellfish"]["start"] for k in SHORES},
         "gulls": {k: g["start"].get(k, 0) for k in SHORES},
-        "seals": SPECIES["seals"]["start"],
+        "seals": SPECIES["seals"]["start"] if SKERRIES else 0,
         "browse": {k: SPECIES["browse"]["start"] for k in SHORES},
         "deer": {k: SPECIES["deer"]["start"].get(k, 0) for k in SHORES},
         "wolves": {k: SPECIES["wolves"]["start"].get(k, 0) for k in SHORES},
@@ -306,8 +412,9 @@ def fresh_state(seed: int) -> dict:
                          for k in SHORES},
         "ponies": {k: SPECIES["ponies"]["start"].get(k, 0) for k in SHORES},
         "alpacas": {k: SPECIES["alpacas"]["start"].get(k, 0) for k in SHORES},
-        "puffins": SPECIES["puffins"]["start"],
+        "puffins": SPECIES["puffins"]["start"] if SKERRIES else 0,
         "south": 0,
+        "gathered": 0,
         "flags": {"thin": False, "hungry": {k: False for k in SHORES},
                   "bare": {k: False for k in SHORES},
                   "deer_hungry": {k: False for k in SHORES},
@@ -371,12 +478,13 @@ def step(state: dict) -> str:
     gull_fish = min(h, int(total_gulls * gs["herring_take"] * work))
     h -= gull_fish
     ss = SPECIES["seals"]
-    seal_fish = min(h, int(state["seals"] * ss["fish_each"] * max(work, 0.5)))
+    seal_fish = (min(h, int(state["seals"] * ss["fish_each"] * max(work, 0.5)))
+                 if SKERRIES else 0)
     h -= seal_fish
     ps = SPECIES["puffins"]
-    puffin_fish = min(h, state["puffins"] * ps["take"] * work)
+    puffin_fish = min(h, state["puffins"] * ps["take"] * work) if SKERRIES else 0
     h -= int(puffin_fish)
-    catch = min(h, int(h * CATCH_SHARE * work), CATCH_MOST)
+    catch = min(h, int(h * CATCH_SHARE * work), CATCH_MOST) if QUAY else 0
     h -= catch
     state["landed"] += catch
     if catch >= GOOD_CATCH:
@@ -393,21 +501,22 @@ def step(state: dict) -> str:
     flags["thin"] = thin
     state["herring"] = h
 
-    # -- the ferry: on any tide, and owed for it ----------------------
-    lo, hi = ABOARD[weather]
-    aboard = rng.randint(lo, hi)
-    guild = state["guild"]
-    guild["crossings"] += 1
-    in_news = 0
-    for _ in range(aboard):
-        if rng.random() < FARE_IN_NEWS:
-            in_news += 1
-        else:
-            guild["coin"] += 1
-    guild["news"] += in_news
-    if aboard == 0:
-        guild["empty"] += 1
-    scraps = aboard * SCRAPS_EACH
+    # -- the ferry: on any tide, and owed for it (where there is one) --
+    aboard = in_news = scraps = 0
+    if FERRY:
+        lo, hi = ABOARD[weather]
+        aboard = rng.randint(lo, hi)
+        guild = state["guild"]
+        guild["crossings"] += 1
+        for _ in range(aboard):
+            if rng.random() < FARE_IN_NEWS:
+                in_news += 1
+            else:
+                guild["coin"] += 1
+        guild["news"] += in_news
+        if aboard == 0:
+            guild["empty"] += 1
+        scraps = aboard * SCRAPS_EACH
 
     # -- shores: shellfish feed, gulls feed, First Island gathers -----
     shs = SPECIES["shellfish"]
@@ -423,8 +532,14 @@ def step(state: dict) -> str:
         shore_take = 0 if weather == "storm" else min(
             s, int(g * gs["shore_take"] * (1.2 - work)))
         s -= shore_take
-        gathered = min(s // 10, GATHERING[weather]) if place == QUAY else 0
+        if place == QUAY:
+            gathered = min(s // 10, GATHERING[weather])
+        elif place == HERMITS["island"]:
+            gathered = min(s // 10, HERMITS["gathering"][weather])
+        else:
+            gathered = 0
         s -= gathered
+        state["gathered"] += gathered
         if s < shs["bare_below"] and spring:
             s += shs["spat"]
         shell[place] = max(0, s)
@@ -449,7 +564,7 @@ def step(state: dict) -> str:
         gulls[place] = new_g
     for places, one, every in ((fledged, "fledged", "fledged_all"),
                                (newly_hungry, "hungry", "hungry_all")):
-        if len(places) == len(SHORES):
+        if len(places) == len(SHORES) > 1:
             events.append(LINES[every])
         else:
             events.extend(LINES[one].format(place=PLACES[k]["name"]) for k in places)
@@ -466,20 +581,20 @@ def step(state: dict) -> str:
         if back:
             state["south"] -= back
             gulls[biggest] += back
-            if back >= 5:
+            if back >= gs["wander_told"]:
                 events.append(LINES["north"])
         if spring:
-            away = int(sum(gulls.values()) * gs["wander"])
+            away = rounded(sum(gulls.values()) * gs["wander"], rng)
             away = min(away, gulls[biggest])
             if away:
                 gulls[biggest] -= away
                 state["south"] += away
-                if away >= 5:
+                if away >= gs["wander_told"]:
                     events.append(LINES["south"])
 
     # -- seals -------------------------------------------------------
     seals = state["seals"]
-    if seals:
+    if seals and SKERRIES:
         fed = seal_fish / (seals * ss["fish_each"])
         if fed >= 0.9 and spring and seals < ss["cap"] and rng.random() < 0.5:
             seals += 1
@@ -493,7 +608,7 @@ def step(state: dict) -> str:
 
     # -- puffins on the skerries ---------------------------------------
     pf = state["puffins"]
-    if pf:
+    if pf and SKERRIES:
         fed = puffin_fish / (pf * ps["need"])
         born = 0
         if fed >= ps["breed_above"] and spring and pf < ps["cap"]:
@@ -662,7 +777,14 @@ def step(state: dict) -> str:
                     events.append(LINES["goats_hungry"].format(place=name))
             flags["goats_hungry"][place] = hungry_g
             gt = max(gts["remnant"], gt - lost_g + born_g)
+            if (place == HERMITS["island"] and gt > gts["remnant"]
+                    and rng.random() < HERMITS["goat"]):
+                gt -= 1
+                events.append(LINES["hermits_goat"])
         goats[place] = gt
+        if (place == HERMITS["island"] and weather == "calm"
+                and rng.random() < HERMITS["smoke"]):
+            events.append(LINES["smoke"])
 
         # -- dragonflies over the pools -----------------------------------
         df = state["dragonflies"][place]
@@ -707,7 +829,7 @@ def step(state: dict) -> str:
     for places, one, every in ((deer_hungry, "deer_hungry", "deer_hungry_all"),
                                (windfalls, "windfall", "windfall_all"),
                                (dragonflies_out, "dragonflies", "dragonflies_all")):
-        if len(places) == len(SHORES):
+        if len(places) == len(SHORES) > 1:
             events.append(LINES[every])
         else:
             events.extend(LINES[one].format(place=PLACES[k]["name"]) for k in places)
@@ -725,23 +847,26 @@ def step(state: dict) -> str:
                         break
 
     # -- the Warden writes what the Guild will not say aloud ----------
-    rings = 1 + (1 if r > 0.5 else 0) + (
-        1 if work >= 0.8 and rng.random() < 0.6 else 0)
-    state["warden"].append([t, rings, aboard, catch])
+    if FERRY:
+        rings = 1 + (1 if r > 0.5 else 0) + (
+            1 if work >= 0.8 and rng.random() < 0.6 else 0)
+        state["warden"].append([t, rings, aboard, catch])
 
     # -- the line ----------------------------------------------------
     clauses = list(events)
-    if weather == "storm" and aboard == 0:
-        clauses.append(LINES["ferry_storm"])
-    elif aboard == 0:
-        clauses.append(LINES["ferry_empty"])
-    else:
-        ferry = LINES["ferry"].format(aboard=words(aboard))
-        if in_news:
-            ferry += ", " + LINES["in_news"].format(n=words(in_news))
-        clauses.append(ferry)
+    if FERRY:
+        if weather == "storm" and aboard == 0:
+            clauses.append(LINES["ferry_storm"])
+        elif aboard == 0:
+            clauses.append(LINES["ferry_empty"])
+        else:
+            ferry = LINES["ferry"].format(aboard=words(aboard))
+            if in_news:
+                ferry += ", " + LINES["in_news"].format(n=words(in_news))
+            clauses.append(ferry)
     if not events:
-        clauses.append(LINES["quiet"])
+        pool = LINES.get("quiet_pool")
+        clauses.append(rng.choice(pool) if pool else LINES["quiet"])
     line = LINES["tide"].format(tide=t + 1, label=label, weather=weather,
                                 clauses="; ".join(clauses))
     state["chronicle"].append(line)
@@ -757,12 +882,13 @@ def run(state: dict, tides: int, out=None) -> None:
 
 
 def summary(state: dict) -> list[str]:
+    ed = EDITIONS[EDITION]
     lines = [f"After {state['tide']} tides (seed {state['seed']}):"]
-    for key, place in PLACES.items():
+    for key in ed["places"]:
+        place = PLACES[key]
         name = place["name"]
-        if place.get("unwritten"):
-            lines.append(f"  {name:<40} "
-                         f"{LINES['not_written'].format(written=place['written'])}")
+        if key in ed["unsimulated"]:
+            lines.append(f"  {name:<40} {LINES['own_account']}")
         elif key == "sounds":
             lines.append(f"  {name:<40} herring {state['herring']}   "
                          f"bloom {state['bloom']}")
@@ -785,15 +911,20 @@ def summary(state: dict) -> list[str]:
         elif key == "skerries":
             lines.append(f"  {name:<40} seals {state['seals']}   "
                          f"puffins {state['puffins']}")
-    lines.append(f"  {'off the record, somewhere south':<40} gulls {state['south']}")
-    g = state["guild"]
-    lines.append(f"  The Guild's ledger: {g['crossings']} crossings, "
-                 f"{g['coin']} fares in coin, {g['news']} in news, "
-                 f"{g['empty']} crossed empty and owed for.")
-    lines.append(f"  Landed at {PLACES[QUAY]['name']}'s quay: "
-                 f"{state['landed']} herring.")
-    lines.append(f"  The Warden's ledger runs to {len(state['warden'])} lines; "
-                 "--ledger shows it.")
+    lines.append(f"  {LINES['off_record']:<40} gulls {state['south']}")
+    if FERRY:
+        g = state["guild"]
+        lines.append(f"  The Guild's ledger: {g['crossings']} crossings, "
+                     f"{g['coin']} fares in coin, {g['news']} in news, "
+                     f"{g['empty']} crossed empty and owed for.")
+    if QUAY:
+        lines.append(f"  Landed at {PLACES[QUAY]['name']}'s quay: "
+                     f"{state['landed']} herring.")
+    if state["gathered"]:
+        lines.append("  " + LINES["gathered"].format(n=state["gathered"]))
+    if FERRY:
+        lines.append(f"  The Warden's ledger runs to {len(state['warden'])} lines; "
+                     "--ledger shows it.")
     return lines
 
 
@@ -814,6 +945,8 @@ def render_html(state: dict, companies_lines: list[str], date: str) -> str:
     lines = "\n".join(f"<li>{esc(line)}</li>" for line in state["chronicle"])
     after = "\n".join(f"<li>{esc(line.strip())}</li>" for line in summary(state)[1:]
                        if "--ledger" not in line)
+    also = (f' · <a href="{esc(PAGE["also_href"])}">{esc(PAGE["also"])}</a>'
+            if PAGE.get("also") else "")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -845,7 +978,7 @@ def render_html(state: dict, companies_lines: list[str], date: str) -> str:
 <body>
 <header>
   <h1>{esc(PAGE["title"])}</h1>
-  <p>{esc(PAGE["kicker"])} · <a href="../">{esc(PAGE["back"])}</a></p>
+  <p>{esc(PAGE["kicker"])} · <a href="../">{esc(PAGE["back"])}</a>{also}</p>
 </header>
 <main>
 <p>{esc(PAGE["lede"].format(date=date))}</p>
@@ -892,6 +1025,7 @@ def load_state(path: str) -> dict | None:
         with open(path, encoding="utf-8") as fh:
             s = json.load(fh)
         if isinstance(s, dict) and isinstance(s.get("tide"), int):
+            configure(s.get("edition", "sounds"))
             return s
     except (OSError, ValueError):
         pass
@@ -942,6 +1076,34 @@ def check() -> list[str]:
             if PLACES["fourth"]["name"] in line:
                 bad(f"seed {seed}: the chronicle spoke of Fourth Island: {line}")
 
+    # Fourth Island: its own account — no ferry, no ledger, no counted hermit
+    for seed in range(1, 6):
+        s = fresh_state(seed, "fourth")
+        run(s, 3 * TIDES_PER_CYCLE)
+        if min(s["herring"], s["south"], s["gathered"]) < 0:
+            bad(f"fourth, seed {seed}: a count went negative")
+        for key in COUNTED:
+            if s[key]["fourth"] < 0:
+                bad(f"fourth, seed {seed}: {key} went negative")
+            if len(s[key]) != 1:
+                bad(f"fourth, seed {seed}: {key} counted on more than the island")
+        if s["warden"] or s["guild"]["crossings"]:
+            bad(f"fourth, seed {seed}: a ferry crossed, or the Warden wrote")
+        text = "\n".join(s["chronicle"] + summary(s))
+        for word in ("ferry", "fare", "Guild", "Warden", "ledger", "quay"):
+            if word in text:
+                bad(f"fourth, seed {seed}: the account spoke of the {word}")
+        if re.search(r"\brings?\b", text) or re.search(r"\d+ hermits?", text):
+            bad(f"fourth, seed {seed}: the bell was counted, or the hermits were")
+    a, b = fresh_state(4, "fourth"), fresh_state(4, "fourth")
+    run(a, 40)
+    run(b, 40)
+    if a != b:
+        bad("fourth: two runs of one seed differed")
+    page = render_html(a, [], "a day")
+    if PAGE["title"] not in page or a["chronicle"][-1].split(" — ")[0] not in page:
+        bad("fourth: the page does not carry the account")
+
     # the page says what the chronicle says, and nothing the Warden keeps
     s = fresh_state(2)
     run(s, TIDES_PER_CYCLE)
@@ -970,6 +1132,7 @@ def check() -> list[str]:
     if straight["chronicle"][:20] != halves["chronicle"][:20]:
         bad("continuing a run rewrote its past")
 
+    configure("sounds")
     return problems
 
 
@@ -978,6 +1141,8 @@ def main() -> int:
     ap.add_argument("--tides", type=int, default=TIDES_PER_CYCLE,
                     help=f"tides to run (default one cycle, {TIDES_PER_CYCLE})")
     ap.add_argument("--seed", type=int, default=1, help="which world (default 1)")
+    ap.add_argument("--edition", choices=sorted(EDITIONS), default="sounds",
+                    help="the Sounds (default), or Fourth Island's own account")
     ap.add_argument("--state", metavar="PATH",
                     help="continue from this file and save back to it")
     ap.add_argument("--history", action="store_true",
@@ -1009,7 +1174,7 @@ def main() -> int:
 
     state = load_state(args.state) if args.state else None
     if state is None:
-        state = fresh_state(args.seed)
+        state = fresh_state(args.seed, args.edition)
 
     if args.history:
         if not args.state:
@@ -1020,7 +1185,7 @@ def main() -> int:
         return 0
 
     quiet = args.quiet or args.json or bool(args.html)
-    company_lines = companies(os.path.abspath(args.repo))
+    company_lines = companies(os.path.abspath(args.repo)) if FERRY else []
     if not quiet:
         for line in company_lines:
             print(line)
