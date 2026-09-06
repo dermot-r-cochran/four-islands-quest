@@ -399,8 +399,16 @@ function renderHistoryEntry(entry) {
     addParas(t, c.text, "prose");
     return label;
   } else if (entry.kind === "examined") {
-    if (!EXAMINE[entry.key]) return null;
-    return addParas(t, [EXAMINE[entry.key].text], "examined");
+    const x = EXAMINE[entry.key];
+    if (!x) return null;
+    /* A lead line in the chosen style, so looking at a thing is as
+       visible an act as choosing one; the text itself stays dim. */
+    const label = document.createElement("p");
+    label.className = "chosen";
+    label.textContent = x.label.charAt(0).toUpperCase() + x.label.slice(1);
+    t.appendChild(label);
+    addParas(t, [x.text], "examined");
+    return label;
   } else if (entry.kind === "faction") {
     const f = FACTIONS[entry.key];
     if (!f) return null;
@@ -582,6 +590,11 @@ function scrollToNew(el) {
 }
 
 function examine(key) {
+  const last = state.history[state.history.length - 1];
+  if (last && last.kind === "examined" && last.key === key) {
+    scrollToNew($("transcript").lastElementChild);
+    return; // looked at it a moment ago; don't say it twice
+  }
   const entry = { kind: "examined", key };
   state.history.push(entry);
   const el = renderHistoryEntry(entry);
