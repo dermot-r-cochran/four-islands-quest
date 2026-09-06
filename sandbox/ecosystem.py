@@ -80,9 +80,11 @@ SPECIES = {
                   "hungry_below": 0.6, "starve": 0.1, "wander": 0.02},
     # Seals on the skerries, fishing the same herring.
     "seals":     {"start": 12, "cap": 24, "fish_each": 4, "short": 0.2},
-    # The hills: browse on every written island, grazed by the deer and
-    # the rabbits. Nothing grazes below the roots, and a stripped hill
-    # regrows from them, slowly.
+    # The hills: the grazing on every written island — browse, in the
+    # keeper's word, which is the key here and never the reader's word,
+    # since on a page it reads as a verb — eaten by the deer, the goats
+    # and the rabbits. Nothing grazes below the roots, and a stripped
+    # hill regrows from them, slowly.
     "browse":    {"capacity": 3000, "rate": 0.06, "start": 2000, "roots": 100,
                   "bare_below": 200},
     # Fallow deer on every written island, fawning when the hill feeds
@@ -767,13 +769,13 @@ def summary(state: dict) -> list[str]:
         elif place.get("shore"):
             lines.append(f"  {name:<40} gulls {state['gulls'][key]}   "
                          f"shellfish {state['shellfish'][key]}")
-            lines.append(f"  {'':<40} deer {state['deer'][key]}   "
+            lines.append(f"  {'':<40} grazing {state['browse'][key]}   "
+                         f"deer {state['deer'][key]}   "
                          f"wolves {state['wolves'][key]}   "
                          f"rabbits {state['rabbits'][key]}   "
                          f"foxes {state['foxes'][key]}   "
                          f"squirrels {state['squirrels'][key]}   "
-                         f"cats {state['cats'][key]}   "
-                         f"browse {state['browse'][key]}")
+                         f"cats {state['cats'][key]}")
             lines.append(f"  {'':<40} goats {state['goats'][key]}   "
                          f"harriers {state['harriers'][key]}   "
                          f"sparrowhawks {state['sparrowhawks'][key]}   "

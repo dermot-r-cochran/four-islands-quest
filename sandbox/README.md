@@ -53,9 +53,12 @@ quest rather than keeping a second copy of it.
 
 And on the hills above the shores:
 
-- **Browse** on every written island, grazed by the deer. A stripped
-  hill regrows from the root, slowly, and the chronicle says when a
-  hill is stripped and when it greens again.
+- **Grazing** on every written island (the sandbox's key for it is
+  `browse`, the keeper's word; the page says *grazing*, since on a page
+  *browse* reads as a verb). Eaten by the deer, the goats and the
+  rabbits; nothing grazes below the roots, a stripped hill regrows from
+  them slowly, and the chronicle says when a hill is stripped and when
+  it greens again.
 - **Fallow deer** on every written island, fawning when the hill feeds
   them and going hungry when it does not. Nothing grazes below the
   roots, so a stripped hill regrows from them, slowly. First Island's

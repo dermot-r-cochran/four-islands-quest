@@ -192,7 +192,9 @@ should not need touching for that.
 
 What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
 grows a bloom, herring, shellfish, gulls, seals and puffins against each
-other on the water and, on the hills, browse, fallow deer, wild goats,
+other on the water and, on the hills, the grazing (`browse` in the data,
+*grazing* on the page — on a page *browse* reads as a verb), fallow deer,
+wild goats,
 rabbits, squirrels, dragonflies, wolves, foxes, hen harriers, sparrowhawks
 and the Keep's cats, ponies and alpacas against each other (wolves on
 Second and Third, which have narrows between them, and foxes cross them
