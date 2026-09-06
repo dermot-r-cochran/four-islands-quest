@@ -65,7 +65,8 @@ world's object literals rather than executing them. See
 ecosystem of the waters the kingdom is named for, ticking one tide at
 a time. The bloom the tide stirs up, the herring that feed on it, the
 shellfish on three shores, the gulls that eat both, the seals on the
-skerries — and, every tide, the ferry crossing and the Warden writing
+skerries, and on the hills above them the browse, the fallow deer and
+the wolves — and, every tide, the ferry crossing and the Warden writing
 down what the Guild will not say aloud.
 
 ```bash

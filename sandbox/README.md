@@ -48,9 +48,28 @@ quest rather than keeping a second copy of it.
 - **The Warden**, who writes down, every tide, what the Guild will not
   say aloud.
 
+And on the hills above the shores:
+
+- **Browse** on every written island, grazed by the deer. A stripped
+  hill regrows from the root, slowly, and the chronicle says when a
+  hill is stripped and when it greens again.
+- **Fallow deer** on every written island, fawning when the hill feeds
+  them and going hungry when it does not. First Island's are the Keep's
+  to hunt, in fair weather, and now and then one goes to the Keep's
+  table.
+- **Wolves**, in packs, on Second and Third, which have narrows between
+  them. A pack is judged on its hunting rather than on one night's luck:
+  it grows while the deer are many and goes short when they are few,
+  and hunting falls away fast as a herd thins, which is what lets the
+  herd come back. A pack that dies out is replaced from across the
+  narrows at a calm neap, when the water between is narrowest. No wolves
+  on First Island, whose deer answer to the Keep instead.
+
 The sandbox settles to its own level after a few cycles — fewer gulls
-than it started with, herring that thin and come back — which is what a
-small water does. Nothing in it is tuned to be pretty.
+than it started with, herring that thin and come back, wolves and deer
+chasing each other up and down — which is what a small water and three
+small hills do. A pack can die out and a herd can crash; nothing in it
+is tuned to be pretty.
 
 ## Two ledgers
 

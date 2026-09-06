@@ -181,8 +181,12 @@ words. Re-voice or re-stock the sandbox by editing the data; the engine
 should not need touching for that.
 
 What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
-grows a bloom, herring, shellfish, gulls and seals against each other, and
-every tide has the ferry cross (on any tide, and owed for it — an empty
+grows a bloom, herring, shellfish, gulls and seals against each other on
+the water and browse, fallow deer and wolves against each other on the
+hills (wolves on Second and Third, which have narrows between them; First
+Island's deer answer to the Keep's huntsmen instead — Dermot's direction,
+2026-09-06: *add wolves and fallow deer*), and every tide has the ferry
+cross (on any tide, and owed for it — an empty
 crossing is logged as owed) and the Warden write a ledger line the
 chronicle never speaks: the bell's rings. `--state PATH` keeps a world
 going between visits; `--history` shows its chronicle; `--ledger` shows
