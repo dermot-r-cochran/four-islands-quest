@@ -151,10 +151,14 @@ hill, a stony shore, cliffs, a wood and pools; gulls, goats, rabbits,
 harriers, squirrels, sparrowhawks, dragonflies, shellfish and the Sounds'
 herring; no deer, wolves, foxes or kept beasts; the gulls that leave the
 three islands go there and come back, and the record follows them that
-far. The hermits gather and take a goat now and then, keep no ledger and
-count no tide. Everything else is still absent, not hidden: **the hermits
-have no names, no number and no reason** — never count them, name them or
-say how they came — and the ferrymen still do not point at the island.
+far. The hermits are sailors — some came ashore by choice, some the sea
+put there, and now and then one more arrives or is stranded (Dermot's
+direction, same day: *hermits as sailors who arrive or are stranded*) —
+who gather and take a goat now and then, keep no ledger and count no
+tide. Everything else is still absent, not hidden: **the hermits have no
+names and no number, the record never says which of them chose it, and
+nobody has written why** — never count them, name them or sort them — and
+the ferrymen still do not point at the island.
 
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
@@ -210,7 +214,10 @@ point at it.
 It keeps **a year of 730 tides with four seasons** (Dermot's direction,
 2026-09-06: *seasons and weather*): each season sets the weather's odds,
 the bloom's level, how fast the plants grow and how hard hunger bites, and
-every species breeds in its own seasons — the tide words are *springs*,
+every species breeds in its own seasons; small birds live on the worms in
+the turf and the berries the wood sets in autumn, and are what the
+sparrowhawks and the cats hunt (same day: *small birds eat worms and
+berries*) — the tide words are *springs*,
 *neaps* and *middling* so a season called spring is never a tide.
 `--date` starts a run on that day of the year, which is what the daily
 pages use. Every species carries **a biosphere role** (the same

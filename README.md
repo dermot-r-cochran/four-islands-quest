@@ -68,8 +68,9 @@ shellfish on three shores, the gulls that eat both, the seals on the
 skerries and the puffins beside them, and on the hills above them the
 grazing, the deer, goats and rabbits that eat it, the wolves and foxes
 that hunt them, the harriers over the moor and the sparrowhawks in the
-wood, the squirrels, the dragonflies over the pools, and the Keep's cats,
-ponies and alpacas — and, every tide, the ferry crossing and the Warden
+wood, the squirrels, the small birds on the worms and the berries, the
+dragonflies over the pools, and the Keep's cats, ponies and alpacas —
+and, every tide, the ferry crossing and the Warden
 writing down what the Guild will not say aloud.
 
 ```bash

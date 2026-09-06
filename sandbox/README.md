@@ -78,6 +78,10 @@ And on the hills above the shores:
   everywhere and when they have thinned.
 - **Squirrels** in the wood on every written island, living off the wood
   itself. A storm shakes the nuts down and they do well after it.
+- **Small birds** in the hedges and the wood on every written island, on
+  the worms in the turf all year — which come up in wet weather more than
+  dry — and on the berries the wood sets in autumn and winter takes back.
+  They are what the sparrowhawks and the Keep's cats hunt.
 - **Foxes** on every written island: rabbits first, squirrels when they
   can get them, and the quay's scraps on First Island. They are judged
   on their hunting like the wolves, and cross the narrows the same way.
@@ -193,9 +197,12 @@ dragonflies over the pools, shellfish on the shore and the Sounds'
 herring off it. No narrows join it to anything, so nothing crosses on
 foot: no deer, no wolves, no foxes, and nothing kept.
 
-**The hermits are a presence, never a count.** They gather on the shore
-in fair weather and take a goat now and then; their smoke shows on a
-calm tide. There is no ferry, so no fare, no Guild and no Warden, and
+**The hermits are a presence, never a count.** They are sailors — some
+came ashore by choice, some the sea put there, and the account never
+says which — and now and then one more arrives on a calm tide or is
+stranded by a storm; the account says so and counts nobody. They gather
+on the shore in fair weather and take a goat now and then; their smoke
+shows on a calm tide. There is no ferry, so no fare, no Guild and no Warden, and
 nobody counts a tide aloud — the kingdom's one tide-calendar is borrowed
 for the numbering. The account is what a hermit might have noticed, in
 its own words for the same events, and a quiet tide there has several

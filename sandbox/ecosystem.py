@@ -90,7 +90,8 @@ ROLES = [
     ("is kept",         "by the Keep, and fed when the hill is bare"),
 ]
 PLANTS = {"the bloom": "sounds", "the grazing": "shore", "the wood": "shore",
-          "the shore's shellfish beds": "shore"}
+          "the shore's shellfish beds": "shore", "the worms in the turf": "shore",
+          "the berries": "shore"}
 
 PLACES = {
     "sounds":   {"name": "the Sounds"},
@@ -171,7 +172,7 @@ SPECIES = {
     # Cats at the Keep and the quay on First Island, kept rather than
     # wild: fed enough by the kitchens never to starve, hunting anyway.
     "cats":      {"start": {"first": 12}, "cap": 24, "kept": 8,
-                  "hunt": 0.05, "hunt_squirrels": 0.02, "need": 0.04,
+                  "hunt": 0.05, "hunt_squirrels": 0.02, "hunt_birds": 0.04, "need": 0.04,
                   "easy_above": 100, "breed": 0.03, "wear": 0.002,
                   "short": 0.1, "role": "is kept", "breeds": ["spring", "summer"]},
     # Wild goats on every written island. They graze the hill with the
@@ -204,11 +205,26 @@ SPECIES = {
                   "breed": 0.05, "short": 0.1, "remnant": 1, "role": "hunts",
                   "breeds": ["summer"]},
     "sparrowhawks": {"start": {"first": 2, "second": 2, "third": 2, "fourth": 1}, "cap": 6,
-                     "prey": "squirrels", "hunt": 0.01, "base": 0.005, "need": 0.012,
-                     "easy_above": 100, "breed": 0.05, "short": 0.1, "remnant": 1,
+                     "prey": "small birds", "hunt": 0.05, "base": 0.005, "need": 0.05,
+                     "easy_above": 300, "breed": 0.05, "short": 0.1, "remnant": 1,
                      "role": "hunts", "breeds": ["summer"]},
     # The Keep's stock on First Island, kept like the cats: they graze the
     # hill when it has grazing and eat the Keep's hay when it does not.
+    # Small birds in the hedges and the wood on every written island, on the
+    # worms in the turf all year and the berries the wood sets in autumn.
+    # What the sparrowhawks and the cats are really for.
+    "small birds": {"start": {"first": 200, "second": 220, "third": 180, "fourth": 150},
+                    "cap": 600, "need": 0.1, "breed": 0.03, "wear": 0.001,
+                    "hungry_below": 0.5, "starve": 0.05, "role": "feeds",
+                    "breeds": ["spring", "summer"]},
+    # The worms in the turf: a stock that follows the soil's season, and
+    # comes up in wet weather more than dry.
+    "worms":     {"capacity": 6000, "start": 4000, "rate": 0.08,
+                  "up": {"calm": 0.5, "fresh": 1.0, "blowing": 0.8, "storm": 0.3}},
+    # The berries: the wood sets them through late summer and autumn, the
+    # birds strip them, and winter takes what is left.
+    "berries":   {"capacity": 1500, "set": 40, "ripen": ["autumn"],
+                  "keeps": ["autumn", "winter"], "fade": 0.05},
     "ponies":    {"start": {"first": 8}, "cap": 14, "kept": 6, "need": 0.6,
                   "hay": 0.7, "breed": 0.01, "wear": 0.002, "role": "is kept",
                   "breeds": ["spring"]},
@@ -245,11 +261,13 @@ COMPANIES_ON_THE_WATER = ["guild", "crown"]
 # on the next tide.
 CARRION = {"gulls": 30, "foxes": 20, "goat": 0.4}
 
-# The hermits of Fourth Island: a presence, never a count. They gather on
-# the shore in fair weather and take a goat now and then (WORLD.md).
+# The hermits of Fourth Island: a presence, never a count. Sailors — some
+# came ashore by choice, some the sea put there — who gather on the shore
+# in fair weather and take a goat now and then (WORLD.md). Now and then
+# one more arrives, or is stranded; the account says so and counts nobody.
 HERMITS = {"island": "fourth",
            "gathering": {"calm": 8, "fresh": 4, "blowing": 0, "storm": 0},
-           "goat": 0.005, "smoke": 0.15}
+           "goat": 0.005, "smoke": 0.15, "arrived": 0.006, "stranded": 0.03}
 
 # What the chronicle says. The engine fills the braces and joins the
 # clauses; every word a player reads is here.
@@ -316,6 +334,15 @@ LINES = {
     "gathered":    "Gathered on the shore: {n} shellfish.",
     "hermits_goat": "a goat for the hermits' pot",
     "smoke":       "smoke on the hill",
+    "arrived":     "a sail off the south, and then a boat on the stones, and "
+                   "nobody putting out again",
+    "stranded":    "the sea put somebody ashore in the night",
+    "berries":     "berries in the wood on {place}",
+    "berries_all": "berries in every wood",
+    "in_berries":  "the small birds were in the berries on {place}",
+    "in_berries_all": "the small birds were in the berries everywhere",
+    "birds_hungry": "the small birds went hungry on {place}",
+    "birds_hungry_all": "the small birds went hungry on every island",
 }
 
 # The chronicle as a page. The engine fills the braces; the words are here.
@@ -381,6 +408,9 @@ EDITIONS = {
             "hawks_short": "the sparrowhawks went short",
             "dragonflies": "dragonflies over the pools",
             "carrion":     "gulls on a kill on the hill",
+            "berries":     "berries in the wood",
+            "in_berries":  "the small birds were in the berries",
+            "birds_hungry": "the small birds went hungry",
         },
         "page": {
             "title":    "Fourth Island",
@@ -498,12 +528,18 @@ def fresh_state(seed: int, edition: str = "sounds", year_tide: int = 0) -> dict:
         "south": 0,
         "gathered": 0,
         "carrion": {k: 0.0 for k in SHORES},
+        "small birds": {k: SPECIES["small birds"]["start"].get(k, 0) for k in SHORES},
+        "worms": {k: SPECIES["worms"]["start"] for k in SHORES},
+        "berries": {k: 0 for k in SHORES},
         "flags": {"thin": False, "hungry": {k: False for k in SHORES},
                   "bare": {k: False for k in SHORES},
                   "deer_hungry": {k: False for k in SHORES},
                   "rabbits_many": {k: False for k in SHORES},
                   "rabbits_thin": {k: False for k in SHORES},
                   "goats_hungry": {k: False for k in SHORES},
+                  "birds_hungry": {k: False for k in SHORES},
+                  "berries_told": {k: False for k in SHORES},
+                  "in_berries_told": {k: False for k in SHORES},
                   "dragonflies": {k: False for k in SHORES},
                   "puffins_hungry": False},
         "guild": {"crossings": 0, "coin": 0, "news": 0, "empty": 0},
@@ -734,6 +770,9 @@ def step(state: dict) -> str:
     deer_hungry: list[str] = []
     windfalls: list[str] = []
     dragonflies_out: list[str] = []
+    berries_out: list[str] = []
+    in_berries_out: list[str] = []
+    birds_hungry: list[str] = []
     for place in SHORES:
         name = PLACES[place]["name"]
         b, d, w = browse[place], deer[place], wolves[place]
@@ -812,13 +851,18 @@ def step(state: dict) -> str:
         ease_q = min(1.0, q / qs["cap"])
         fox_hunting = f * (fs["hunt"] * ease_r + fs["hunt_squirrels"] * ease_q)
         fox_hunting += min(carrion * CARRION["foxes"], f * fs["need"]) if f else 0
-        cat_hunting = c * (cs["hunt"] * ease_r + cs["hunt_squirrels"] * ease_q)
+        sb, sbs = state["small birds"][place], SPECIES["small birds"]
+        ease_b = min(1.0, sb / SPECIES["sparrowhawks"]["easy_above"]) ** 2
+        cat_hunting = c * (cs["hunt"] * ease_r + cs["hunt_squirrels"] * ease_q
+                           + cs["hunt_birds"] * ease_b)
         hs_, ks_ = SPECIES["harriers"], SPECIES["sparrowhawks"]
         taken_r = min(r, rounded((f * fs["hunt"] + c * cs["hunt"]
                                   + state["harriers"][place] * hs_["hunt"]) * ease_r, rng))
-        taken_q = min(q, rounded((f * fs["hunt_squirrels"] + c * cs["hunt_squirrels"]
-                                  + state["sparrowhawks"][place] * ks_["hunt"])
+        taken_q = min(q, rounded((f * fs["hunt_squirrels"] + c * cs["hunt_squirrels"])
                                  * ease_q, rng))
+        taken_b = min(sb, rounded((c * cs["hunt_birds"]
+                                   + state["sparrowhawks"][place] * ks_["hunt"])
+                                  * ease_b, rng))
 
         fed_r = nibble / (r * rs["need"]) if r else 1.0
         born_r = (rounded(r * rs["breed"] * fed_r * lush * (1 - r / rs["cap"]), rng)
@@ -842,6 +886,46 @@ def step(state: dict) -> str:
             windfalls.append(place)
         q = max(0, q - rounded(q * qs["wear"], rng) - taken_q)
         squirrels[place] = q
+
+        # -- the worms, the berries, and the small birds on both ---------
+        wms, brs = SPECIES["worms"], SPECIES["berries"]
+        wm = state["worms"][place]
+        wm += int(wms["rate"] * grow * wm * (1 - wm / wms["capacity"]))
+        br = state["berries"][place]
+        if sn in brs["ripen"]:
+            br = min(brs["capacity"], br + brs["set"])
+            if not flags["berries_told"][place]:
+                berries_out.append(place)
+            flags["berries_told"][place] = True
+        elif sn not in brs["keeps"]:
+            br = 0
+            flags["berries_told"][place] = False
+            flags["in_berries_told"][place] = False
+        else:
+            br -= rounded(br * brs["fade"], rng)
+        if sb:
+            want = sb * sbs["need"]
+            from_berries = min(br, want)
+            br -= int(from_berries)
+            from_worms = min(wm * wms["up"][weather], want - from_berries)
+            wm -= int(from_worms)
+            fed_b = (from_berries + from_worms) / want
+            if from_berries and not flags["in_berries_told"][place]:
+                in_berries_out.append(place)
+                flags["in_berries_told"][place] = True
+            born_b = (rounded(sb * sbs["breed"] * fed_b * (1 - sb / sbs["cap"]), rng)
+                      if in_season(sbs, sn) else 0)
+            lost_b = rounded(sb * sbs["wear"], rng) + taken_b
+            hungry_b = fed_b < sbs["hungry_below"]
+            if hungry_b:
+                lost_b += rounded(sb * (sbs["hungry_below"] - fed_b) * sbs["starve"] * starve, rng)
+                if not flags["birds_hungry"][place]:
+                    birds_hungry.append(place)
+            flags["birds_hungry"][place] = hungry_b
+            sb = max(0, sb - lost_b + born_b)
+        state["small birds"][place] = sb
+        state["worms"][place] = max(0, wm)
+        state["berries"][place] = max(0, br)
 
         if f:
             fed_f = (fox_hunting + (scraps * 0.1 if place == QUAY else 0)) / (f * fs["need"])
@@ -890,9 +974,13 @@ def step(state: dict) -> str:
                 gt -= 1
                 events.append(LINES["hermits_goat"])
         goats[place] = gt
-        if (place == HERMITS["island"] and weather == "calm"
-                and rng.random() < HERMITS["smoke"]):
-            events.append(LINES["smoke"])
+        if place == HERMITS["island"]:
+            if weather == "calm" and rng.random() < HERMITS["smoke"]:
+                events.append(LINES["smoke"])
+            if weather == "storm" and rng.random() < HERMITS["stranded"]:
+                events.append(LINES["stranded"])
+            elif weather == "calm" and rng.random() < HERMITS["arrived"]:
+                events.append(LINES["arrived"])
 
         # -- dragonflies over the pools -----------------------------------
         df = state["dragonflies"][place]
@@ -938,7 +1026,10 @@ def step(state: dict) -> str:
             state[key][place] = max(n, spec["kept"])
     for places, one, every in ((deer_hungry, "deer_hungry", "deer_hungry_all"),
                                (windfalls, "windfall", "windfall_all"),
-                               (dragonflies_out, "dragonflies", "dragonflies_all")):
+                               (dragonflies_out, "dragonflies", "dragonflies_all"),
+                               (berries_out, "berries", "berries_all"),
+                               (in_berries_out, "in_berries", "in_berries_all"),
+                               (birds_hungry, "birds_hungry", "birds_hungry_all")):
         if len(places) == len(SHORES) > 1:
             events.append(LINES[every])
         else:
@@ -1018,6 +1109,9 @@ def summary(state: dict) -> list[str]:
                          f"dragonflies {state['dragonflies'][key]}   "
                          f"ponies {state['ponies'][key]}   "
                          f"alpacas {state['alpacas'][key]}")
+            lines.append(f"  {'':<40} small birds {state['small birds'][key]}   "
+                         f"worms {state['worms'][key]}   "
+                         f"berries {state['berries'][key]}")
         elif key == "skerries":
             lines.append(f"  {name:<40} seals {state['seals']}   "
                          f"puffins {state['puffins']}")
@@ -1183,7 +1277,7 @@ def save_state(path: str, state: dict) -> None:
 
 COUNTED = ("gulls", "shellfish", "deer", "wolves", "browse", "rabbits",
            "squirrels", "foxes", "cats", "goats", "dragonflies", "harriers",
-           "sparrowhawks", "ponies", "alpacas")
+           "sparrowhawks", "ponies", "alpacas", "small birds", "worms", "berries")
 
 
 def check() -> list[str]:
@@ -1236,7 +1330,7 @@ def check() -> list[str]:
         for word in ("ferry", "fare", "Guild", "Warden", "ledger", "quay"):
             if word in text:
                 bad(f"fourth, seed {seed}: the account spoke of the {word}")
-        if re.search(r"\brings?\b", text) or re.search(r"\d+ hermits?", text):
+        if re.search(r"\brings?\b", text) or re.search(r"\d+ (hermits?|sailors?)", text):
             bad(f"fourth, seed {seed}: the bell was counted, or the hermits were")
     a, b = fresh_state(4, "fourth"), fresh_state(4, "fourth")
     run(a, 40)
