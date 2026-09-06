@@ -138,6 +138,13 @@ record never wrote and may not contradict a spine fact or a chapter that
 stands on `main`. `tools/validate.py` cannot check it; it is a judgement the
 author makes before committing.
 
+**Fourth Island has one written line** (Dermot's direction, 2026-09-06: *no
+major settlements except a few human hermits*), recorded in `WORLD.md`
+under the no-hidden-canon rule, outside the spine — soft, and the whole of
+what is written. Everything else behind the island is still absent, not
+hidden: don't give the hermits names, a number or a reason until a chapter
+does, and keep the sandbox's Fourth Island line to exactly that.
+
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
 
@@ -182,10 +189,12 @@ should not need touching for that.
 
 What it does: ticks one tide at a time on a 28-tide spring-and-neap cycle,
 grows a bloom, herring, shellfish, gulls and seals against each other on
-the water and browse, fallow deer and wolves against each other on the
-hills (wolves on Second and Third, which have narrows between them; First
-Island's deer answer to the Keep's huntsmen instead — Dermot's direction,
-2026-09-06: *add wolves and fallow deer*), and every tide has the ferry
+the water and, on the hills, browse, fallow deer, rabbits, squirrels, wolves,
+foxes and the Keep's cats against each other (wolves on Second and Third,
+which have narrows between them, and foxes cross them too; First Island's
+deer answer to the Keep's huntsmen instead, and its cats are kept rather
+than wild — Dermot's directions, 2026-09-06: *add wolves and fallow deer*;
+*add foxes, rabbits, cats and squirrels*), and every tide has the ferry
 cross (on any tide, and owed for it — an empty
 crossing is logged as owed) and the Warden write a ledger line the
 chronicle never speaks: the bell's rings. `--state PATH` keeps a world
@@ -200,11 +209,11 @@ Three rules it lives under, all consequences of `WORLD.md`:
   It is bounded the other way — nothing in it may contradict a spine fact,
   and `--check` pins the two it could: the ferry crosses every tide, and
   the bell is never counted aloud in the chronicle.
-- **Fourth Island is listed and not simulated.** No hidden canon: there is
-  nothing behind it until it is written, so the sandbox holds no
-  populations there, prints *not simulated — nothing is written of it*,
-  and `--check` fails if a run ever puts anything on it or names it in a
-  chronicle line. Gulls that go south leave the record, and come back
+- **Fourth Island is listed and not simulated.** No hidden canon: the
+  sandbox holds no populations there, prints its one written line (*a few
+  hermits, and nothing else is written of it*) and no more, and `--check`
+  fails if a run ever puts anything on it or names it in a chronicle
+  line. Gulls that go south leave the record, and come back
   without saying where they were.
 - **The written past stays written.** One random stream per tide, keyed
   on seed and tide number, so a run continued from a save is the run

@@ -65,9 +65,10 @@ world's object literals rather than executing them. See
 ecosystem of the waters the kingdom is named for, ticking one tide at
 a time. The bloom the tide stirs up, the herring that feed on it, the
 shellfish on three shores, the gulls that eat both, the seals on the
-skerries, and on the hills above them the browse, the fallow deer and
-the wolves — and, every tide, the ferry crossing and the Warden writing
-down what the Guild will not say aloud.
+skerries, and on the hills above them the browse, the deer and the
+rabbits that graze it, the wolves and foxes that hunt them, the squirrels
+in the wood and the Keep's cats — and, every tide, the ferry crossing and
+the Warden writing down what the Guild will not say aloud.
 
 ```bash
 python3 sandbox/ecosystem.py                  # one tide-cycle
@@ -75,7 +76,8 @@ python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going betwe
 ```
 
 It is not a chapter and not a player; it invents nothing about Fourth
-Island, which it lists and does not simulate. See
+Island, which it lists with the one line `WORLD.md` holds of it and does
+not simulate. See
 [`sandbox/README.md`](./sandbox/README.md).
 
 ## Forking it

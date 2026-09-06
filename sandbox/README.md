@@ -54,9 +54,10 @@ And on the hills above the shores:
   hill regrows from the root, slowly, and the chronicle says when a
   hill is stripped and when it greens again.
 - **Fallow deer** on every written island, fawning when the hill feeds
-  them and going hungry when it does not. First Island's are the Keep's
-  to hunt, in fair weather, and now and then one goes to the Keep's
-  table.
+  them and going hungry when it does not. Nothing grazes below the
+  roots, so a stripped hill regrows from them, slowly. First Island's
+  deer are the Keep's to hunt, in fair weather — the Keep's huntsmen are
+  that island's wolves — and now and then one goes to the Keep's table.
 - **Wolves**, in packs, on Second and Third, which have narrows between
   them. A pack is judged on its hunting rather than on one night's luck:
   it grows while the deer are many and goes short when they are few,
@@ -64,6 +65,22 @@ And on the hills above the shores:
   herd come back. A pack that dies out is replaced from across the
   narrows at a calm neap, when the water between is narrowest. No wolves
   on First Island, whose deer answer to the Keep instead.
+- **Rabbits** on every written island, grazing the same hill as the deer
+  and breeding the way rabbits do. The chronicle says when they are
+  everywhere and when they have thinned.
+- **Squirrels** in the wood on every written island, living off the wood
+  itself. A storm shakes the nuts down and they do well after it.
+- **Foxes** on every written island: rabbits first, squirrels when they
+  can get them, and the quay's scraps on First Island. They are judged
+  on their hunting like the wolves, and cross the narrows the same way.
+- **Cats** at the Keep and the quay on First Island, kept rather than
+  wild. The kitchens keep a floor under them, so they never starve out;
+  above it they live or die by the hunting like anything else, and now
+  and then there are kittens at the Keep.
+
+A few deer, a few rabbits and a fox or two always survive on a hill,
+however bad it gets: hills have corners. Wolves do not get that; a pack
+that runs out of deer runs out, and comes back only across the narrows.
 
 The sandbox settles to its own level after a few cycles — fewer gulls
 than it started with, herring that thin and come back, wolves and deer
@@ -103,10 +120,10 @@ the sandbox can carry, and `--check` proves it.
 
 ## Fourth Island
 
-Listed, and not simulated. `WORLD.md` says there is nothing behind it
-until it is written, and the sandbox holds it to that: no populations,
-no events, a summary line that says *not simulated — nothing is written
-of it*. Gulls that go south leave the record; the ones that come back do
+Listed, and not simulated. `WORLD.md` holds one line of it — a few
+hermits, and nothing more — and the sandbox holds it to exactly that: no
+populations, no events, a summary line that says *not simulated — a few
+hermits, and nothing else is written of it*. Gulls that go south leave the record; the ones that come back do
 not say where they were. `--check` fails if a run ever puts anything on
 Fourth Island or names it in a chronicle line.
 
