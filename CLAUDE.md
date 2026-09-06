@@ -78,9 +78,10 @@ artifacts are tracked. CI installs nothing, and should stay that way.
 every push to `main` and once a day
 (https://dermot-r-cochran.github.io/four-islands-quest/). It stages that
 one file, has the sandbox write the day's chronicle beside it at
-`/sounds/` and Fourth Island's account at `/fourth/` (`--html`, seeded by
-the date, so the same day gives the same Sounds and the same island to
-everyone), and installs nothing. The tools and the docs stay in
+`/sounds/`, Fourth Island's account at `/fourth/` and the open sea at
+`/sea/` (`--html`, seeded by the date, so the same day gives the same
+Sounds, the same island and the same sea to everyone), and installs
+nothing. The tools and the docs stay in
 the repository. Saves on the site live in that origin's localStorage, under
 the same `four-islands-` keys as anywhere else. The chronicle page is
 generated, never hand-edited, and never `index.html`.
@@ -160,6 +161,16 @@ names and no number, the record never says which of them chose it, and
 nobody has written why** — never count them, name them or sort them — and
 the ferrymen still do not point at the island.
 
+**The rest of the known world is open sea** (Dermot's direction, 2026-09-06,
+with *dolphins and whales*, *plankton and fish*, *coral reefs*), written in
+`WORLD.md`'s section *The open sea, so far*: beyond the mainland shore and
+the four islands no other land is charted; the sea holds the plankton and
+the shoals, dolphins on the shoals, whales on the plankton for the summer
+and autumn and gone the rest of the year; and south of Fourth Island a
+coral reef with its own fish. Nobody keeps an account of the sea — the
+sandbox's third edition, `--edition sea`, is what might be seen from a
+deck. Where the whales go is absent, not hidden: don't write it.
+
 The demo world is the author's pen. **Code contributions are welcome; story
 changes belong in a fork** — see `CONTENT-LICENSE.md`.
 
@@ -202,14 +213,16 @@ and every line the chronicle can say — and an engine below it that adds no
 words. Re-voice or re-stock the sandbox by editing the data; the engine
 should not need touching for that.
 
-It runs **two editions** on one engine (`EDITIONS` in the data): the
+It runs **three editions** on one engine (`EDITIONS` in the data): the
 **Sounds** — the three islands, the skerries, the ferry and the Warden, in
-the ferryman's voice — and **Fourth Island** (`--edition fourth`) — one
-island facing open sea, no ferry, no ledger, no counted hermit, in an
-account a hermit might have noticed, with its own words for the same
-events and a pool of ways a quiet tide can be quiet. The Sounds edition
-lists Fourth Island and does not simulate it, because ferrymen do not
-point at it.
+the ferryman's voice; **Fourth Island** (`--edition fourth`) — one island
+facing open sea, no ferry, no ledger, no counted hermit, in an account a
+hermit might have noticed, with its own words for the same events and a
+pool of ways a quiet tide can be quiet; and **the open sea** (`--edition
+sea`) — plankton and shoals, dolphins and whales that come and go with
+the seasons, and the reef south of Fourth Island with its fish, as seen
+from a deck. The Sounds edition lists Fourth Island and does not simulate
+it, because ferrymen do not point at it.
 
 It keeps **a year of 730 tides with four seasons** (Dermot's direction,
 2026-09-06: *seasons and weather*): each season sets the weather's odds,

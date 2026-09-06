@@ -69,6 +69,21 @@ none; the ferrymen still do not point at the island.
   They have no names and no number, and nobody has written why the
   ones who chose it chose it.
 
+## The open sea, so far
+
+- **The rest of the known world is open sea** (the author, 2026-09-06).
+  Beyond the mainland shore the ferry leaves from and the four islands,
+  no other land is charted, and the record holds none.
+- The sea has its own life: the plankton, and the shoals that feed on
+  it, too many to count; dolphins on the shoals; whales on the
+  plankton, in these waters for the summer and the autumn and gone the
+  rest of the year, nobody knowing where.
+- South of Fourth Island, in shallower water, a coral reef with its own
+  fish. The warm seasons grow it and the storms break it.
+- The sailors who come to Fourth Island came across all of this. Nobody
+  keeps an account of the sea; what the record has of it is what might
+  be seen from a deck.
+
 ## Who writes the world
 
 The engine (MIT) welcomes code fixes. The world content (CC BY 4.0)

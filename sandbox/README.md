@@ -13,6 +13,7 @@ python3 sandbox/ecosystem.py --ledger              # the Warden's ledger after t
 python3 sandbox/ecosystem.py --json                # the final state, for tools
 python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page
 python3 sandbox/ecosystem.py --edition fourth      # Fourth Island's own account
+python3 sandbox/ecosystem.py --edition sea         # the open sea, seen from a deck
 python3 sandbox/ecosystem.py --check               # the invariants hold, both editions
 ```
 
@@ -162,8 +163,9 @@ page in the quest's palette, with the companies on the water at its head
 and a link back to the quest. It leaves the Warden's ledger out, since
 the bell is not counted aloud, and `--check` fails if a page ever shows
 it. The Pages workflow runs this once a day with the date as the seed, so
-every reader sees the same Sounds for the same day, at `/sounds/`, and
-the same Fourth Island at `/fourth/`; each page points at the other.
+every reader sees the same Sounds for the same day, at `/sounds/`, the
+same Fourth Island at `/fourth/` and the same sea at `/sea/`; each page
+points at the others.
 
 ## Between visits
 
@@ -185,6 +187,21 @@ number. So a run continued from a save is the same run as one played
 straight through, and reading a saved chronicle back never changes a
 line of it. That is the spine's time-travel fact in the smallest form
 the sandbox can carry, and `--check` proves it.
+
+## The open sea
+
+The rest of the known world, in a third edition, `--edition sea`, as
+seen from a deck: the plankton, the sea's own bloom; the shoals that
+feed on it, too many to count; the dolphins that live on the shoals;
+the whales that come in for the plankton in summer and autumn and go,
+wherever they go, for the rest of the year; and south of Fourth Island,
+in shallower water, the coral, which the warm seasons grow and the
+storms break, with the reef fish that live on it. Nobody keeps an
+account out here, so the voice is what a sailor might have told, had a
+sailor come in, and a quiet tide has its own ways of being quiet —
+*flat calm to the edge of the world*. `--check` fails if the account
+ever mentions the ferry, a fare, the Guild, the Warden, a ledger or a
+quay, and if the whales neither come nor go in a year.
 
 ## Fourth Island
 
