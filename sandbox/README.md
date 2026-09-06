@@ -10,6 +10,7 @@ python3 sandbox/ecosystem.py --tides 84 --seed 7   # three cycles, another world
 python3 sandbox/ecosystem.py --quiet               # the summary only
 python3 sandbox/ecosystem.py --ledger              # the Warden's ledger after the run
 python3 sandbox/ecosystem.py --json                # the final state, for tools
+python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page
 python3 sandbox/ecosystem.py --check               # the invariants hold
 ```
 
@@ -115,6 +116,15 @@ ledger — `--ledger` — is the Crown's: tide, rings, how many aboard, how
 much landed. The spine says the bell is not counted *aloud*; the record
 of Chapter One says the Crown counts what the Guild won't. The sandbox
 keeps both, and `--check` fails if the chronicle ever says the count.
+
+## On the site
+
+`--html PATH` writes the chronicle and the summary as one self-contained
+page in the quest's palette, with the companies on the water at its head
+and a link back to the quest. It leaves the Warden's ledger out, since
+the bell is not counted aloud, and `--check` fails if a page ever shows
+it. The Pages workflow runs this once a day with the date as the seed, so
+every reader sees the same Sounds for the same day, at `/sounds/`.
 
 ## Between visits
 

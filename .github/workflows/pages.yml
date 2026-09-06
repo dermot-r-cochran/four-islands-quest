@@ -1,14 +1,19 @@
 name: Pages
 
-# Serves index.html from GitHub Pages on every push to main. The engine is
-# one file with no build, so the whole job is: copy that file into a
-# staging directory and hand it to Pages. Nothing is installed, and the
-# tools, the sandbox and the README stay in the repository rather than on
-# the site — the site is the quest, nothing else.
+# Serves index.html from GitHub Pages on every push to main, and beside it
+# a page the sandbox writes: one tide-cycle of the Sounds, seeded by the
+# date, at /sounds/. Nothing is installed — the sandbox is standard
+# library — and the tools and the README stay in the repository. The
+# daily schedule re-runs the same job so the Sounds tick over once a day
+# for every reader; the same day gives the same Sounds to everyone.
+# (GitHub pauses scheduled workflows after sixty days without a commit;
+# a push or a manual run wakes them.)
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 5 * * *"
   workflow_dispatch:
 
 permissions:
@@ -29,10 +34,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Stage the one file
+      - name: Stage the quest
         run: |
           mkdir -p _site
           cp index.html _site/index.html
+
+      - name: Tick the Sounds over for today
+        run: |
+          python3 sandbox/ecosystem.py --check
+          python3 sandbox/ecosystem.py --seed "$(date -u +%Y%m%d)" \
+            --date "$(date -u +%F)" --html _site/sounds/index.html
 
       - uses: actions/configure-pages@v5
         with:

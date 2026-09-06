@@ -82,6 +82,12 @@ Island, which it lists with the one line `WORLD.md` holds of it and does
 not simulate. See
 [`sandbox/README.md`](./sandbox/README.md).
 
+On the site it has a page of its own: the Pages workflow runs one
+tide-cycle seeded by the date and publishes the chronicle at
+https://dermot-r-cochran.github.io/four-islands-quest/sounds/ , ticking
+it over once a day. The Warden's ledger is not on the page — the bell is
+not counted aloud.
+
 ## Forking it
 
 The demo ends where your world begins: replace the four data structures at
@@ -102,8 +108,9 @@ python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 ```
 
 A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
-every push to `main`: it copies that one file into a staging directory and
-hands it to Pages, and installs nothing either.
+every push to `main` and once a day: it copies that one file into a staging
+directory, has the sandbox write the day's chronicle beside it, and hands
+both to Pages. It installs nothing either.
 
 `tools/validate.py` is the useful one. It reads the world out of
 `index.html` and fails on what is always wrong — a beat looking at an
