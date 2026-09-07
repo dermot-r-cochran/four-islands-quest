@@ -72,12 +72,47 @@ def first_point(body: str) -> str:
     return text if len(text) <= 320 else text[:317].rsplit(" ", 1)[0] + "…"
 
 
+def _console_takes_ansi() -> bool:
+    """True when escape sequences will be rendered rather than printed.
+
+    A tty is not enough: the legacy Windows console (conhost under
+    PowerShell 5.1 / cmd) shows them as `←[1m` unless virtual-terminal
+    processing is switched on for the session. Ask for it; if refused,
+    fall back to plain text rather than litter the page.
+    """
+    if not sys.stdout.isatty():
+        return False
+    if os.name != "nt":
+        return True
+    if os.environ.get("WT_SESSION") or os.environ.get("TERM_PROGRAM"):
+        return True  # Windows Terminal, VS Code: VT already on
+    try:
+        import ctypes
+        k32 = ctypes.windll.kernel32
+        handle = k32.GetStdHandle(-11)  # STD_OUTPUT_HANDLE
+        mode = ctypes.c_uint32()
+        if not k32.GetConsoleMode(handle, ctypes.byref(mode)):
+            return False
+        want = mode.value | 0x0004  # ENABLE_VIRTUAL_TERMINAL_PROCESSING
+        return bool(k32.SetConsoleMode(handle, want))
+    except Exception:
+        return False
+
+
+ANSI = _console_takes_ansi()
+
+# A pipe or file on Windows defaults to the ANSI code page, which cannot
+# hold the dashes and quotes the prose uses. The console itself is fine.
+if not sys.stdout.isatty() and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+
 def dim(s: str) -> str:
-    return f"\033[2m{s}\033[0m" if sys.stdout.isatty() else s
+    return f"\033[2m{s}\033[0m" if ANSI else s
 
 
 def bold(s: str) -> str:
-    return f"\033[1m{s}\033[0m" if sys.stdout.isatty() else s
+    return f"\033[1m{s}\033[0m" if ANSI else s
 
 
 def read_progress(root: str) -> dict:
@@ -194,31 +229,41 @@ HELP = """\
   n / b     next / previous fragment   a WORD   ask the record about a word
   g N       go to fragment N           l        list fragments
   v N       show the Nth picture       r        re-read this fragment
+  x         look: pictures named here, and what the reference holds
+  x FOLDER  list that folder's pictures; v FOLDER/NAME shows any of them
   q         save and leave
 """
 
 
 class Teller:
     def __init__(self, root: str, drafts: bool, pace: int,
-                 image_mode: str = "auto") -> None:
+                 image_mode: str = "auto", cue: bool = True) -> None:
         self.root = root
         self.pace = max(1, pace)
         self.image_mode = image_mode
+        self.show_cue = cue
         allf = load_fragments(root)
         self.fragments = allf if drafts else [f for f in allf if f.approved]
         self.log = load_log(root)
         self.idx = 0
         self.pos = 0
+        self.index: dict[str, str] = {}
+        self.folders: dict[str, list[str]] = {}
         self._attach_pictures()
         self._load_progress()
 
     # ---- pictures the record names --------------------------------
     def _attach_pictures(self) -> None:
-        if self.image_mode == "off":
-            return
+        # Indexed even with --images off: x still counts, v still names the file.
         index = images.index_media(self.root)
         if not index:
             return
+        self.index = index
+        for full in sorted(set(index.values())):
+            rel = os.path.relpath(full, self.root).replace(os.sep, "/")
+            parts = rel.split("/")
+            folder = parts[1] if len(parts) > 2 else parts[0]
+            self.folders.setdefault(folder, []).append(full)
         side = images.sidecar(self.root)
         by_number = {e.number: e for e in self.log}
         for f in self.fragments:
@@ -238,20 +283,86 @@ class Teller:
                     found.append(path)
             f.pictures = found
 
+    def _resolve(self, name: str) -> str | None:
+        """A picture by rel path, folder/stem, file name or bare stem."""
+        name = name.strip().replace("\\", "/").strip("/")
+        if not name:
+            return None
+        for key in (name, name.split("/")[-1]):
+            if key in self.index:
+                return self.index[key]
+        folder, _, stem = name.rpartition("/")
+        if folder in self.folders:
+            for full in self.folders[folder]:
+                if os.path.splitext(os.path.basename(full))[0] == stem:
+                    return full
+        return None
+
     def view(self, arg: str) -> None:
         pics = self.current.pictures
+        arg = arg.strip()
         print()
-        if not pics:
-            print(dim("  the record names no picture for this fragment."))
+        if arg and not arg.isdigit():
+            path = self._resolve(arg)
+            if not path:
+                print(dim(f"  no picture called “{arg}” in the reference. "
+                          "(x lists what there is)"))
+                print()
+                return
+        elif not pics:
+            print(dim("  the record names no picture for this fragment. "
+                      "(x shows what the reference holds)"))
             print()
             return
-        try:
-            path = pics[(int(arg) if arg.strip() else 1) - 1]
-        except (ValueError, IndexError):
-            print(dim("  show which? (v 1)"))
-            print()
-            return
+        else:
+            try:
+                path = pics[(int(arg) if arg else 1) - 1]
+            except (ValueError, IndexError):
+                print(dim("  show which? (v 1)"))
+                print()
+                return
         print(dim("  " + images.show(path, self.image_mode)))
+        print()
+
+    def look(self, arg: str) -> None:
+        """What pictures this fragment names, and what the reference holds."""
+        arg = arg.strip().strip("/")
+        print()
+        if arg:
+            paths = self.folders.get(arg)
+            if not paths:
+                print(dim(f"  no folder called “{arg}”. "
+                          "(x lists the folders)"))
+                print()
+                return
+            n = len(paths)
+            print(dim(f"  {arg}: {n} picture{'s' if n != 1 else ''}"))
+            stems = [os.path.splitext(os.path.basename(p))[0] for p in paths]
+            print(dim(wrap(" · ".join(stems), "    ")))
+            print(dim(f"  v {arg}/NAME shows one."))
+            print()
+            return
+        pics = self.current.pictures
+        if pics:
+            n = len(pics)
+            print(dim(f"  the record names {n} picture{'s' if n != 1 else ''} "
+                      "for this fragment:"))
+            for i, p in enumerate(pics, 1):
+                rel = os.path.relpath(p, self.root).replace(os.sep, "/")
+                print(dim(f"    {i}  {rel}   (v {i})"))
+        else:
+            print(dim("  the record names no picture for this fragment."))
+        if not self.folders:
+            print(dim("  the reference holds no pictures."))
+            print()
+            return
+        total = sum(len(v) for v in self.folders.values())
+        nf = len(self.folders)
+        print(dim(f"  the reference holds {total} pictures in "
+                  f"{nf} folder{'s' if nf != 1 else ''}:"))
+        counts = " · ".join(f"{k} {len(v)}" for k, v in sorted(self.folders.items()))
+        print(dim(wrap(counts, "    ")))
+        print(dim("  x FOLDER lists one; v FOLDER/NAME shows any of them."))
         print()
 
     # ---- progress -------------------------------------------------
@@ -360,10 +471,25 @@ class Teller:
                     self.pos += 1
                 if self.pos >= len(self.current.passages):
                     break
-                if not self.prompt(dim("  —")):
+                if not self.prompt(self.cue()):
                     return
             if not self.end_of_fragment():
                 return
+
+    def cue(self, at_end: bool = False, last: bool = False) -> str:
+        """The prompt: a dash, or the dash with this step's options after it."""
+        if at_end:
+            lead = "  [enter] on" if not last else "  [enter]"
+        else:
+            lead = "  —"
+        if not self.show_cue:
+            return dim(lead)
+        opts = ["b back", "g N go"] if at_end else ["enter next"]
+        pics = self.current.pictures
+        if pics:
+            opts.append("v 1" if len(pics) == 1 else f"v 1-{len(pics)}")
+        opts += ["x look", "? help"]
+        return dim(lead) + dim("  " + " · ".join(opts))
 
     def end_of_fragment(self) -> bool:
         last = self.idx >= len(self.fragments) - 1
@@ -371,8 +497,7 @@ class Teller:
         if last:
             print(dim(wrap("That is the whole record as it stands. "
                            "The rest is unruled page.", "  ")))
-        return self.prompt(dim("  [enter] on" if not last else "  [enter]"),
-                           at_end=True)
+        return self.prompt(self.cue(at_end=True, last=last), at_end=True)
 
     def prompt(self, label: str, at_end: bool = False) -> bool:
         try:
@@ -397,6 +522,8 @@ class Teller:
             self.listing()
         elif cmd in ("v", "view", "show"):
             self.view(arg)
+        elif cmd in ("x", "look"):
+            self.look(arg)
         elif cmd in ("r", "reread"):
             self.pos = 0
             self.announce()
@@ -670,6 +797,8 @@ def main() -> int:
     ap.add_argument("--images", default="auto",
                     choices=["auto", "inline", "open", "off"],
                     help="how to show pictures the record names (default: auto)")
+    ap.add_argument("--bare", action="store_true",
+                    help="a plain dash for the prompt, no options after it")
     ap.add_argument("--quest", action="store_true",
                     help="play the hand-authored chapters from quest/index.html")
     args = ap.parse_args()
@@ -686,7 +815,7 @@ def main() -> int:
             return 0
         QuestPlayer(root, data).run()
         return 0
-    t = Teller(root, args.drafts, args.pace, args.images)
+    t = Teller(root, args.drafts, args.pace, args.images, cue=not args.bare)
     if args.list:
         for f in t.fragments:
             print(f.label)

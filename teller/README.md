@@ -49,6 +49,12 @@ itself names, in a fragment's header, in a log entry it cites, or in an
 optional `reference/fragments.json` sidecar. Nothing is matched by
 guesswork.
 
+`x` says what the record names for this fragment and how many pictures
+the `reference/` tree holds, by folder; `x FOLDER` lists one folder, and
+`v FOLDER/NAME` shows any picture there, named by the record or not. The
+prompt itself carries the step's options after the dash; `--bare` gives a
+plain dash instead.
+
 This repository ships no pictures, so none are ever shown here. The
 capability travels with the shared code because the tool is written
 against the shape, not against any one world. `--images off` disables it
