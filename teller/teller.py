@@ -232,8 +232,57 @@ HELP = """\
             you have not yet seen      x        look: pictures here, and
   v N       the Nth picture here                what the reference holds
   x FOLDER  list that folder's pictures; v FOLDER/NAME shows any of them
+  + TEXT    note a line for the author's review (+ alone: several lines)
   q         save and leave
 """
+
+INBOX_FILE = "teller-inbox.md"
+
+
+def write_note(root: str, where: str, text: str) -> str:
+    """Append a reader's note to the repo's inbox for review.
+
+    The inbox is a plain Markdown file the teller only ever appends to and
+    never reads back: nothing typed here reaches the story, the record or
+    the quest until a person moves it there. Returns the file name.
+    """
+    import datetime as _dt
+    stamp = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+    path = os.path.join(root, INBOX_FILE)
+    fresh = not os.path.exists(path)
+    with open(path, "a", encoding="utf-8", newline="\n") as fh:
+        if fresh:
+            fh.write("# teller inbox\n\nNotes typed at the teller's prompt, "
+                     "newest last. For review; nothing here is canon.\n")
+        fh.write(f"\n## {stamp} — {where}\n\n")
+        fh.write("\n".join("> " + ln if ln.strip() else ">"
+                           for ln in text.strip().splitlines()) + "\n")
+    return INBOX_FILE
+
+
+def take_note(root: str, where: str, arg: str) -> None:
+    """One line from the command, or several lines ended by an empty one."""
+    text = arg.strip()
+    if not text:
+        print(dim("  note for review — end with an empty line:"))
+        lines = []
+        while True:
+            try:
+                ln = input("  | ")
+            except (EOFError, KeyboardInterrupt):
+                print()
+                break
+            if not ln.strip():
+                break
+            lines.append(ln)
+        text = "\n".join(lines).strip()
+    if not text:
+        print(dim("  nothing noted."))
+        print()
+        return
+    name = write_note(root, where, text)
+    print(dim(f"  noted for review in {name}."))
+    print()
 
 
 class Teller:
@@ -560,6 +609,10 @@ class Teller:
             self.view(arg)
         elif cmd in ("x", "look"):
             self.look(arg)
+        elif cmd in ("+", "note", "add"):
+            f = self.current
+            take_note(self.root, f"Fragment {f.number:03d} — {f.title}, "
+                      f"after passage {self.pos} of {len(f.passages)}", arg)
         elif cmd in ("r", "reread"):
             self.pos = 0
             self.announce()
@@ -590,6 +643,7 @@ QUEST_HELP = """\
   j         the quest log                 f        the companies present
   l         list chapters                 g N      go to chapter N
   r         restart this chapter          q        save and leave
+  + TEXT    note a line for the author's review (+ alone: several lines)
 """
 
 
@@ -752,6 +806,11 @@ class QuestPlayer:
                 self.companies()
             elif cmd in ("l", "list"):
                 self.listing()
+            elif cmd in ("+", "note", "add"):
+                c = self.chapter
+                take_note(self.root, f"chapter {c.get('title', '')!r} "
+                          f"({c.get('saveId', '')}), beat {self.beat + 1} "
+                          f"of {len(self.beats)}", arg)
             elif cmd in ("r", "restart"):
                 self.beat = 0
                 self.announce()
