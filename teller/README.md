@@ -28,6 +28,7 @@ runs a line of the file it reads.
   j         the quest log                 f        the companies present
   l         list chapters                 g N      go to chapter N
   r         restart this chapter          q        save and leave
+  + TEXT    note a line for the author's review (+ alone: several lines)
 ```
 
 Finishing a chapter shows its endcard and offers the way on, exactly as
@@ -61,6 +62,15 @@ capability travels with the shared code because the tool is written
 against the shape, not against any one world. `--images off` disables it
 outright; images are never decoded or interpreted, only handed to the
 terminal or the system viewer.
+
+## Notes for review
+
+`+ TEXT` at any prompt, in either mode, appends the line to `teller-inbox.md`
+in the repo root, stamped with the time and the place in the story; `+` alone
+takes several lines, ended by an empty one. The teller only ever appends to
+that file and never reads it back, so nothing typed there reaches the story,
+the record or the quest until a person moves it. It is the safe way to leave
+fresh text, a scene idea or a choice for the author while reading.
 
 ## What it does not do
 
