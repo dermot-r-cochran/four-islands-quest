@@ -51,7 +51,8 @@ guesswork.
 
 `x` says what the record names for this fragment and how many pictures
 the `reference/` tree holds, by folder; `x FOLDER` lists one folder, and
-`v FOLDER/NAME` shows any picture there, named by the record or not. The
+`v FOLDER/NAME` shows any picture there, named by the record or not; a
+bare `v` shows the next picture here you have not yet seen. The
 prompt itself carries the step's options after the dash; `--bare` gives a
 plain dash instead.
 

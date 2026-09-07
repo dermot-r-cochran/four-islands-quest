@@ -228,8 +228,9 @@ HELP = """\
   [enter]   the next passage           o        what this fragment leaves open
   n / b     next / previous fragment   a WORD   ask the record about a word
   g N       go to fragment N           l        list fragments
-  v N       show the Nth picture       r        re-read this fragment
-  x         look: pictures named here, and what the reference holds
+  v         the next picture here      r        re-read this fragment
+            you have not yet seen      x        look: pictures here, and
+  v N       the Nth picture here                what the reference holds
   x FOLDER  list that folder's pictures; v FOLDER/NAME shows any of them
   q         save and leave
 """
@@ -314,14 +315,28 @@ class Teller:
                       "(x shows what the reference holds)"))
             print()
             return
+        elif not arg:
+            left = self.unseen()
+            if not left:
+                n = len(pics)
+                print(dim(f"  you have seen all {n} picture"
+                          f"{'s' if n != 1 else ''} here. (v 1 shows the "
+                          "first again)"))
+                print()
+                return
+            path = left[0]
         else:
             try:
-                path = pics[(int(arg) if arg else 1) - 1]
+                path = pics[int(arg) - 1]
             except (ValueError, IndexError):
                 print(dim("  show which? (v 1)"))
                 print()
                 return
+        self._mark_seen(path)
         print(dim("  " + images.show(path, self.image_mode)))
+        left = len(self.unseen())
+        if left and path in pics:
+            print(dim(f"  ({left} more here not yet seen — v)"))
         print()
 
     def look(self, arg: str) -> None:
@@ -373,11 +388,28 @@ class Teller:
             if f.number == n:
                 self.idx, self.pos = i, int(d.get("passage", 0))
                 break
+        seen = d.get("seen") or {}
+        self.seen = {str(k): list(v) for k, v in seen.items()
+                     if isinstance(v, list)}
 
     def save(self) -> None:
         if self.fragments:
             write_progress(self.root, fragment=self.current.number,
-                           passage=self.pos)
+                           passage=self.pos, seen=self.seen)
+
+    def _rel(self, path: str) -> str:
+        return os.path.relpath(path, self.root).replace(os.sep, "/")
+
+    def unseen(self) -> list[str]:
+        """This fragment's pictures not yet shown, in the record's order."""
+        done = set(self.seen.get(f"{self.current.number:03d}", []))
+        return [p for p in self.current.pictures if self._rel(p) not in done]
+
+    def _mark_seen(self, path: str) -> None:
+        key = f"{self.current.number:03d}"
+        rel = self._rel(path)
+        if rel not in self.seen.setdefault(key, []):
+            self.seen[key].append(rel)
 
     # ---- state ----------------------------------------------------
     @property
@@ -487,7 +519,11 @@ class Teller:
         opts = ["b back", "g N go"] if at_end else ["enter next"]
         pics = self.current.pictures
         if pics:
-            opts.append("v 1" if len(pics) == 1 else f"v 1-{len(pics)}")
+            left = len(self.unseen())
+            if left:
+                opts.append(f"v ({left} unseen)")
+            else:
+                opts.append("v 1" if len(pics) == 1 else f"v 1-{len(pics)}")
         opts += ["x look", "? help"]
         return dim(lead) + dim("  " + " · ".join(opts))
 
