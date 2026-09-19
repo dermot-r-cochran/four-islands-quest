@@ -16,7 +16,7 @@ author's pen.
 The three islands have deer (`WORLD.md`: the deer, the squirrels and the
 small birds eat the fruit); Fourth Island has none. Which island's arch
 and whose keep this is, the record has not said, and Fiona is named
-nowhere in it yet. Note for the record: three winged figures were filed
-here on 4 September 2026 and removed the same day at the author's
-direction as not wanted in the Four Sounds; Fiona is winged and is the
-author's own choice, so that ruling is his to reconcile when he places her.
+nowhere in it yet. For the record: three winged figures were filed here
+on 4 September 2026 and removed the same day at the author's direction;
+those, in his words, "were not friendly elves". Fiona is, and her wings
+are no conflict with that removal.
