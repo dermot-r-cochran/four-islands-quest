@@ -19,4 +19,6 @@ and whose keep this is, the record has not said, and Fiona is named
 nowhere in it yet. For the record: three winged figures were filed here
 on 4 September 2026 and removed the same day at the author's direction;
 those, in his words, "were not friendly elves". Fiona is, and her wings
-are no conflict with that removal.
+are no conflict with that removal. The author's standing rule, given on
+19 September 2026: winged figures are allowed in general, and especially
+for the fae.
