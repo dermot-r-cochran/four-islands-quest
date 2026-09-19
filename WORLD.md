@@ -44,6 +44,24 @@ everything outside the spine, and it is the whole of it: the hermits
 have no names, no number and no reason, and the record gives them
 none; the ferrymen still do not point at the island.
 
+## The register: rigorous fantasy
+
+The world is a fantasy — a Crown and a Keep, a ferry owed for every
+crossing, a bell nobody counts aloud, a fae figure among the deer —
+and it is written under the same discipline a hard record is. The
+author's phrase for it (2026-09-19): *rigorous fantasy, as the
+counterpart to hard science fiction.* Nothing here is explained by
+magic, because nothing here is explained: the spine binds, an absence
+is an absence, and what the record does not say is not so. Where hard
+science fiction states its mechanism and is bound by it, this record
+states none and is bound by its silence instead — the mechanism is
+never given and never needed, because this is a telling and not a
+survey. Every choice converges, time travel alters no written past, and
+a told tale keeps its shape by not being altered. That is the bound the
+fantasy runs under in place of physics: six facts, a kept silence, and
+an engine that cannot branch. A later chapter may add a dragon; it may
+not add the reason for one.
+
 ## Fourth Island, so far
 
 - It lies south of the three, alone. The Sounds end on its northern
