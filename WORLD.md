@@ -132,4 +132,15 @@ yourself is yours alone.
 
 ## Register
 
-The Four Sounds stays general-audience.
+The Four Sounds is written at the **young-adult reading tier**: more
+mysterious than plain, with a sense of exploration and adventure, and a
+reader who goes out into the world and finds things. That is a statement
+about reading level, protagonists and depth, and about nothing else — the
+Four Sounds remains suitable for any reader of any age, which is the older
+sense of *general-audience* this line used to carry and still means. It is
+not the *general tier*, which is a rung above.
+
+Two consequences for anyone writing here. Sentences may be long and a joke
+may work by implication, as the quay at first light does; and the mystery
+in a chapter is an invitation rather than a weight — the reader is being
+drawn outward, not pressed down.

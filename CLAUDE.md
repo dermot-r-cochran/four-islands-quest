@@ -130,8 +130,24 @@ lines to keep the file readable — follow that.
 
 **`WORLD.md` is the entire canon apparatus** and is deliberately minimal: the
 repo is the record, six spine facts bind, everything else is soft, no hidden
-canon exists, and the register stays general-audience. Read it before writing
-world content, and keep it accurate if the spine changes.
+canon exists, and the register is the **young-adult reading tier** (Dermot's
+placement, 2026-09-22). Read it before writing world content, and keep it
+accurate if the spine changes.
+
+**On that word.** This line read "the register stays general-audience" until
+2026-09-22, meaning *suitable for any reader of any age* — which is still
+true and still the rule. It was rewritten because the sibling `star-rangers`
+repo now names a rung **general**, one above young adult, so the old phrasing
+would read to a future session as a licence to write two rungs deeper than
+this world wants. The tier ladder there is children / young adult / general /
+contemplative, and it orders reading level, protagonists and depth only: no
+rung is a content rating, and nothing here is unsuitable for anyone. Dermot
+placed the Four Sounds at young adult on the evidence of what is already
+written — the quay-at-first-light opening runs long sentences and lands a
+joke by implication, which is past the children's rung's plain words, and its
+subject is exploration and adventure, which is exactly that rung's register.
+A tier is a floor and not a ceiling, so an older reader is not being sent
+elsewhere.
 
 **Time travel is in the spine** (Dermot's direction, 2026-09-06): it exists,
 and it never alters an established past event. To the engine that costs
