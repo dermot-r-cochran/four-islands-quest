@@ -167,7 +167,7 @@ current data.
 
 ## License
 
-Dual-licensed by section — see `CONTENT-LICENSE.md` for the full
+Licensed by section — see `CONTENT-LICENSE.md` for the full
 statement:
 
 - **Engine** (everything outside `index.html`'s WORLD DATA section)
@@ -175,3 +175,6 @@ statement:
 - **Demo world content** (the prose and data in the WORLD DATA
   section) — CC BY 4.0. Build on it with attribution, or replace it
   with your own world, which is then yours alone.
+- **Pictures and clips** (`reference/`, `media/`) — CC BY-NC-ND 4.0.
+  Share them unchanged, with credit, non-commercially; a fork replaces
+  them the way it replaces the world data.

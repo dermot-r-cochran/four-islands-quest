@@ -201,6 +201,12 @@ changes belong in a fork** — see `CONTENT-LICENSE.md`.
   plus `teller/` and `tools/`.
 - **Demo world content — CC BY 4.0** (`CONTENT-LICENSE.md`): the prose and
   data inside `WORLD DATA`.
+- **Pictures and clips — CC BY-NC-ND 4.0** (`CONTENT-LICENSE.md`): the files
+  in `reference/` and `media/`. Stricter than the prose on purpose — shared
+  unchanged, with credit, non-commercially, and never adapted — so a fork
+  replaces them as it replaces the world data. What the record *says* about
+  a picture is world content under the CC BY 4.0 section, not under this
+  one.
 
 Know which side a change falls on. A forker who replaces the world data owns
 what they write, under the MIT engine terms alone.
