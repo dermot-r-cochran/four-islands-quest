@@ -1,7 +1,8 @@
 # Content License
 
-This repository is dual-licensed by section, so the engine can be
-forked freely while the demo world's writing carries attribution.
+This repository is licensed by section, so the engine can be forked
+freely while the demo world's writing carries attribution and its
+pictures stay the author's.
 
 ## Engine — MIT
 
@@ -31,9 +32,39 @@ if changes were made. Suggested attribution:
 > (https://github.com/dermot-r-cochran/four-islands-quest),
 > CC BY 4.0.
 
+## Pictures and clips — CC BY-NC-ND 4.0
+
+The images in `reference/` and the clips in `media/` — and any picture
+the record names in a chapter or on a generated page — are the
+author's own work and carry their own terms: the Creative Commons
+Attribution-NonCommercial-NoDerivatives 4.0 International license
+(CC BY-NC-ND 4.0):
+
+https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+You may share them unchanged, with credit, for non-commercial
+purposes. You may not adapt them — no crops, re-colouring, upscaling,
+re-generation from them, or use as training or reference material for
+a model — and you may not use them commercially. Suggested
+attribution:
+
+> Picture by Dermot Cochran, from *four-islands-quest*
+> (https://github.com/dermot-r-cochran/four-islands-quest),
+> CC BY-NC-ND 4.0.
+
+This section is the terms for the files, not a rule about the world:
+what the record says about a picture stays soft world content like
+everything else, under the section above.
+
 ## The intended fork path
 
 Fork the engine, then either build on the demo world (with
 attribution, as above) or replace the WORLD DATA sections wholesale
 with your own world — a world you write yourself is yours alone, and
 only the MIT engine terms apply to it.
+
+The pictures go the same way as the world data, and have to: a fork
+that keeps them is bound by CC BY-NC-ND, which forbids the adaptation
+a new world would want and any commercial use of it. So a fork
+replaces the pictures as it replaces the prose, and then owns what it
+puts there.
