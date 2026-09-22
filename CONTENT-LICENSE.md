@@ -52,6 +52,24 @@ attribution:
 > (https://github.com/dermot-r-cochran/four-islands-quest),
 > CC BY-NC-ND 4.0.
 
+A note on what this section can and cannot do. Where a picture was
+generated rather than photographed, how far copyright reaches over it
+varies by country and is not settled law. Ireland, where these were
+made, treats a computer-generated work as authored by the person who
+made the arrangements for it (Copyright and Related Rights Act 2000,
+s. 21(f)), and the United Kingdom has the same rule; the United States
+Copyright Office holds that prompt-generated output has no human author
+and no copyright, protecting only a person's own contribution to it —
+the choice of frame, the editing, the arrangement. So this section is
+best read as a statement of the terms the author asks for, which holds
+wherever there is a right to license and states his intent where there
+is not. It asserts nothing about which of those a given file falls
+under, and a reuser is not invited to guess: ask.
+
+Separately, and regardless of copyright, the terms of the service that
+generated a picture may bind its use. `reference/README.md` records
+which generator made each file for that reason.
+
 This section is the terms for the files, not a rule about the world:
 what the record says about a picture stays soft world content like
 everything else, under the section above.
