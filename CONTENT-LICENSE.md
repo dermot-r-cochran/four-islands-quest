@@ -48,9 +48,14 @@ re-generation from them, or use as training or reference material for
 a model — and you may not use them commercially. Suggested
 attribution:
 
-> Picture by Dermot Cochran, from *four-islands-quest*
+> Picture by Dermot Cochran, made with Grok, from *four-islands-quest*
 > (https://github.com/dermot-r-cochran/four-islands-quest),
 > CC BY-NC-ND 4.0.
+
+Name the tool that `reference/README.md` records for the file; every
+picture filed there so far was made with Grok. A generated picture is
+credited as generated, so nobody takes it for a photograph or a
+painting (the author's decision, 23 September 2026).
 
 A note on what this section can and cannot do. Where a picture was
 generated rather than photographed, how far copyright reaches over it
