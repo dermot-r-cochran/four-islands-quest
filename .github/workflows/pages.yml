@@ -40,6 +40,11 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html _site/index.html
+          # The pictures a chapter can name sit beside the page, unchanged.
+          mkdir -p _site/reference
+          find reference -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpg' \
+            -o -name '*.jpeg' -o -name '*.gif' -o -name '*.webp' \) \
+            -exec cp {} _site/reference/ \;
 
       - name: Tick the Sounds, Fourth Island and the sea over for today
         run: |

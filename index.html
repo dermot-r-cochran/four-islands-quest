@@ -58,6 +58,12 @@
   .examined { color: var(--dim); }
   .examined p, .company p { margin: 0.5rem 0; }
   .company { color: var(--dim); }
+  figure.picture { margin: 1rem 0; text-align: center; }
+  figure.picture img {
+    max-width: min(100%, 22rem); height: auto;
+    border: 1px solid var(--line); border-radius: 6px;
+  }
+  figure.picture figcaption { color: var(--dim); font-size: 0.8rem; }
   button {
     font: inherit; color: var(--ink); background: var(--sea-2);
     border: 1px solid var(--line); border-radius: 6px;
@@ -411,7 +417,14 @@ const CHAPTERS = [
           "time the path came out under the Keep's wall the morning " +
           "had made up its mind and the sun was well up, and far " +
           "below, the bridge had a line of carts on it, being counted."
-        ]
+        ],
+        picture: {
+          src: "reference/fallow-deer-fantasy-world.png",
+          alt: "A fallow buck grazing in long grass and flowers below " +
+            "a ruined stone arch, a wooded valley in mist behind, and a " +
+            "spired keep on the crags.",
+          credit: "Picture by Dermot Cochran, CC BY-NC-ND 4.0"
+        }
       }
     ]
   },
@@ -510,6 +523,27 @@ function addParas(container, paras, cls) {
   return div;
 }
 
+/* A beat or a choice may name a picture: {src, alt, credit}. It is
+   shown whole and unaltered (scaled to fit, never cropped), and if the
+   file is not beside the page it quietly drops out. */
+function addPicture(container, pic) {
+  if (!pic || !pic.src) return;
+  const fig = document.createElement("figure");
+  fig.className = "picture";
+  const img = document.createElement("img");
+  img.src = pic.src;
+  img.alt = pic.alt || "";
+  img.loading = "lazy";
+  img.addEventListener("error", () => fig.remove());
+  fig.appendChild(img);
+  if (pic.credit) {
+    const cap = document.createElement("figcaption");
+    cap.textContent = pic.credit;
+    fig.appendChild(cap);
+  }
+  container.appendChild(fig);
+}
+
 /* Renders one history entry into the transcript and returns the first
    element it added, so the page can scroll to what is new rather than
    to the bottom — which, on a narrow screen, is the sidebar. */
@@ -523,6 +557,7 @@ function renderHistoryEntry(entry) {
     h.textContent = b.log;
     t.appendChild(h);
     addParas(t, b.enter, "prose");
+    addPicture(t, b.picture);
     return h;
   } else if (entry.kind === "chosen") {
     const b = beats()[entry.beat];
@@ -533,6 +568,7 @@ function renderHistoryEntry(entry) {
     label.textContent = c.label;
     t.appendChild(label);
     addParas(t, c.text, "prose");
+    addPicture(t, c.picture);
     return label;
   } else if (entry.kind === "examined") {
     const x = EXAMINE[entry.key];

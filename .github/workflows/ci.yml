@@ -25,6 +25,29 @@ jobs:
       - name: The sandbox holds together
         run: python3 sandbox/ecosystem.py --check
 
+      # Kept here rather than in tools/validate.py, which is shared
+      # byte-identical with another repository.
+      - name: Every picture a chapter names is in the repository
+        run: |
+          python3 - <<'PY'
+          import os, sys; sys.path.insert(0, "teller")
+          import questfile
+          data = questfile.load_quest(questfile.find_quest("."))
+          bad = []
+          for ch in data["chapters"]:
+              for b in ch["beats"]:
+                  for item in [b] + list(b.get("choices", [])):
+                      pic = item.get("picture")
+                      if not pic:
+                          continue
+                      if not os.path.isfile(pic.get("src", "")):
+                          bad.append(f"{ch['saveId']}/{b['id']}: {pic.get('src')} is missing")
+                      if not pic.get("alt"):
+                          bad.append(f"{ch['saveId']}/{b['id']}: {pic.get('src')} has no alt text")
+          print("\n".join(bad) or "every named picture is present, with alt text")
+          sys.exit(1 if bad else 0)
+          PY
+
       - name: The engine's literals parse
         run: |
           python3 - <<'PY'

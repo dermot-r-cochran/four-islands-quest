@@ -77,7 +77,7 @@ artifacts are tracked. CI installs nothing, and should stay that way.
 `.github/workflows/pages.yml` publishes `index.html` to GitHub Pages on
 every push to `main` and once a day
 (https://dermot-r-cochran.github.io/four-islands-quest/). It stages that
-one file, has the sandbox write the day's chronicle beside it at
+one file and the pictures in `reference/` beside it, has the sandbox write the day's chronicle beside it at
 `/sounds/`, Fourth Island's account at `/fourth/` and the open sea at
 `/sea/` (`--html`, seeded by the date, so the same day gives the same
 Sounds, the same island and the same sea to everyone), and installs
@@ -104,6 +104,14 @@ generated, never hand-edited, and never `index.html`.
     next beat**. Choices are texture, not branching: different ways to arrive
     where the story arrives. A beat with no choices takes an optional
     `continueLabel`.
+  - A beat or a choice may carry an optional `picture: {src, alt, credit}`,
+    shown after its prose. `src` is a path beside `index.html`, normally in
+    `reference/`; the picture is shown whole and unaltered (scaled to fit,
+    never cropped, as its CC BY-NC-ND licence requires) and drops out
+    quietly if the file is absent. CI fails on a named picture that is
+    missing or has no alt text; that check lives in `ci.yml` because
+    `tools/validate.py` is shared. `teller` does not show quest pictures
+    (the author's decision, 2026-09-23: leave the terminal player alone).
 - **`EXAMINE`** — `{key: {label, text}}`, shared across chapters.
 - **`FACTIONS`** — `{key: {name, seat, quest, members, of, sub}}`. Companies
   nest via `of` (parent key) and `sub` (child keys).
