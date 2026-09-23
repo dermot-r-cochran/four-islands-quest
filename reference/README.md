@@ -35,9 +35,11 @@ its version if it has one, and the date — at the time, while it is
 still a fact and not a recollection.
 
 The three islands have deer (`WORLD.md`: the deer, the squirrels and the
-small birds eat the fruit); Fourth Island has none. Which island's arch
-and whose keep this is, the record has not said, and Fiona is named
-nowhere in it yet. For the record: three winged figures were filed here
+small birds eat the fruit); Fourth Island has none.
+`fallow-deer-fantasy-world.png` is placed on Chapter Two's wood route on
+First Island (the author's approval, 23 September 2026), where the path
+passes a ruined arch and three fallow deer under the High Keep. Fiona is
+named nowhere in the record yet. For the record: three winged figures were filed here
 on 4 September 2026 and removed the same day at the author's direction;
 those, in his words, "were not friendly elves". Fiona is, and her wings
 are no conflict with that removal. The author's standing rule, given on
