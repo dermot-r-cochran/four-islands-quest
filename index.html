@@ -159,6 +159,26 @@ const EXAMINE = {
       "itself. The Guild says a crossing begun on its third ring " +
       "comes home dry. Nobody counts rings aloud; it is considered " +
       "pushy."
+  },
+  keepBridge: {
+    label: "the Crown bridge",
+    text: "Grey stone, one span, straight-backed over a green gorge. " +
+      "There is no toll-house at either end, only a keeper's box with " +
+      "a ledger on the sill. The Crown does not charge for its " +
+      "bridges. It counts them."
+  },
+  hillWood: {
+    label: "the wood",
+    text: "Oak and hazel on the hill's shoulder, and an older path " +
+      "under them that goes round rather than over. Somewhere in it, " +
+      "by the sound of things, a stream that turned the gorge's bridge " +
+      "down and found its own way."
+  },
+  keepArch: {
+    label: "the arch over the gate",
+    text: "Four islands cut in the stone in a row. Three are named in " +
+      "the mason's square capitals. The fourth is there, the same size " +
+      "as the others, and left smooth."
   }
 };
 
@@ -188,7 +208,8 @@ const FACTIONS = {
 };
 
 const CHAPTER_FACTIONS = {
-  ch1: ["crown", "guild"]
+  ch1: ["crown", "guild"],
+  ch2: ["crown"]
 };
 
 const CHAPTERS = [
@@ -201,12 +222,11 @@ const CHAPTERS = [
     text: [
       "First Island rises ahead, and behind it the kingdom keeps " +
       "its own counsel: three more islands, one of them unpointed-at.",
-      "The Second Island is not yet written. Add the next chapter " +
-      "to CHAPTERS and this card will offer the way on."
+      "The Keep is up the hill, and there is more than one way to it."
     ],
-    nextLabel: null
+    nextLabel: "Go up the hill"
   },
-  heldLine: "The Second Island (held)",
+  heldLine: "The High Keep (held)",
   beats: [
   {
     id: "quay",
@@ -315,6 +335,122 @@ const CHAPTERS = [
           "“Welcome to First Island,” the Warden said, closing the " +
           "ledger. “The Keep is up the hill. The kingdom is bigger " +
           "than it looks from the water — most things here are.”"
+        ]
+      }
+    ]
+  }
+  ]
+},
+{
+  saveId: "ch2",
+  title: "Chapter Two — Up the Hill",
+  sub: "to the High Keep, by the bridge or by the wood",
+  end: {
+    title: "End of Chapter Two",
+    text: [
+      "You were inside the High Keep, with the harbour below it, the " +
+      "First Sound beyond, and Second and Third trading haze off to " +
+      "the west — and southward, if you looked, a smudge that the " +
+      "mason over the gate had left smooth.",
+      "The Second Island is not yet written. Add the next chapter " +
+      "to CHAPTERS and this card will offer the way on."
+    ],
+    nextLabel: null
+  },
+  heldLine: "The Second Island (held)",
+  beats: [
+  {
+    id: "hillfoot",
+    log: "The foot of the Keep's hill",
+    presences: ["the Crown road", "the bridge", "the wood"],
+    examine: ["keepBridge", "hillWood", "fourLights"],
+    enter: [
+      "The Keep was up the hill, as the Warden had said, and the " +
+      "hill was a good deal more hill than it had looked from the " +
+      "water, which the Warden had also said, in other words. Where " +
+      "the harbour lane gave out, the way divided at a milestone " +
+      "that had lost its numbers to the weather and kept its " +
+      "opinions.",
+      "The Crown road went straight on: down into a green gorge, " +
+      "over it by a bridge of grey stone, and up the far side to the " +
+      "Keep's gate in a hurry. The other path was older and in no " +
+      "hurry at all. It turned off under the trees and went round " +
+      "the hill's shoulder through the wood, and from the wood came " +
+      "nothing but birdsong and a green smell of leaves."
+    ],
+    choices: [
+      {
+        label: "Take the bridge.",
+        text: [
+          "You took the bridge. It was a good bridge, sure of itself, " +
+          "and at its near end a keeper sat in a stone box about the " +
+          "size of a sentry's patience, with a ledger open on the " +
+          "sill.",
+          "“Name, and whether you're going up or coming down,” said " +
+          "the keeper. “No toll. The Crown doesn't charge for its " +
+          "bridges. It counts them.” You gave both, the pen went down " +
+          "the page, and you were over the gorge and at the Keep's " +
+          "gate while the morning was still making up its mind about " +
+          "the weather."
+        ]
+      },
+      {
+        label: "Go round by the wood.",
+        text: [
+          "You went round by the wood, which took the long way and " +
+          "made no apology for it. The path wound under oak and hazel, " +
+          "over roots, across a stream that had turned down the " +
+          "gorge's bridge and found its own way, and under a ruined " +
+          "arch that had once been the gate to something the wood had " +
+          "since taken back. Beyond it three fallow deer looked up at " +
+          "you, agreed among themselves that you were nothing to " +
+          "worry about, and went back to their breakfast. A pair of " +
+          "fishing eagles crossed a gap in the canopy, heading for " +
+          "the Sound.",
+          "Nobody asked your name. Nobody wrote anything down. By the " +
+          "time the path came out under the Keep's wall the morning " +
+          "had made up its mind and the sun was well up, and far " +
+          "below, the bridge had a line of carts on it, being counted."
+        ]
+      }
+    ]
+  },
+  {
+    id: "gate",
+    log: "The gate of the High Keep",
+    presences: ["the porter", "the gate", "the arch"],
+    examine: ["keepArch", "fourLights"],
+    enter: [
+      "The High Keep was bigger close to than it had looked from the " +
+      "water, as promised, and older than its gate, which had been " +
+      "replaced at least once by somebody who had not been told. " +
+      "Over the arch four islands were cut in the stone in a row. " +
+      "Three had their names beside them. The fourth was the same " +
+      "size as the others, and left smooth.",
+      "The porter at the wicket looked at your boots, which told her " +
+      "which way you had come, and then at your face, which told her " +
+      "nothing she needed in writing."
+    ],
+    choices: [
+      {
+        label: "Ask about the smooth island.",
+        text: [
+          "“The mason carved all four,” said the porter, “and was " +
+          "paid for all four, and named three. If you want to know " +
+          "why, you'll have to ask the mason, and the mason's been " +
+          "dead longer than the gate's been standing.”",
+          "She opened the wicket. “Hall's on the left. Mind the step. " +
+          "It's the only thing in here older than the arch.”"
+        ]
+      },
+      {
+        label: "Say only that you've come up the hill.",
+        text: [
+          "“Everyone has,” said the porter, not unkindly. “Which way " +
+          "is your own business, unless you came by the bridge, in " +
+          "which case it's the Crown's already.”",
+          "She opened the wicket. “Hall's on the left. Mind the step. " +
+          "It's the only thing in here older than the arch.”"
         ]
       }
     ]
