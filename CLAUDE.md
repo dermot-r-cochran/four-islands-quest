@@ -355,3 +355,28 @@ looking at an examinable that does not exist, two chapters sharing a
 chapter that follows nothing — and warns on judgement calls, like an
 examinable nothing looks at. Warnings are for a human to weigh, not to
 silence.
+
+## Related repositories
+
+The map of Dermot's public repositories and what crosses between them is
+`RELATED-REPOSITORIES.md` in `dermot-r-cochran/star-rangers`; this section
+names only this repository's own neighbours (added 2026-09-29 at his
+direction, after a session had to discover a sibling by listing his
+repositories).
+
+- **`dermot-r-cochran/photo-safari-tutorial-game`**, **`dermot-r-cochran/photo-safari-range`**
+  and **`dermot-r-cochran/applied-statistics-for-AI-engineers`** each state that
+  they inherit this repository's prime directive whole: one `index.html`, data
+  on top and engine below, no dependencies, never rewritten programmatically, a
+  check CI runs that installs nothing, engine MIT and content CC BY 4.0. What
+  crosses is the shape and its reasons, not files: each has its own engine and
+  its own `tools/check.js`. A change to the rules above is therefore a change
+  three other repositories say they follow; say so in the pull request, and
+  expect it to land in their `CLAUDE.md` files as their own decision.
+- **`dermot-r-cochran/star-rangers`** is a separate world and the two never
+  cross (Dermot's ruling, 2026-09-06, under *Governance* above). The one thing
+  taken from it is a word: the young-adult register, borrowed from that
+  record's reading-tier ladder on 2026-09-22, as *Governance* explains.
+- The repository that `teller/` and `tools/validate.py` are kept byte-identical
+  with is not public and is deliberately not named here; the rule under *The
+  shared tools* is the whole of what a session here needs to know about it.
