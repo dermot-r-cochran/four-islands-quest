@@ -225,7 +225,10 @@ whether anyone of the kingdom has reached it, and whether the Sounds' own
 dragonflies have anything to do with the Prism-Weavers are absent, not
 hidden — don't write them. It has no chapter, no company and no sandbox
 edition; a fourth edition would be built the way `--edition fourth` and
-`--edition sea` were, at his ask.
+`--edition sea` were, at his ask. One file is its so far: the song
+`media/odonata-raise-your-banners.mp4`, sent the same day and filed in
+`reference/README.md` with its maker unrecorded, which that file asks him
+to supply.
 
 **This is its own world, and the mainland shore is unnamed** (Dermot's
 ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming
