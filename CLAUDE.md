@@ -226,10 +226,15 @@ dragonflies have anything to do with the Prism-Weavers are absent, not
 hidden — don't write them. It has no chapter and no company. It has a
 sandbox edition, `--edition odonata` (his word the next day, 2026-10-02:
 *Sandbox edition*), built the way `--edition fourth` and `--edition sea`
-were and described under *The sandbox* below. One file is its so far: the song
-`media/odonata-raise-your-banners.mp4`, sent the same day and filed in
-`reference/README.md`; its maker, MyTunes, was his word the day after, and
-the version was not noted.
+were and described under *The sandbox* below. Three files are its so far,
+all filed in `reference/README.md`: the song
+`media/odonata-raise-your-banners.mp4`, sent the same day (its maker,
+MyTunes, his word the day after), and a still and clip of three
+Prism-Weavers over a stream, `reference/prism-weavers-over-a-stream.webp`
+and its `media/` clip, both Grok's, placed as Odonata's by his ruling the
+same day (*the first option*) — so the Prism-Weavers glow and trail light,
+which `WORLD.md`'s section now says. The picture is named on no beat yet;
+placing it on one is a story change and his.
 
 **This is its own world, and the mainland shore is unnamed** (Dermot's
 ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming

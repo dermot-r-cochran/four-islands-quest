@@ -163,6 +163,15 @@ anything else.
   scholars and sorcerers who channel their spellcraft through long,
   delicate staves carved from dragonfly mandible bone, and whose work
   is light, speed and the shaping of water.
+- **The record holds one picture of the Prism-Weavers** (the author's
+  placement, 2026-10-02: `reference/prism-weavers-over-a-stream.webp`,
+  with a six-second clip of the same scene beside it in `media/`): three
+  of them over a slow stream between mossy rocks in a dark, misty wood,
+  glowing blue-violet and trailing light as they go, pale light coming
+  through the canopy beyond. So the Prism-Weavers glow, and their light
+  stays a moment in the air behind them. Which of the three realms the
+  wood is in, the picture does not say and the record does not; nothing
+  in the frame gives their size, and the sizes above stand.
 - **Lumen-moss**, a glowing moss-like alga, is the light of the fen
   cities and the fuel of their magic.
 - **Refraction magic.** The magic of Odonata is rarely brute force.
