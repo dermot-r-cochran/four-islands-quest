@@ -188,9 +188,13 @@ What is absent, and stays so until it is written:
   and the Prism-Weavers. The Sounds' dragonflies are the Sounds' own,
   and the record ties the two no more than it ties Fourth Island's
   gulls to the three islands' — which is to say it does not.
-- A chapter, a company, a sandbox edition. Odonata has none yet. A
-  later chapter may add any of them, as it may add anything; what is
-  here is the ground such a chapter would stand on.
+- A chapter and a company. Odonata has neither yet. A later chapter
+  may add either, as it may add anything; what is here is the ground
+  such a chapter would stand on. The sandbox's fourth edition,
+  `--edition odonata` (the author's word, 2026-10-02: *Sandbox
+  edition*), runs this ground and no more, and is soft like the rest of
+  the sandbox: nothing in it is a fact of Odonata beyond what this
+  section says, and it may be contradicted freely.
 
 ## Who writes the world
 
