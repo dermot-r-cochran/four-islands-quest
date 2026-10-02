@@ -78,10 +78,10 @@ artifacts are tracked. CI installs nothing, and should stay that way.
 every push to `main` and once a day
 (https://dermot-r-cochran.github.io/four-islands-quest/). It stages that
 one file and the pictures in `reference/` beside it, has the sandbox write the day's chronicle beside it at
-`/sounds/`, Fourth Island's account at `/fourth/` and the open sea at
-`/sea/` (`--html`, seeded by the date, so the same day gives the same
-Sounds, the same island and the same sea to everyone), and installs
-nothing. The tools and the docs stay in
+`/sounds/`, Fourth Island's account at `/fourth/`, the open sea at
+`/sea/` and Odonata at `/odonata/` (`--html`, seeded by the date, so the
+same day gives the same Sounds, the same island, the same sea and the same
+Odonata to everyone), and installs nothing. The tools and the docs stay in
 the repository. Saves on the site live in that origin's localStorage, under
 the same `four-islands-` keys as anywhere else. The chronicle page is
 generated, never hand-edited, and never `index.html`.
@@ -185,10 +185,12 @@ names and no number, the record never says which of them chose it, and
 nobody has written why** — never count them, name them or sort them — and
 the ferrymen still do not point at the island.
 
-**The rest of the known world is open sea** (Dermot's direction, 2026-09-06,
-with *dolphins and whales*, *plankton and fish*, *coral reefs*), written in
-`WORLD.md`'s section *The open sea, so far*: beyond the mainland shore and
-the four islands no other land is charted; the sea holds the plankton and
+**Beyond the kingdom is open sea** (Dermot's direction, 2026-09-06, *the
+rest of the known world is open sea*, with *dolphins and whales*, *plankton
+and fish*, *coral reefs*), written in `WORLD.md`'s section *The open sea, so
+far*: beyond the mainland shore and the four islands no other land is
+charted by the kingdom — the record itself holds one other land since
+2026-10-02, Odonata, in the paragraph below; the sea holds the plankton and
 the shoals, dolphins on the shoals, whales on the plankton for the summer
 and autumn and gone the rest of the year; and south of Fourth Island a
 coral reef with its own fish. Nobody keeps an account of the sea — the
@@ -203,6 +205,31 @@ ostriches that ride them on the open sea — big flightless birds that
 cannot land on the islands, which is their limit. The ferry starts from
 the old quay on the mainland shore and lands at First Island's
 water-stairs, as Chapter One has it.
+
+**Odonata is written** (Dermot's direction, 2026-10-02: *Four Islands Quest
+… now includes* the world of Odonata, given whole), in `WORLD.md`'s section
+*Odonata, so far* — the first land the record holds beyond the kingdom and
+the sea, soft, outside the spine, and the whole of what is written: giant
+thinking dragonflies, the Prism-Weavers, horse-sized to airship-sized, that
+speak in colour and wing-beat and whose wants the civilisation is built
+around; the Crystal Fen, the Glass-Wing Spires and the Mist-Veiled
+Canopies; three peoples, the Chitin-Binders (the Shimmersmiths), the
+Naiad-Kin and the Needle-Mages; lumen-moss; a refraction magic that bends
+light, alters momentum and moves the air a wing-beat stirs, with no *how*
+given, since the register forbids one; and its own count of time by the
+Great Migration of the Ancient Monarch Dragonfly, which is Odonata's
+reckoning and not the Crown's one tide-calendar, so the spine stands. The
+brochure framing his text arrived in (*step into a vibrant realm*) was
+dropped and every name and fact kept. Where Odonata lies from the Sounds,
+whether anyone of the kingdom has reached it, and whether the Sounds' own
+dragonflies have anything to do with the Prism-Weavers are absent, not
+hidden — don't write them. It has no chapter and no company. It has a
+sandbox edition, `--edition odonata` (his word the next day, 2026-10-02:
+*Sandbox edition*), built the way `--edition fourth` and `--edition sea`
+were and described under *The sandbox* below. One file is its so far: the song
+`media/odonata-raise-your-banners.mp4`, sent the same day and filed in
+`reference/README.md` with its maker unrecorded, which that file asks him
+to supply.
 
 **This is its own world, and the mainland shore is unnamed** (Dermot's
 ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming
@@ -264,7 +291,7 @@ and every line the chronicle can say — and an engine below it that adds no
 words. Re-voice or re-stock the sandbox by editing the data; the engine
 should not need touching for that.
 
-It runs **three editions** on one engine (`EDITIONS` in the data): the
+It runs **four editions** on one engine (`EDITIONS` in the data): the
 **Sounds** — the three islands, the skerries, the ferry and the Warden, in
 the ferryman's voice; **Fourth Island** (`--edition fourth`) — one island
 facing open sea, no ferry, no ledger, no counted hermit, in an account a
@@ -275,7 +302,16 @@ the seasons, and the reef south of Fourth Island with its fish, and the rafts of
 trees with the sea ostriches on them, as seen from a deck. On the
 islands, blossom, bees and the fruit they set, fishing eagles, and the
 coves and sea caves. The Sounds edition lists Fourth Island and does not simulate
-it, because ferrymen do not point at it.
+it, because ferrymen do not point at it. The fourth is **Odonata**
+(`--edition odonata`, Dermot's direction, 2026-10-02: *Sandbox edition*) —
+the Crystal Fen, the Glass-Wing Spires and the Mist-Veiled Canopies from
+`WORLD.md`'s *Odonata, so far* and nothing beyond it, in an account somebody
+on a silk gondola might have given: the lumen-moss as a level, the
+Prism-Weavers holding territories they dispute in colour and move between
+and leave cast shells from, the bottom-dwellers up in still water, and the
+peoples as a presence never counted. Nothing in it is born or dies, since
+where a Prism-Weaver comes from is unwritten; nothing in it is fed, since
+what any of them eats is unwritten; and no kingdom word is in it.
 
 It keeps **a year of 730 tides with four seasons** (Dermot's direction,
 2026-09-06: *seasons and weather*): each season sets the weather's odds,
@@ -328,6 +364,19 @@ Three rules it lives under, all consequences of `WORLD.md`:
   Warden, a ledger or a quay, counts the bell, or counts the hermits.
   Gulls that go south leave the ferryman's record; on Fourth Island they
   come in off the sea, and neither account ties the two.
+- **Odonata is in the record and not in the kingdom's knowledge.**
+  `WORLD.md` has the sea as the whole of what the kingdom knows, so
+  `--check` fails if the Sounds, Fourth Island or the sea ever name
+  Odonata or anything in it, and fails if Odonata's account ever
+  mentions the ferry, a fare, the Guild, the Warden, a ledger, a quay,
+  the Crown, the Keep, the Sounds, an island, a gull or a herring,
+  counts the bell, gives Odonata the kingdom's tide words or seasons
+  (its own are unwritten), counts a people or a spirit, or lets a
+  Prism-Weaver be born or die. The numbering is the kingdom's
+  tide-calendar, borrowed as Fourth Island borrows it, and the page says
+  which count it is keeping, as `WORLD.md`'s Odonata section asks; the
+  Great Migration is never on the chronicle. The pages link to each
+  other as navigation, not as knowledge.
 - **The written past stays written.** One random stream per tide, keyed
   on seed and tide number, so a run continued from a save is the run
   played straight through, and revisiting a saved chronicle never changes

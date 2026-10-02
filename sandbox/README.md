@@ -3,7 +3,9 @@
 A mini ecosystem of the Kingdom of the Four Sounds, one tide at a time.
 Not a chapter and not a player: a small living model of the waters the
 kingdom is named for, and of the two companies that work them every tide
-— and, in its own edition, of Fourth Island, which nobody points at.
+— and, in their own editions, of Fourth Island, which nobody points at,
+of the open sea, and of Odonata, which the record holds and the kingdom
+does not know of.
 
 ```bash
 python3 sandbox/ecosystem.py                       # one tide-cycle, seed 1
@@ -14,7 +16,8 @@ python3 sandbox/ecosystem.py --json                # the final state, for tools
 python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page
 python3 sandbox/ecosystem.py --edition fourth      # Fourth Island's own account
 python3 sandbox/ecosystem.py --edition sea         # the open sea, seen from a deck
-python3 sandbox/ecosystem.py --check               # the invariants hold, both editions
+python3 sandbox/ecosystem.py --edition odonata     # Odonata, from a silk gondola
+python3 sandbox/ecosystem.py --check               # the invariants hold, every edition
 ```
 
 ## What it needs
@@ -174,8 +177,8 @@ and a link back to the quest. It leaves the Warden's ledger out, since
 the bell is not counted aloud, and `--check` fails if a page ever shows
 it. The Pages workflow runs this once a day with the date as the seed, so
 every reader sees the same Sounds for the same day, at `/sounds/`, the
-same Fourth Island at `/fourth/` and the same sea at `/sea/`; each page
-points at the others.
+same Fourth Island at `/fourth/`, the same sea at `/sea/` and the same
+Odonata at `/odonata/`; each page points at the others.
 
 ## Between visits
 
@@ -200,8 +203,8 @@ the sandbox can carry, and `--check` proves it.
 
 ## The open sea
 
-The rest of the known world, in a third edition, `--edition sea`, as
-seen from a deck: the plankton, the sea's own bloom; the shoals that
+The open sea beyond the kingdom, in a third edition, `--edition sea`,
+as seen from a deck: the plankton, the sea's own bloom; the shoals that
 feed on it, too many to count; the dolphins that live on the shoals;
 the whales that come in for the plankton in summer and autumn and go,
 wherever they go, for the rest of the year; and south of Fourth Island,
@@ -246,6 +249,60 @@ ferrymen do not point at it, and `--check` fails if that run ever puts
 anything on it or names it in a chronicle line. Gulls that go south
 leave the ferryman's record; on Fourth Island gulls come in off the sea;
 neither account ties the two, though `WORLD.md` does.
+
+## Odonata
+
+A fourth edition, `--edition odonata` (the author's word, 2 October
+2026: *Sandbox edition*, the day after Odonata was written into
+`WORLD.md`), running the ground that file wrote for it and no more: the
+Crystal Fen, the Glass-Wing Spires and the Mist-Veiled Canopies, in an
+account somebody on a silk gondola might have given.
+
+- **The lumen-moss** lights the fen cities and is a level like the
+  bloom: it brightens in still air and a storm dims it, and the account
+  says when it is bright in every channel and when the cities dim with
+  it.
+- **The Prism-Weavers** hold territories over all three realms. They
+  dispute one in colour, and one gives way; on a fresh wind one leaves a
+  realm for another with an open territory; in still air one leaves a
+  cast shell on the reeds, and the Shimmersmiths go out to it before the
+  light goes. **Nothing is born and nothing dies.** Where a Prism-Weaver
+  comes from is unwritten, so the count only moves between realms, and
+  `--check` fails if it ever changes. What they eat is unwritten too,
+  and the sandbox does not feed them; they are listed under a role of
+  their own, *holds* — a territory, which everything else is built
+  around.
+- **The bottom-dwellers** of the fen come up in still water, when the
+  Naiad-Kin's lights go down to meet them, and go deep in a storm.
+- **The peoples are a presence, never a count**, like the hermits:
+  silk gondolas on the channels or tied to the reed-stalks; the
+  Naiad-Kin's lights moving under the water; a Needle-Mage bending the
+  light over a channel, hurrying a gondola up it faster than the water,
+  or shaping the water back off the reed-stalks after a storm — what
+  the magic does, as `WORLD.md` has it, and never how. The high hunters
+  go out over the Spires and a sky-rider goes up from them. The
+  Canopies close in mist and lights show in them that are nobody's
+  lanterns; the lineage spirits are never counted or named in a line.
+
+**The count is borrowed, and the page says so.** Odonata keeps its own
+time by the Great Migration, and a page that moves by days cannot carry
+a count that moves by decades. So the chronicle is numbered in the
+kingdom's tide-calendar, as Fourth Island's is, the lede says which
+count it is keeping, and the kingdom's tide words and seasons stay out
+of it: no springs or neaps, no season coming in, since Odonata's are
+unwritten. The weather keeps the engine's four states under the fen's
+own words — *still*, *a breeze in the reeds*, *wind through the
+Spires*, *storm*. The Migration itself is never on the chronicle.
+
+**No kingdom account knows of it.** `WORLD.md` has the sea as the whole
+of what the kingdom knows, so `--check` fails if the Sounds, Fourth
+Island or the sea ever name Odonata or anything in it, and fails if
+Odonata's account ever mentions the ferry, a fare, the Guild, the
+Warden, a ledger, a quay, the Crown, the Keep, the Sounds, an island, a
+gull or a herring, counts the bell, or counts a people or a spirit. The
+page links to the other three and they to it — the links are the site's
+navigation, not the kingdom's knowledge, the same way the Sounds page
+links to an island its ferrymen do not point at.
 
 ## Data and engine
 

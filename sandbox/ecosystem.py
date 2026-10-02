@@ -19,7 +19,8 @@ Crown's Warden writes down what the Guild will not say aloud.
     python3 sandbox/ecosystem.py --html sounds.html    # the chronicle as a page, for the site
     python3 sandbox/ecosystem.py --edition fourth      # Fourth Island, its own account
     python3 sandbox/ecosystem.py --edition sea         # the open sea, seen from a deck
-    python3 sandbox/ecosystem.py --check               # the invariants hold, both editions
+    python3 sandbox/ecosystem.py --edition odonata     # Odonata, from a silk gondola
+    python3 sandbox/ecosystem.py --check               # the invariants hold, every edition
 
 Standard library only: nothing installed, fetched, or executed from
 elsewhere. The companies it names are read out of `index.html` through
@@ -30,13 +31,17 @@ The world data at the top is the sandbox's own and is soft content in
 WORLD.md's sense — bounded by the spine, owed nothing by any chapter. The
 engine below it never needs editing to re-voice or re-stock the sandbox.
 
-Three editions run on the same engine: the Sounds (the three islands, the
+Four editions run on the same engine: the Sounds (the three islands, the
 skerries, the ferry and the Warden, in the ferryman's voice), Fourth
 Island (one island facing open sea, no ferry, no ledger, in an account a
-hermit might have noticed), and the open sea beyond them all (plankton
-and shoals, dolphins and whales, and the reef south of Fourth Island, as
-seen from a deck). The Sounds edition lists Fourth Island and does not
-simulate it: ferrymen do not point at it.
+hermit might have noticed), the open sea beyond them all (plankton and
+shoals, dolphins and whales, and the reef south of Fourth Island, as seen
+from a deck), and Odonata (the Crystal Fen, the Glass-Wing Spires and the
+Mist-Veiled Canopies, the ground WORLD.md wrote for it and no more, in an
+account somebody on a silk gondola might have given — under no Crown of
+the kingdom's, on no tide of its own, and where it lies from the Sounds
+unsaid). The Sounds edition lists Fourth Island and does not simulate it:
+ferrymen do not point at it. No kingdom edition knows of Odonata at all.
 """
 
 from __future__ import annotations
@@ -92,11 +97,13 @@ ROLES = [
     ("hunts",           "and keeps the feeders in check"),
     ("picks up after",  "the hunters and the tide"),
     ("is kept",         "by the Keep, and fed when the hill is bare"),
+    ("holds",           "a territory, which everything else is built around"),
 ]
 PLANTS = {"the bloom": "sounds", "the grazing": "shore", "the wood": "shore",
           "the shore's shellfish beds": "shore", "the worms in the turf": "shore",
           "the berries": "shore", "the blossom": "shore", "the fruit": "shore",
-          "the plankton": "sea", "the coral": "reef", "the rafts of sea trees": "sea"}
+          "the plankton": "sea", "the coral": "reef", "the rafts of sea trees": "sea",
+          "the lumen-moss": "fen"}
 
 PLACES = {
     "sounds":   {"name": "the Sounds"},
@@ -110,6 +117,12 @@ PLACES = {
                  "coves": True, "caves": True},
     "sea":      {"name": "the open sea"},
     "reef":     {"name": "the reef south of Fourth Island"},
+    # Odonata's three realms (WORLD.md, "Odonata, so far"). Not shores, not
+    # in the Sounds, under no Crown; where they lie from the kingdom is
+    # unwritten and the engine never asks.
+    "fen":      {"name": "the Crystal Fen", "odonata": True},
+    "spires":   {"name": "the Glass-Wing Spires", "odonata": True},
+    "canopies": {"name": "the Mist-Veiled Canopies", "odonata": True},
 }
 
 SPECIES = {
@@ -287,7 +300,41 @@ SPECIES = {
     "alpacas":   {"start": {"first": 12}, "cap": 24, "kept": 10, "need": 0.25,
                   "hay": 0.7, "breed": 0.012, "wear": 0.002, "role": "is kept",
                   "breeds": ["spring", "summer"]},
+    # Odonata, from WORLD.md and nowhere else. The lumen-moss that lights
+    # the fen cities and fuels their magic, a level like the bloom; the
+    # Prism-Weavers, giant thinking dragonflies holding territories over
+    # the fen, the Spires and the Canopies, who dispute in colour, move on
+    # a fresh wind, and leave cast shells for the Shimmersmiths; the
+    # bottom-dwellers of the fen the Naiad-Kin live alongside, up in still
+    # water and deep in a storm; the high hunters of the Spires' air the
+    # sky-riders bond with. Nothing here is born and nothing dies: where a
+    # Prism-Weaver comes from is unwritten, so the count only moves, and
+    # --check holds it to that. What any of them eats is unwritten too,
+    # and the sandbox does not feed them.
+    "lumen-moss": {"level": 70, "settle": 0.1, "still": 4, "storm_dim": 15,
+                   "bright_above": 80, "dim_below": 40, "lives": "fen"},
+    "prism-weavers": {"start": {"fen": 8, "spires": 5, "canopies": 4},
+                      "territories": {"fen": 12, "spires": 8, "canopies": 6},
+                      "dispute": 0.01, "move": 0.012, "cast": 0.012,
+                      "lives": "fen", "role": "holds"},
+    "bottom-dwellers": {"start": 60, "cap": 100, "up_above": 80, "lives": "fen",
+                        "drift": {"calm": 8, "fresh": 2, "blowing": -2, "storm": -15}},
+    "high hunters": {"start": 7, "out": 0.12, "rider": 0.03, "grounded": 0.5,
+                     "lives": "spires", "role": "hunts"},
 }
+
+# The peoples of Odonata at their work, and the mist on the Canopies: a
+# presence, never a count, like the hermits. The Shimmersmiths go out to
+# a cast shell; the Naiad-Kin's lights move under the water; a Needle-Mage
+# bends light, shapes water or hurries a gondola; the silk gondolas run or
+# are tied up; the Canopies close in mist and lights show in them that are
+# nobody's lanterns. The lineage spirits are never counted, and the Great
+# Migration is never on the chronicle — a page that moves by days cannot
+# carry a count that moves by decades, so the page says so and the
+# chronicle keeps off it.
+ODONATA = {"gondolas": 0.22, "naiad_lights": 0.12, "mage_light": 0.03,
+           "mage_water": 0.5, "mage_speed": 0.025, "shimmersmiths": 0.6,
+           "mist_close": 0.12, "mist_lift": 0.2, "canopy_lights": 0.04}
 
 # Who crosses the narrows, and what the chronicle says when they do.
 CROSSERS = [("wolves", "crossed"), ("foxes", "fox_crossed")]
@@ -449,7 +496,7 @@ PAGE = {
     "foot":     "A mini ecosystem, run again each day from the repository's "
                 "sandbox; the same day gives the same Sounds to everyone.",
     "links":    [["Fourth Island, which nobody points at", "../fourth/"],
-                 ["The open sea", "../sea/"]],
+                 ["The open sea", "../sea/"], ["Odonata", "../odonata/"]],
 }
 
 # Editions: which places the run holds, whether the ferry and the Warden
@@ -519,7 +566,8 @@ EDITIONS = {
             "foot":     "A mini ecosystem, run again each day from the "
                         "repository's sandbox; the same day gives the same "
                         "island to everyone.",
-            "links":    [["The Sounds", "../sounds/"], ["The open sea", "../sea/"]],
+            "links":    [["The Sounds", "../sounds/"], ["The open sea", "../sea/"],
+                         ["Odonata", "../odonata/"]],
         },
     },
     "sea": {
@@ -547,7 +595,78 @@ EDITIONS = {
             "foot":     "A mini ecosystem, run again each day from the "
                         "repository's sandbox; the same day gives the same sea "
                         "to everyone.",
-            "links":    [["The Sounds", "../sounds/"], ["Fourth Island", "../fourth/"]],
+            "links":    [["The Sounds", "../sounds/"], ["Fourth Island", "../fourth/"],
+                         ["Odonata", "../odonata/"]],
+        },
+    },
+    "odonata": {
+        "places": ["fen", "spires", "canopies"],
+        "unsimulated": [],
+        "ferry": False, "skerries": False,
+        "lines": {
+            # The kingdom's tide-calendar is borrowed for the numbering and
+            # said so on the page; its tide words and its seasons are not,
+            # since Odonata's are unwritten. The weather keeps the engine's
+            # four states under the fen's own words.
+            "tide":        "Tide {tide} · {weather} — {clauses}.",
+            "season_turn": "",
+            "weather_words": {"calm": "still", "fresh": "a breeze in the reeds",
+                              "blowing": "wind through the Spires", "storm": "storm"},
+            "storm":       "a storm went over the fen",
+            "quiet":       "nothing anyone would tell",
+            "quiet_pool":  ["nothing anyone would tell",
+                            "the moss lit the channels and nothing moved on them",
+                            "wings somewhere over the fen, too fast to count",
+                            "the Spires stood in the air, as they do",
+                            "the mist did not lift from the Canopies",
+                            "colour went across a Prism-Weaver's wings and back, "
+                            "and meant something to another",
+                            "a reed-stalk creaked under a city, and the city did not mind"],
+            "lumen_bright": "the lumen-moss bright in every channel",
+            "lumen_dim":   "the moss dimmed, and the fen cities with it",
+            "dispute":     "two Prism-Weavers disputed a territory over {place}, "
+                           "in colour, and one gave way",
+            "moved":       "a Prism-Weaver left {place} for {to}",
+            "cast":        "a cast shell on the reeds of {place}",
+            "gathered_cast": "Shimmersmiths out to a cast shell before the light went",
+            "dwellers_up": "the bottom-dwellers came up in the still water, and the "
+                           "Naiad-Kin's lights went down to meet them",
+            "dwellers_down": "the bottom-dwellers went deep",
+            "gondolas":    "silk gondolas on the channels",
+            "gondolas_tied": "the gondolas tied to the reed-stalks",
+            "naiad_lights": "the Naiad-Kin's lights under the water, moving",
+            "mage_light":  "a Needle-Mage bent the light over a channel, and the "
+                           "gondolas went under it",
+            "mage_water":  "the Needle-Mages shaped the water back off the "
+                           "reed-stalks after the storm",
+            "mage_speed":  "a gondola went up the channel faster than the water, "
+                           "with a Needle-Mage in the stern",
+            "hunters_out": "the high hunters out over the Spires",
+            "rider_up":    "a sky-rider went up from the Spires",
+            "hunters_grounded": "nothing flew from the Spires",
+            "mist_close":  "the Canopies closed in mist",
+            "mist_lift":   "the mist lifted off the Canopies",
+            "canopy_lights": "lights in the Canopies that were nobody's lanterns",
+            "gathered_casts": "Cast shells gathered by the Shimmersmiths: {n}.",
+        },
+        "page": {
+            "title":    "Odonata",
+            "kicker":   "Giant dragonflies, and the waters they keep",
+            "lede":     "One tide-cycle of Odonata, ticked over on {date}: the "
+                        "Crystal Fen, the Glass-Wing Spires and the Mist-Veiled "
+                        "Canopies, in an account somebody on a silk gondola might "
+                        "have given. Odonata keeps its own count of time, by the "
+                        "Great Migration, and a page that moves by days cannot "
+                        "carry a count that moves by decades — so the numbering "
+                        "here is the kingdom's tide-calendar, borrowed and said "
+                        "so, and the Migration's count stays Odonata's own. Where "
+                        "Odonata lies from the kingdom, the record does not say, "
+                        "and neither does this page.",
+            "foot":     "A mini ecosystem, run again each day from the "
+                        "repository's sandbox; the same day gives the same "
+                        "Odonata to everyone.",
+            "links":    [["The Sounds", "../sounds/"], ["Fourth Island", "../fourth/"],
+                         ["The open sea", "../sea/"]],
         },
     },
 }
@@ -565,12 +684,14 @@ FERRY = True
 SKERRIES = True
 AT_SEA = False
 IN_SOUNDS = True
+REALMS: list[str] = []   # Odonata's places in this edition; empty elsewhere
 
 
 def configure(edition: str) -> None:
     """Point the engine at one edition: its shores, its quay if any, whether
-    the ferry and the skerries are in it, and its words."""
-    global EDITION, SHORES, QUAY, FERRY, SKERRIES, AT_SEA, IN_SOUNDS, LINES, PAGE
+    the ferry and the skerries are in it, Odonata's realms if any, and its
+    words."""
+    global EDITION, SHORES, QUAY, FERRY, SKERRIES, AT_SEA, IN_SOUNDS, REALMS, LINES, PAGE
     ed = EDITIONS[edition]
     EDITION = edition
     SHORES = [k for k in ed["places"]
@@ -580,6 +701,7 @@ def configure(edition: str) -> None:
     SKERRIES = ed["skerries"]
     AT_SEA = "sea" in ed["places"]
     IN_SOUNDS = "sounds" in ed["places"]
+    REALMS = [k for k in ed["places"] if PLACES[k].get("odonata")]
     LINES = {**_BASE_LINES, **ed["lines"]}
     PAGE = {**_BASE_PAGE, **ed["page"]}
 
@@ -672,7 +794,15 @@ def fresh_state(seed: int, edition: str = "sounds", year_tide: int = 0) -> dict:
         "rafts": SPECIES["rafts"]["start"] if AT_SEA else 0,
         "sea ostriches": SPECIES["sea ostriches"]["start"] if AT_SEA else 0,
         "gathered_fruit": 0,
+        "lumen": SPECIES["lumen-moss"]["level"] if REALMS else 0,
+        "prism-weavers": {k: SPECIES["prism-weavers"]["start"][k] for k in REALMS},
+        "bottom-dwellers": SPECIES["bottom-dwellers"]["start"] if REALMS else 0,
+        "high hunters": SPECIES["high hunters"]["start"] if REALMS else 0,
+        "casts": 0,
+        "gathered_casts": 0,
         "flags": {"thin": False, "hungry": {k: False for k in SHORES},
+                  "lumen_bright": False, "lumen_dim": False, "dwellers_up": False,
+                  "after_storm": False, "mist": False,
                   "bare": {k: False for k in SHORES},
                   "deer_hungry": {k: False for k in SHORES},
                   "rabbits_many": {k: False for k in SHORES},
@@ -729,7 +859,7 @@ def step(state: dict) -> str:
     events: list[str] = []
     flags = state["flags"]
 
-    if abs_tide % YEAR_TIDES == season["from"]:
+    if abs_tide % YEAR_TIDES == season["from"] and LINES["season_turn"]:
         events.append(LINES["season_turn"].format(season=sn))
     if weather == "storm":
         events.append(LINES["storm"])
@@ -744,6 +874,8 @@ def step(state: dict) -> str:
 
     if AT_SEA:
         sea_events(state, rng, sn, season, r, weather, spring, stir, events)
+    if REALMS:
+        odonata_events(state, rng, weather, events)
 
     # -- herring: grow on the bloom, then everything eats them --------
     hs = SPECIES["herring"]
@@ -1316,7 +1448,8 @@ def step(state: dict) -> str:
     if not events:
         pool = LINES.get("quiet_pool")
         clauses.append(rng.choice(pool) if pool else LINES["quiet"])
-    line = LINES["tide"].format(tide=t + 1, season=sn, label=label, weather=weather,
+    weather_word = LINES.get("weather_words", {}).get(weather, weather)
+    line = LINES["tide"].format(tide=t + 1, season=sn, label=label, weather=weather_word,
                                 clauses="; ".join(clauses))
     state["chronicle"].append(line)
     state["tide"] = t + 1
@@ -1436,6 +1569,101 @@ def sea_events(state, rng, sn, season, r, weather, spring, stir, events) -> None
     state["sea ostriches"] = max(0, O)
 
 
+def odonata_events(state, rng, weather, events) -> None:
+    """One tide of Odonata: the lumen-moss, the Prism-Weavers' territories
+    and cast shells, the bottom-dwellers and the Naiad-Kin's lights, the
+    high hunters of the Spires, the mist on the Canopies, and the peoples
+    at their work. Nothing is born and nothing dies; the count only moves,
+    and nobody is counted but the Prism-Weavers and what lies on the fen's
+    floor. The season drives the weather's odds and is never spoken."""
+    flags = state["flags"]
+    # the lumen-moss: settles toward its level, dimmed by a storm
+    lm = SPECIES["lumen-moss"]
+    L = state["lumen"]
+    L += int((lm["level"] - L) * lm["settle"])
+    if weather == "calm":
+        L += lm["still"]
+    elif weather == "storm":
+        L -= lm["storm_dim"]
+    L = clamp(L, 0, 100)
+    bright, dim = L >= lm["bright_above"], L < lm["dim_below"]
+    if bright and not flags["lumen_bright"]:
+        events.append(LINES["lumen_bright"])
+    if dim and not flags["lumen_dim"]:
+        events.append(LINES["lumen_dim"])
+    flags["lumen_bright"], flags["lumen_dim"] = bright, dim
+    state["lumen"] = L
+    # the Prism-Weavers: disputes in colour, a move on a fresh wind, a
+    # cast shell in still air
+    pw, W = SPECIES["prism-weavers"], state["prism-weavers"]
+    for place in list(W):
+        n, name = W[place], PLACES[place]["name"]
+        if n >= 2 and weather in ("calm", "fresh") and rng.random() < pw["dispute"] * n:
+            events.append(LINES["dispute"].format(place=name))
+        if n and weather == "fresh" and rng.random() < pw["move"] * n:
+            open_ = [k for k in W if k != place and W[k] < pw["territories"][k]]
+            if open_:
+                to = rng.choice(open_)
+                W[place] -= 1
+                W[to] += 1
+                events.append(LINES["moved"].format(place=name, to=PLACES[to]["name"]))
+        if W[place] and weather == "calm" and rounded(W[place] * pw["cast"], rng):
+            state["casts"] += 1
+            events.append(LINES["cast"].format(place=name))
+    if state["casts"] and weather in ("calm", "fresh") and rng.random() < ODONATA["shimmersmiths"]:
+        state["casts"] -= 1
+        state["gathered_casts"] += 1
+        events.append(LINES["gathered_cast"])
+    # the bottom-dwellers: up in still water, deep in a storm
+    bd, D = SPECIES["bottom-dwellers"], state["bottom-dwellers"]
+    D = clamp(D + bd["drift"][weather], 0, bd["cap"])
+    up = D >= bd["up_above"]
+    if up and not flags["dwellers_up"]:
+        events.append(LINES["dwellers_up"])
+    elif weather == "storm" and flags["dwellers_up"]:
+        events.append(LINES["dwellers_down"])
+    flags["dwellers_up"] = up
+    state["bottom-dwellers"] = D
+    # the fen: gondolas, the Naiad-Kin's lights, the Needle-Mages
+    if weather == "storm":
+        events.append(LINES["gondolas_tied"])
+        flags["after_storm"] = True
+    else:
+        if flags["after_storm"] and rng.random() < ODONATA["mage_water"]:
+            events.append(LINES["mage_water"])
+            flags["after_storm"] = False
+        if rng.random() < ODONATA["gondolas"]:
+            events.append(LINES["gondolas"])
+        if weather == "calm":
+            if rng.random() < ODONATA["naiad_lights"]:
+                events.append(LINES["naiad_lights"])
+            if rng.random() < ODONATA["mage_light"]:
+                events.append(LINES["mage_light"])
+        if rng.random() < ODONATA["mage_speed"]:
+            events.append(LINES["mage_speed"])
+    # the Spires: the high hunters and the sky-riders
+    hh = SPECIES["high hunters"]
+    if weather == "storm":
+        if rng.random() < hh["grounded"]:
+            events.append(LINES["hunters_grounded"])
+    elif weather in ("calm", "fresh"):
+        if rng.random() < hh["out"]:
+            events.append(LINES["hunters_out"])
+        if rng.random() < hh["rider"]:
+            events.append(LINES["rider_up"])
+    # the Canopies: the mist, and the lights in it
+    closed = flags["mist"]
+    if not closed and rng.random() < ODONATA["mist_close"]:
+        closed = True
+        events.append(LINES["mist_close"])
+    elif closed and weather in ("fresh", "blowing") and rng.random() < ODONATA["mist_lift"]:
+        closed = False
+        events.append(LINES["mist_lift"])
+    if closed and weather == "calm" and rng.random() < ODONATA["canopy_lights"]:
+        events.append(LINES["canopy_lights"])
+    flags["mist"] = closed
+
+
 def run(state: dict, tides: int, out=None) -> None:
     for _ in range(tides):
         line = step(state)
@@ -1489,6 +1717,18 @@ def summary(state: dict) -> list[str]:
         elif key == "reef":
             lines.append(f"  {name:<40} coral {state['coral']}   "
                          f"reef fish {state['reef fish']}")
+        elif key == "fen":
+            lines.append(f"  {name:<40} lumen-moss {state['lumen']}   "
+                         f"prism-weavers {state['prism-weavers'][key]}   "
+                         f"bottom-dwellers {state['bottom-dwellers']}   "
+                         f"cast shells on the reeds {state['casts']}")
+        elif key == "spires":
+            lines.append(f"  {name:<40} prism-weavers {state['prism-weavers'][key]}   "
+                         f"high hunters {state['high hunters']}")
+        elif key == "canopies":
+            mist = "closed in mist" if state["flags"]["mist"] else "clear"
+            lines.append(f"  {name:<40} prism-weavers {state['prism-weavers'][key]}   "
+                         f"{mist}")
     if SHORES:
         lines.append(f"  {LINES['off_record']:<40} gulls {state['south']}")
     if FERRY:
@@ -1503,6 +1743,8 @@ def summary(state: dict) -> list[str]:
         lines.append("  " + LINES["gathered"].format(n=state["gathered"]))
     if state["gathered_fruit"]:
         lines.append(f"  Fruit gathered: {state['gathered_fruit']}.")
+    if state.get("gathered_casts"):
+        lines.append("  " + LINES["gathered_casts"].format(n=state["gathered_casts"]))
     if FERRY:
         lines.append(f"  The Warden's ledger runs to {len(state['warden'])} lines; "
                      "--ledger shows it.")
@@ -1653,6 +1895,12 @@ def save_state(path: str, state: dict) -> None:
 
 # -- the invariants ---------------------------------------------------
 
+# What no kingdom account may know of: Odonata is in the record and not in
+# the kingdom's knowledge, and the sea is still the whole of what the
+# kingdom knows (WORLD.md).
+ODONATA_WORDS = ("Odonata", "Prism-Weaver", "Crystal Fen", "lumen", "Spires",
+                 "Canopies", "Shimmersmith", "Naiad-Kin", "Needle-Mage")
+
 COUNTED = ("gulls", "shellfish", "deer", "wolves", "browse", "rabbits",
            "squirrels", "foxes", "cats", "goats", "dragonflies", "harriers",
            "sparrowhawks", "ponies", "alpacas", "small birds", "worms", "berries",
@@ -1691,6 +1939,9 @@ def check() -> list[str]:
                 bad(f"seed {seed}: a tide without a season: {line}")
             if PLACES["fourth"]["name"] in line:
                 bad(f"seed {seed}: the chronicle spoke of Fourth Island: {line}")
+        for word in ODONATA_WORDS:
+            if word in "\n".join(s["chronicle"] + summary(s)):
+                bad(f"seed {seed}: the kingdom's account knew of Odonata: {word}")
 
     # the open sea: no ferry, no ledger, whales that come and go
     for seed in range(1, 5):
@@ -1704,6 +1955,9 @@ def check() -> list[str]:
         for word in ("ferry", "fare", "Guild", "Warden", "ledger", "quay", "gulls fledged"):
             if word in text:
                 bad(f"sea, seed {seed}: the account spoke of the {word}")
+        for word in ODONATA_WORDS:
+            if word in text:
+                bad(f"sea, seed {seed}: the sea's account knew of Odonata: {word}")
         if LINES["whales_back"] not in text or LINES["whales_gone"] not in text:
             bad(f"sea, seed {seed}: the whales neither came nor went in a year")
     a, b = fresh_state(2, "sea"), fresh_state(2, "sea")
@@ -1734,6 +1988,9 @@ def check() -> list[str]:
                 bad(f"fourth, seed {seed}: the account spoke of the {word}")
         if re.search(r"\brings?\b", text) or re.search(r"\d+ (hermits?|sailors?)", text):
             bad(f"fourth, seed {seed}: the bell was counted, or the hermits were")
+        for word in ODONATA_WORDS:
+            if word in text:
+                bad(f"fourth, seed {seed}: the island's account knew of Odonata: {word}")
     a, b = fresh_state(4, "fourth"), fresh_state(4, "fourth")
     run(a, 40)
     run(b, 40)
@@ -1742,6 +1999,57 @@ def check() -> list[str]:
     page = render_html(a, [], "a day")
     if PAGE["title"] not in page or a["chronicle"][-1].split(" — ")[0] not in page:
         bad("fourth: the page does not carry the account")
+
+    # Odonata: its own account — nothing of the kingdom in it, no season or
+    # tide word, nobody counted but the Prism-Weavers, and none of those
+    # born or dead
+    pw = SPECIES["prism-weavers"]
+    for seed in range(1, 6):
+        s = fresh_state(seed, "odonata")
+        run(s, 3 * TIDES_PER_CYCLE)
+        if min(s["lumen"], s["bottom-dwellers"], s["casts"], s["gathered_casts"],
+               *s["prism-weavers"].values()) < 0:
+            bad(f"odonata, seed {seed}: a count went negative")
+        if sum(s["prism-weavers"].values()) != sum(pw["start"].values()):
+            bad(f"odonata, seed {seed}: a Prism-Weaver was born or died, and the "
+                "record has neither")
+        for place, n in s["prism-weavers"].items():
+            if n > pw["territories"][place]:
+                bad(f"odonata, seed {seed}: more Prism-Weavers than territories over {place}")
+        if s["warden"] or s["guild"]["crossings"] or s["herring"] or s["shoals"]:
+            bad(f"odonata, seed {seed}: the kingdom's water ran in Odonata")
+        text = "\n".join(s["chronicle"] + summary(s))
+        for word in ("ferry", "fare", "Guild", "Warden", "ledger", "quay", "Crown",
+                     "Keep", "Sounds", "island", "Island", "gull", "herring",
+                     "Monarch", "Migration"):
+            if word in text:
+                bad(f"odonata, seed {seed}: the account spoke of the {word}")
+        if re.search(r"\b(winter|spring|summer|autumn|springs|neaps|middling|rings?)\b", text):
+            bad(f"odonata, seed {seed}: the account gave Odonata the kingdom's seasons, "
+                "tides or bell")
+        if re.search(r"\d+ (spirits?|Shimmersmiths?|Chitin-Binders?|Naiad-Kin|"
+                     r"Needle-Mages?|sky-riders?|people)", text):
+            bad(f"odonata, seed {seed}: a people or a spirit was counted")
+    a, b = fresh_state(3, "odonata"), fresh_state(3, "odonata")
+    run(a, 40)
+    run(b, 40)
+    if a != b:
+        bad("odonata: two runs of one seed differed")
+    straight = fresh_state(5, "odonata")
+    run(straight, 40)
+    halves = fresh_state(5, "odonata")
+    run(halves, 20)
+    halves = json.loads(json.dumps(halves))
+    run(halves, 20)
+    if straight != halves:
+        bad("odonata: a run continued from a save differed from one played straight")
+    page = render_html(a, [], "a day")
+    if PAGE["title"] not in page or a["chronicle"][-1].split(" — ")[0] not in page:
+        bad("odonata: the page does not carry the account")
+    if _BASE_PAGE["kicker"] in page:
+        bad("odonata: the page put Odonata under the kingdom's name")
+    if not any(role == "holds" for role, _, _ in roles(a)):
+        bad("odonata: nothing holds a territory")
 
     # a year turns through all four seasons, in order, from any start
     s = fresh_state(6, "sounds", year_tide=200)
@@ -1795,7 +2103,8 @@ def main() -> int:
                     help=f"tides to run (default one cycle, {TIDES_PER_CYCLE})")
     ap.add_argument("--seed", type=int, default=1, help="which world (default 1)")
     ap.add_argument("--edition", choices=sorted(EDITIONS), default="sounds",
-                    help="the Sounds (default), or Fourth Island's own account")
+                    help="the Sounds (default), Fourth Island's own account, "
+                         "the open sea, or Odonata")
     ap.add_argument("--state", metavar="PATH",
                     help="continue from this file and save back to it")
     ap.add_argument("--history", action="store_true",

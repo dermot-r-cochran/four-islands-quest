@@ -106,9 +106,13 @@ not add the reason for one.
 
 ## The open sea, so far
 
-- **The rest of the known world is open sea** (the author, 2026-09-06).
-  Beyond the mainland shore the ferry leaves from and the four islands,
-  no other land is charted, and the record holds none.
+- **Beyond the kingdom is open sea** (the author, 2026-09-06: *the rest
+  of the known world is open sea*). Beyond the mainland shore the ferry
+  leaves from and the four islands, no other land is charted by the
+  kingdom. Since 2026-10-02 the record holds one other land, Odonata
+  (its own section below), and does not say where it lies from here or
+  what water is between — so the sea is still the whole of what the
+  kingdom knows, and Odonata is what the record knows.
 - The sea has its own life: the plankton, and the shoals that feed on
   it, too many to count; dolphins on the shoals; whales on the
   plankton, in these waters for the summer and the autumn and gone the
@@ -122,6 +126,75 @@ not add the reason for one.
 - The sailors who come to Fourth Island came across all of this. Nobody
   keeps an account of the sea; what the record has of it is what might
   be seen from a deck.
+
+## Odonata, so far
+
+The first land the record holds beyond the kingdom and the sea (the
+author, 2026-10-02, who gave the whole of what follows; set down here
+at his direction in this file's register, with his names kept). It is
+soft, like everything outside the spine, and it is a telling: what is
+said of it is what is said, and nothing in it is the reason for
+anything else.
+
+- A land built around giant dragonflies, the **Prism-Weavers**, and the
+  shining waters they keep. Its magic is old, and it hums with the beat
+  of a thousand iridescent wings. The dragonflies run from the size of
+  a horse to the size of a small airship; they think, they hold their
+  territories fiercely, and they speak to one another in quick shifts
+  of colour and in the frequency of their wing-beats. Civilisation
+  there is built around what they want.
+- **The Crystal Fen**: a vast glowing wetland whose water always
+  carries the magical minerals that make it shine. Its cities stand on
+  the stalks of giant translucent reeds, and people go between them in
+  gondolas of woven silk.
+- **The Glass-Wing Spires**: archipelagos of hardened crystal that
+  float in the air. The sky-riders live there, each bonded to one of
+  the high-altitude hunters of that air.
+- **The Mist-Veiled Canopies**: deep, ancient rainforest where the air
+  is so wet it feels liquid. The ancient lineage spirits breed there,
+  and the forest is held sacred for it.
+- Three peoples. The **Chitin-Binders**, who call themselves the
+  **Shimmersmiths**: an artisan society of humanoids who harvest the
+  shed exoskeletons and iridescent wing-casings of the giant
+  dragonflies and make from them lightweight, indestructible armour
+  and refracting glass weapons. The **Naiad-Kin**: aquatic humanoids,
+  webbed and marked with their own bioluminescence, who live in
+  symbiosis with the bottom-dwellers of the fens. The **Needle-Mages**:
+  scholars and sorcerers who channel their spellcraft through long,
+  delicate staves carved from dragonfly mandible bone, and whose work
+  is light, speed and the shaping of water.
+- **Lumen-moss**, a glowing moss-like alga, is the light of the fen
+  cities and the fuel of their magic.
+- **Refraction magic.** The magic of Odonata is rarely brute force.
+  What it does is bend light, alter momentum, and move the invisible
+  currents a fast wing-beat leaves in the air. That is what it does;
+  the record does not say how, and the register above is why — a tale
+  may add a dragon and not the reason for one.
+- **Odonata keeps its own count of time**, not by suns or moons but by
+  the **Great Migration**: the lifecycle, decades long, of the Ancient
+  Monarch Dragonfly, whose passing closes one era of its history and
+  opens the next. That is Odonata's reckoning and not the Crown's. The
+  spine's one tide-calendar is the kingdom's, and Odonata is under no
+  Crown of ours, so the two do not meet; an account that crosses
+  between them has to say which count it is keeping.
+
+What is absent, and stays so until it is written:
+
+- Where Odonata lies from the Sounds — across what sea, how far,
+  whether a ship from the old quay could reach it, or whether anyone of
+  the kingdom ever has. The sailors on Fourth Island came across open
+  sea, and no account of theirs names it.
+- Any tie between the dragonflies over the pools of the four islands
+  and the Prism-Weavers. The Sounds' dragonflies are the Sounds' own,
+  and the record ties the two no more than it ties Fourth Island's
+  gulls to the three islands' — which is to say it does not.
+- A chapter and a company. Odonata has neither yet. A later chapter
+  may add either, as it may add anything; what is here is the ground
+  such a chapter would stand on. The sandbox's fourth edition,
+  `--edition odonata` (the author's word, 2026-10-02: *Sandbox
+  edition*), runs this ground and no more, and is soft like the rest of
+  the sandbox: nothing in it is a fact of Odonata beyond what this
+  section says, and it may be contradicted freely.
 
 ## Who writes the world
 

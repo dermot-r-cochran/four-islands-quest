@@ -88,17 +88,24 @@ ground `WORLD.md` wrote for it in an account a hermit might have
 noticed: no ferry, no ledger, and the hermits never counted. See
 [`sandbox/README.md`](./sandbox/README.md).
 
-Beyond them all is the open sea, the rest of the known world — plankton
+Beyond them all is the open sea — plankton
 and shoals, dolphins and whales, the reef south of Fourth Island, and
 rafts of floating sea trees with sea ostriches riding them — in a third
 edition, `--edition sea`, seen from a deck.
 
+And Odonata, which the record holds and the kingdom does not know of —
+the Crystal Fen, the Glass-Wing Spires and the Mist-Veiled Canopies, the
+Prism-Weavers holding their territories and the peoples at their work —
+in a fourth, `--edition odonata`, from a silk gondola, numbered in the
+kingdom's borrowed tide-calendar and saying so.
+
 On the site each has a page: the Pages workflow runs one tide-cycle of
 each, seeded by the date, and publishes the Sounds at
 https://dermot-r-cochran.github.io/four-islands-quest/sounds/ , Fourth
-Island at https://dermot-r-cochran.github.io/four-islands-quest/fourth/
-and the open sea at https://dermot-r-cochran.github.io/four-islands-quest/sea/ ,
-ticking all three over once a day. The Warden's ledger is on none of
+Island at https://dermot-r-cochran.github.io/four-islands-quest/fourth/ ,
+the open sea at https://dermot-r-cochran.github.io/four-islands-quest/sea/
+and Odonata at https://dermot-r-cochran.github.io/four-islands-quest/odonata/ ,
+ticking all four over once a day. The Warden's ledger is on none of
 them — the bell is not counted aloud.
 
 ## Forking it
@@ -122,8 +129,8 @@ python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
 
 A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
 every push to `main` and once a day: it copies that one file into a staging
-directory, has the sandbox write the day's three chronicles beside it,
-and hands all four to Pages. It installs nothing either.
+directory, has the sandbox write the day's four chronicles beside it,
+and hands all five to Pages. It installs nothing either.
 
 `tools/validate.py` is the useful one. It reads the world out of
 `index.html` and fails on what is always wrong — a beat looking at an
