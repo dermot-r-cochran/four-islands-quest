@@ -228,8 +228,8 @@ sandbox edition, `--edition odonata` (his word the next day, 2026-10-02:
 *Sandbox edition*), built the way `--edition fourth` and `--edition sea`
 were and described under *The sandbox* below. One file is its so far: the song
 `media/odonata-raise-your-banners.mp4`, sent the same day and filed in
-`reference/README.md` with its maker unrecorded, which that file asks him
-to supply.
+`reference/README.md`; its maker, MyTunes, was his word the day after, and
+the version was not noted.
 
 **This is its own world, and the mainland shore is unnamed** (Dermot's
 ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming
