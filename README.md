@@ -88,7 +88,7 @@ ground `WORLD.md` wrote for it in an account a hermit might have
 noticed: no ferry, no ledger, and the hermits never counted. See
 [`sandbox/README.md`](./sandbox/README.md).
 
-Beyond them all is the open sea, the rest of the known world — plankton
+Beyond them all is the open sea — plankton
 and shoals, dolphins and whales, the reef south of Fourth Island, and
 rafts of floating sea trees with sea ostriches riding them — in a third
 edition, `--edition sea`, seen from a deck.

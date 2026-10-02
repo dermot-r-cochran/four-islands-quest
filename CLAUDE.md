@@ -185,10 +185,12 @@ names and no number, the record never says which of them chose it, and
 nobody has written why** — never count them, name them or sort them — and
 the ferrymen still do not point at the island.
 
-**The rest of the known world is open sea** (Dermot's direction, 2026-09-06,
-with *dolphins and whales*, *plankton and fish*, *coral reefs*), written in
-`WORLD.md`'s section *The open sea, so far*: beyond the mainland shore and
-the four islands no other land is charted; the sea holds the plankton and
+**Beyond the kingdom is open sea** (Dermot's direction, 2026-09-06, *the
+rest of the known world is open sea*, with *dolphins and whales*, *plankton
+and fish*, *coral reefs*), written in `WORLD.md`'s section *The open sea, so
+far*: beyond the mainland shore and the four islands no other land is
+charted by the kingdom — the record itself holds one other land since
+2026-10-02, Odonata, in the paragraph below; the sea holds the plankton and
 the shoals, dolphins on the shoals, whales on the plankton for the summer
 and autumn and gone the rest of the year; and south of Fourth Island a
 coral reef with its own fish. Nobody keeps an account of the sea — the
@@ -203,6 +205,27 @@ ostriches that ride them on the open sea — big flightless birds that
 cannot land on the islands, which is their limit. The ferry starts from
 the old quay on the mainland shore and lands at First Island's
 water-stairs, as Chapter One has it.
+
+**Odonata is written** (Dermot's direction, 2026-10-02: *Four Islands Quest
+… now includes* the world of Odonata, given whole), in `WORLD.md`'s section
+*Odonata, so far* — the first land the record holds beyond the kingdom and
+the sea, soft, outside the spine, and the whole of what is written: giant
+thinking dragonflies, the Prism-Weavers, horse-sized to airship-sized, that
+speak in colour and wing-beat and whose wants the civilisation is built
+around; the Crystal Fen, the Glass-Wing Spires and the Mist-Veiled
+Canopies; three peoples, the Chitin-Binders (the Shimmersmiths), the
+Naiad-Kin and the Needle-Mages; lumen-moss; a refraction magic that bends
+light, alters momentum and moves the air a wing-beat stirs, with no *how*
+given, since the register forbids one; and its own count of time by the
+Great Migration of the Ancient Monarch Dragonfly, which is Odonata's
+reckoning and not the Crown's one tide-calendar, so the spine stands. The
+brochure framing his text arrived in (*step into a vibrant realm*) was
+dropped and every name and fact kept. Where Odonata lies from the Sounds,
+whether anyone of the kingdom has reached it, and whether the Sounds' own
+dragonflies have anything to do with the Prism-Weavers are absent, not
+hidden — don't write them. It has no chapter, no company and no sandbox
+edition; a fourth edition would be built the way `--edition fourth` and
+`--edition sea` were, at his ask.
 
 **This is its own world, and the mainland shore is unnamed** (Dermot's
 ruling, 2026-09-06, choosing *separate worlds, mainland unnamed* over naming

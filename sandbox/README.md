@@ -200,8 +200,8 @@ the sandbox can carry, and `--check` proves it.
 
 ## The open sea
 
-The rest of the known world, in a third edition, `--edition sea`, as
-seen from a deck: the plankton, the sea's own bloom; the shoals that
+The open sea beyond the kingdom, in a third edition, `--edition sea`,
+as seen from a deck: the plankton, the sea's own bloom; the shoals that
 feed on it, too many to count; the dolphins that live on the shoals;
 the whales that come in for the plankton in summer and autumn and go,
 wherever they go, for the rest of the year; and south of Fourth Island,
