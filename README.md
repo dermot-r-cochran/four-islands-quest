@@ -42,8 +42,14 @@ bind, everything else is soft, and no hidden canon exists.
 
 Chapter One crosses the First Sound by ferry: a fare paid in coin
 or news, a tide-bell nobody counts aloud, three islands worth a
-fare and a fourth that pays its own way. The endcard holds **The
-Second Island** open — the demo ends where your world begins.
+fare and a fourth that pays its own way. Its endcard offers the way
+on: **Go up the hill**.
+
+Chapter Two climbs to the High Keep, by the Crown's bridge, where a
+keeper counts you, or round by the wood, where nobody writes anything
+down, to a gate with four islands cut over its arch and only three of
+them named. Its endcard holds **The Second Island** open — the demo
+ends where your world begins.
 
 ## Playing in a terminal
 
@@ -115,6 +121,16 @@ the top of `index.html` and the engine below them needs no edits at all.
 [`CLAUDE.md`](./CLAUDE.md) is the house guide — the schema, the `saveId`
 rule, what not to add, and what to run before committing. It is written for
 Claude Code and reads perfectly well as documentation for a person.
+
+Four strings in the page shell, outside the data, still belong to the demo
+world, and a fork replaces them by hand: the page's `<title>` and its `<h1>`, both "The
+Kingdom of the Four Sounds" (lines 6 and 91 of `index.html`); the quest-log
+card's heading, "The Crossing" (line 106); and the About card's link "The
+Sounds, today", which points at `sounds/`, the sandbox's daily page (line
+121). The saves sit under the `four-islands-` localStorage prefix (the
+`CURRENT_KEY` and `saveKey` lines in the engine); a fork served from the
+same origin as another world, or as this one, keeps its saves apart by
+giving that prefix a name of its own.
 
 ## Checks
 

@@ -126,6 +126,16 @@ inserting a chapter mid-sequence safe, because nobody's save is orphaned.
 Never renumber, reuse, or "tidy" a `saveId` — changing one silently discards
 the progress of everyone who has played that chapter. Adding one is free.
 
+Inside a chapter it is the other way round. A save records beats and
+choices by position — `state.beat` and each history entry's `beat` and
+`choice` are array indices into `beats` and `choices` — so once a chapter
+is published it only grows at its end: a new beat after the last one, a
+new choice after a beat's last choice. Inserting, removing or reordering
+beats or choices in a chapter people have played replays their saves
+against the wrong beats. Editing the prose in place is safe, because saves
+hold structure, not text; a chapter that needs restructuring is a new
+chapter with a new `saveId`.
+
 ### Adding a chapter
 
 Append to `CHAPTERS` (and any new examinables to `EXAMINE`), give the
