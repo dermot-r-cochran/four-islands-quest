@@ -103,7 +103,7 @@
     <div id="chapters"></div>
   </div>
   <div class="card">
-    <h2>The Crossing</h2>
+    <h2 id="questlog-title">The Crossing</h2>
     <ul id="questlog"></ul>
   </div>
   <div class="card">
@@ -350,6 +350,7 @@ const CHAPTERS = [
 {
   saveId: "ch2",
   title: "Chapter Two — Up the Hill",
+  logTitle: "Chapter Two — Up the Hill",
   sub: "to the High Keep, by the bridge or by the wood",
   end: {
     title: "End of Chapter Two",
@@ -622,10 +623,15 @@ function renderChapters() {
   });
 }
 
+/* The quest-log card's heading is the shell's own ("The Crossing")
+   unless the chapter carries a logTitle; saves never hold it. */
+const SHELL_LOG_TITLE = $("questlog-title").textContent;
+
 function renderQuestLog() {
   const ul = $("questlog");
   ul.innerHTML = "";
   const ch = CHAPTERS[currentChapter];
+  $("questlog-title").textContent = ch.logTitle || SHELL_LOG_TITLE;
   ch.beats.forEach((b, i) => {
     if (i > state.beat) return; // stages ahead stay unspoiled
     const li = document.createElement("li");

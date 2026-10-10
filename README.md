@@ -20,12 +20,20 @@ transcript. Two sidebar systems frame the story:
 
 - **The quest log** shows the chapter's stages as they are reached,
   plus one held line for what comes next — stages ahead stay
-  unspoiled.
+  unspoiled. A chapter may give the card its own heading
+  (`logTitle`); otherwise it keeps the shell's. Proof:
+  `tools/validate.py`, `check_quest` (every beat has a `log` stage,
+  every chapter a `heldLine`) and `ci.yml`, *The engine's literals
+  parse* (a `logTitle`, if present, is a non-empty string and the
+  shell has the heading to replace). That stages ahead stay hidden
+  on the page has no test yet: not yet implemented.
 - **Companies** is a light faction layer: factions nest (`sub` /
   `of`), keep a *seat*, carry a *quest*, and hold members. Chapters
   choose which companies stand behind them. The panel is
   descriptive — it tells the player who keeps what and why, and
-  makes no rules of its own.
+  makes no rules of its own. Proof: `tools/validate.py`,
+  `check_quest` (`of` and `sub` name companies that exist;
+  `CHAPTER_FACTIONS` names real chapters and real companies).
 
 The engine descends from the author's earlier Evennia-based
 prototypes of factions and nested inner worlds, rebuilt as a single
@@ -63,7 +71,8 @@ python3 teller/teller.py --quest
 
 No browser, no JavaScript runtime, nothing to install — it parses the
 world's object literals rather than executing them. See
-[`teller/README.md`](./teller/README.md).
+[`teller/README.md`](./teller/README.md). Proof: `ci.yml`, *Play the
+quest end to end* (a scripted run reaches an endcard).
 
 ## A sandbox
 
@@ -87,8 +96,9 @@ python3 sandbox/ecosystem.py --state .ecosystem-state.json   # keeps going betwe
 
 It keeps a year with four seasons, each species breeding in its own,
 and every species carries a role in the biosphere — what grows, what
-feeds, what hunts, what picks up after — which the pages list. It is not
-a chapter and not a player. Fourth Island, which the ferrymen
+feeds, what hunts, what picks up after — which the pages list. Proof:
+`sandbox/ecosystem.py --check` (its invariants, listed under *Checks*
+below). It is not a chapter and not a player. Fourth Island, which the ferrymen
 do not point at, is its own edition — `--edition fourth` — running the
 ground `WORLD.md` wrote for it in an account a hermit might have
 noticed: no ferry, no ledger, and the hermits never counted. See
@@ -125,7 +135,8 @@ Claude Code and reads perfectly well as documentation for a person.
 Four strings in the page shell, outside the data, still belong to the demo
 world, and a fork replaces them by hand: the page's `<title>` and its `<h1>`, both "The
 Kingdom of the Four Sounds" (lines 6 and 91 of `index.html`); the quest-log
-card's heading, "The Crossing" (line 106); and the About card's link "The
+card's heading, "The Crossing" (line 106), which a chapter's `logTitle`
+replaces while that chapter is open; and the About card's link "The
 Sounds, today", which points at `sounds/`, the sandbox's daily page (line
 121). The saves sit under the `four-islands-` localStorage prefix (the
 `CURRENT_KEY` and `saveKey` lines in the engine); a fork served from the
@@ -141,7 +152,14 @@ has no build and the tools have no dependencies:
 python3 -m compileall -q teller tools sandbox   # everything parses
 python3 tools/validate.py                       # the world data holds together
 python3 sandbox/ecosystem.py --check            # the sandbox's invariants hold
+python3 tools/check_docs.py                     # the docs hold together
 ```
+
+`tools/check_docs.py` reads the Markdown files: every relative link
+resolves to something in the repository, no file carries two
+front-matter blocks, and the counts this README states — four data
+structures, four editions, six spine facts, the four shell strings at
+the lines named above — match what is on disk.
 
 A second workflow, `pages.yml`, publishes `index.html` to GitHub Pages on
 every push to `main` and once a day: it copies that one file into a staging
@@ -165,28 +183,45 @@ All content lives in four structures at the top of the script; the
 engine below them never needs editing to add content.
 
 - `CHAPTERS` — an array of `{saveId, title, sub, end, heldLine,
-  beats}`. `saveId` keys the chapter's save and must be stable and
-  unique; inserting chapters never orphans a save. `end` is
-  `{title, text: [paragraphs], nextLabel}` — set `nextLabel` on a
-  chapter when the next one exists and the endcard offers the way
-  on. `heldLine` names what is not yet written.
+  beats}`, plus an optional `logTitle`. `saveId` keys the chapter's
+  save and must be stable and unique; inserting chapters never
+  orphans a save. `end` is `{title, text: [paragraphs], nextLabel}`
+  — set `nextLabel` on a chapter when the next one exists and the
+  endcard offers the way on. `heldLine` names what is not yet
+  written. `logTitle`, when present, heads the quest-log card while
+  the chapter is open; absent, the card keeps the shell's heading.
+  Proof: `tools/validate.py`, `check_quest` (a `saveId` on every
+  chapter, none reused; a title; a complete endcard; no `nextLabel`
+  on the last chapter) and `ci.yml`, *The engine's literals parse*
+  (`logTitle`).
 - A **beat** is `{id, log, presences, examine, enter, choices}`:
   `log` is the quest-log stage; `presences` the who's-here list;
   `examine` an array of `EXAMINE` keys; `enter` the beat's prose as
   plain-text paragraphs; `choices` an array of `{label, text}`
   where every choice converges on the same next beat — texture,
   not branching. A beat with no choices takes an optional
-  `continueLabel`.
+  `continueLabel`. Proof: `tools/validate.py`, `check_quest` (an
+  `id`, a `log` and `enter` text on every beat; every `examine` key
+  in `EXAMINE`; a label and text on every choice; a way onward from
+  every beat). That every choice converges is the engine's shape,
+  not a check: not yet implemented.
 - `EXAMINE` — `{key: {label, text}}` lookables, shared across
-  chapters.
+  chapters. Proof: `tools/validate.py`, `check_quest` (warns on an
+  examinable nothing looks at).
 - `FACTIONS` — `{key: {name, seat, quest, members, sub, of}}`, and
   `CHAPTER_FACTIONS` maps `saveId` to the faction keys shown for
-  that chapter.
+  that chapter. Proof: `tools/validate.py`, `check_quest` (a name on
+  every company; `of` and `sub` name companies; `CHAPTER_FACTIONS`
+  names real chapters and companies; warns on a company behind no
+  chapter).
+- A beat or a choice may carry a `picture: {src, alt, credit}`.
+  Proof: `ci.yml`, *Every picture a chapter names is in the
+  repository* (the file exists and has alt text).
 
 Saves hold structure, not prose (`{kind, beat, choice, key}`
 history entries replayed against the data), so editing text never
 corrupts a save — the transcript simply re-renders from the
-current data.
+current data. No test replays a save yet: not yet implemented.
 
 ## License
 

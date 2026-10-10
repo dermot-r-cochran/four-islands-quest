@@ -55,8 +55,19 @@ jobs:
           import questfile
           data = questfile.load_quest(questfile.find_quest("."))
           assert data["chapters"], "CHAPTERS did not parse"
+          # logTitle is optional and display-only; present, it must be a
+          # non-empty string, and the shell must have the heading it replaces.
+          for ch in data["chapters"]:
+              lt = ch.get("logTitle")
+              assert lt is None or (isinstance(lt, str) and lt.strip()), \
+                  f"{ch['saveId']}: logTitle must be a non-empty string"
+          assert 'id="questlog-title"' in open("index.html", encoding="utf-8").read(), \
+              "the quest-log heading has lost its id"
           print(f"{len(data['chapters'])} chapters parsed from index.html")
           PY
+
+      - name: The docs hold together
+        run: python3 tools/check_docs.py
 
       - name: Play the quest end to end
         run: |
