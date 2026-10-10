@@ -71,8 +71,17 @@ python3 sandbox/ecosystem.py --check # the sandbox's invariants hold
 
 Run `tools/validate.py` before committing — CI runs it too, along with the
 parse gate, the sandbox's `--check`, a full scripted playthrough, a guard
-that the shared tool stays world-agnostic, and a check that no build
-artifacts are tracked. CI installs nothing, and should stay that way.
+that the shared tool stays world-agnostic, a check that no build
+artifacts are tracked, and `tools/check_docs.py` (standard library only:
+every relative link in a Markdown file resolves, no file carries two
+front-matter blocks, and the counts the README states match what is on
+disk). CI installs nothing, and should stay that way.
+
+The README names its proof: every bullet there that claims a capability
+names the check that proves it (file and check name) or says the test is
+not yet implemented (the convention since 2026-10-10, Dermot's decision).
+Never cite a check that does not exist; `tools/check_docs.py` is this
+repository's own and is not shared.
 
 `.github/workflows/pages.yml` publishes `index.html` to GitHub Pages on
 every push to `main` and once a day
@@ -91,7 +100,11 @@ generated, never hand-edited, and never `index.html`.
 `index.html`, between the `WORLD DATA` and `ENGINE` banners.
 
 - **`CHAPTERS`** — an array of
-  `{saveId, title, sub, end, heldLine, beats}`.
+  `{saveId, title, sub, end, heldLine, beats}`, plus an optional `logTitle`.
+  - `logTitle`, when present, is the quest-log card's heading while that
+    chapter is open; absent, the heading is the page shell's own ("The
+    Crossing"). It is display only — saves never hold it (added 2026-10-10,
+    Dermot's decision, after Chapter Two's log kept the kingdom's title).
   - `end` is `{title, text: [paragraphs], nextLabel}`. Set `nextLabel` only
     when a next chapter exists; the last chapter's is `null`.
   - `heldLine` names what has not been reached yet — it shows at the foot of
