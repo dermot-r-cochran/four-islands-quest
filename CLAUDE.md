@@ -117,6 +117,17 @@ generated, never hand-edited, and never `index.html`.
     next beat**. Choices are texture, not branching: different ways to arrive
     where the story arrives. A beat with no choices takes an optional
     `continueLabel`.
+  - A choice may carry an optional `sets: [facts]`, and a beat or a choice
+    an optional `variants: [{when: [facts], ...}]` (added 2026-10-27,
+    Dermot's approval of `design/tracked-consequence-sketch.md`). A fact
+    is `holder.verb.thing`, verbs `knows`, `saw` and `owes`, with `+N` on a
+    set fact to hold it back N chapters. Facts are derived each render by
+    replaying the saved histories of the chapters up to the open one and
+    are never saved, so the save shape is unchanged. The first variant
+    whose `when` is all held replaces a beat's `enter`/`presences` or a
+    choice's `label`/`text`, and nothing else: no fact ever adds, removes
+    or reorders a beat or a choice, so positions in saves stay valid.
+    `teller/` ignores both keys and plays the defaults.
   - A beat or a choice may carry an optional `picture: {src, alt, credit}`,
     shown after its prose. `src` is a path beside `index.html`, normally in
     `reference/`; the picture is shown whole and unaltered (scaled to fit,

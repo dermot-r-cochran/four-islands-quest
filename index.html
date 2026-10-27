@@ -270,7 +270,8 @@ const CHAPTERS = [
           "“That,” he said, “is worth the crossing and a cup of " +
           "what I keep under the stern seat. Aboard. Mind the " +
           "thwart; it minds back.”"
-        ]
+        ],
+        sets: ["marren.knows.carrow", "first.knows.carrow+1"]
       }
     ]
   },
@@ -446,6 +447,28 @@ const CHAPTERS = [
       "which way you had come, and then at your face, which told her " +
       "nothing she needed in writing."
     ],
+    variants: [
+      {
+        when: ["first.knows.carrow"],
+        /* DRAFT: the third paragraph is placeholder wording for the
+           author to rewrite; the first two are the beat's own. */
+        enter: [
+          "The High Keep was bigger close to than it had looked from the " +
+          "water, as promised, and older than its gate, which had been " +
+          "replaced at least once by somebody who had not been told. " +
+          "Over the arch four islands were cut in the stone in a row. " +
+          "Three had their names beside them. The fourth was the same " +
+          "size as the others, and left smooth.",
+          "The porter at the wicket looked at your boots, which told her " +
+          "which way you had come, and then at your face, which told her " +
+          "nothing she needed in writing.",
+          "“Carrow's bridge is down again, they tell me,” she said. " +
+          "“Old Marren had it off a passenger this morning, and the " +
+          "harbour had it off Marren.” She looked at you as if she could " +
+          "guess which passenger."
+        ]
+      }
+    ],
     choices: [
       {
         label: "Ask about the smooth island.",
@@ -525,6 +548,53 @@ function addParas(container, paras, cls) {
   return div;
 }
 
+/* Tracked consequence. A choice may carry `sets: [facts]`, and a beat
+   or a choice may carry `variants: [{when: [facts], ...}]`. A fact is
+   one string, holder.verb.thing, held or not; "+N" on a fact a choice
+   sets holds it back N chapters, the time news takes to travel. Facts
+   are never saved: they are derived on every render by replaying the
+   saved histories of the chapters up to the one open, so restarting a
+   chapter withdraws what it set. The first variant whose `when` is all
+   held rewords a beat's enter and presences, or a choice's label and
+   text; it never changes how many beats or choices there are. */
+function chapterHistory(i) {
+  if (i === currentChapter) return state.history;
+  try {
+    const s = JSON.parse(localStorage.getItem(saveKey(i)));
+    if (s && Array.isArray(s.history)) return s.history;
+  } catch (e) { /* nothing saved */ }
+  return [];
+}
+
+function heldFacts() {
+  const held = new Set();
+  for (let i = 0; i <= currentChapter; i++) {
+    for (const entry of chapterHistory(i)) {
+      if (entry.kind !== "chosen") continue;
+      const b = CHAPTERS[i].beats[entry.beat];
+      const c = b && b.choices[entry.choice];
+      for (const atom of (c && c.sets) || []) {
+        const m = /^(.*?)(?:\+(\d+))?$/.exec(atom);
+        if (i + Number(m[2] || 0) <= currentChapter) held.add(m[1]);
+      }
+    }
+  }
+  return held;
+}
+
+function holds(facts, list) {
+  return (list || []).every((atom) => facts.has(atom));
+}
+
+function pick(node, facts) {
+  for (const v of (node && node.variants) || []) {
+    if (!holds(facts, v.when)) continue;
+    const { when, choices, ...over } = v; // a variant never touches choices
+    return Object.assign({}, node, over);
+  }
+  return node;
+}
+
 /* A beat or a choice may name a picture: {src, alt, credit}. It is
    shown whole and unaltered (scaled to fit, never cropped), and if the
    file is not beside the page it quietly drops out. */
@@ -552,7 +622,7 @@ function addPicture(container, pic) {
 function renderHistoryEntry(entry) {
   const t = $("transcript");
   if (entry.kind === "beat") {
-    const b = beats()[entry.beat];
+    const b = pick(beats()[entry.beat], heldFacts());
     if (!b) return null;
     const h = document.createElement("div");
     h.className = "beat-title";
@@ -563,7 +633,7 @@ function renderHistoryEntry(entry) {
     return h;
   } else if (entry.kind === "chosen") {
     const b = beats()[entry.beat];
-    const c = b && b.choices[entry.choice];
+    const c = pick(b && b.choices[entry.choice], heldFacts());
     if (!c) return null;
     const label = document.createElement("p");
     label.className = "chosen";
@@ -649,7 +719,7 @@ function renderPresences() {
   const ul = $("presences");
   ul.innerHTML = "";
   const bs = beats();
-  const b = bs[Math.min(state.beat, bs.length - 1)];
+  const b = pick(bs[Math.min(state.beat, bs.length - 1)], heldFacts());
   for (const p of b.presences) {
     const li = document.createElement("li");
     li.textContent = p;
@@ -713,7 +783,9 @@ function renderActions() {
   const b = beats()[state.beat];
 
   const choices = document.createElement("div");
-  b.choices.forEach((c, i) => {
+  const facts = heldFacts();
+  b.choices.forEach((raw, i) => {
+    const c = pick(raw, facts);
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = c.label;

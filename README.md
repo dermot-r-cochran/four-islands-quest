@@ -214,6 +214,20 @@ engine below them never needs editing to add content.
   every company; `of` and `sub` name companies; `CHAPTER_FACTIONS`
   names real chapters and companies; warns on a company behind no
   chapter).
+- A choice may carry `sets: [facts]`, and a beat or a choice
+  `variants: [{when: [facts], ...}]` — an experiment in tracked
+  consequence (`design/tracked-consequence-sketch.md`). A fact is
+  `holder.verb.thing` (verbs `knows`, `saw`, `owes`), with an
+  optional `+N` on a set fact to hold it back N chapters. Facts are
+  derived from the saved histories on every render, never saved. The
+  first variant whose `when` is all held rewords a beat's `enter`
+  and `presences` or a choice's `label` and `text`; it never adds,
+  removes or reorders a beat or a choice. Proof: `tools/validate.py`,
+  `check_consequence` (fact grammar and verbs; every `when` set
+  somewhere, early enough counting its delay; a variant names only
+  those fields, ones its node has, and never `choices`; warns on a
+  fact nothing reads). That the page shows a variant only after its
+  choice has no test yet: not yet implemented.
 - A beat or a choice may carry a `picture: {src, alt, credit}`.
   Proof: `ci.yml`, *Every picture a chapter names is in the
   repository* (the file exists and has alt text).
