@@ -141,6 +141,8 @@ def check_quest(root: str) -> bool:
         if key not in used_examine:
             warn(f"{where}: examinable {key!r} is never looked at")
 
+    check_consequence(where, chapters)
+
     # a scripted walk of every chapter, taking the first choice each time
     for ch in chapters:
         for b in ch.get("beats") or []:
@@ -152,6 +154,117 @@ def check_quest(root: str) -> bool:
           f"{sum(len(c.get('beats') or []) for c in chapters)} beats, "
           f"{len(examine)} examinables, {len(factions)} companies")
     return True
+
+
+# Tracked consequence: a choice may carry `sets: [facts]`, and a beat or a
+# choice may carry `variants: [{when: [facts], ...}]`. A fact is
+# holder.verb.thing, with an optional +N delay in chapters on a fact a
+# choice sets. A variant rewords a node and never changes its shape, so it
+# may name only these fields, and only ones the node itself has.
+FACT_RE = re.compile(r"^([a-z0-9-]+)\.([a-z0-9-]+)\.([a-z0-9-]+)(?:\+(\d+))?$")
+FACT_VERBS = ("knows", "saw", "owes")
+VARIANT_FIELDS = {"beat": ("enter", "presences"), "choice": ("label", "text")}
+
+
+def _fact(atom, tag: str, delay_ok: bool):
+    """(base atom, delay) for a well-formed fact, else None after a fail."""
+    m = FACT_RE.match(atom) if isinstance(atom, str) else None
+    if not m:
+        fail(f"{tag}: {atom!r} is not a fact (holder.verb.thing, optional +N)")
+        return None
+    if m.group(2) not in FACT_VERBS:
+        fail(f"{tag}: {atom!r} uses verb {m.group(2)!r}; the verbs are "
+             + ", ".join(FACT_VERBS))
+        return None
+    if m.group(4) is not None and not delay_ok:
+        fail(f"{tag}: {atom!r} carries a delay; a delay belongs on `sets`, "
+             "not on `when`")
+        return None
+    return atom.split("+", 1)[0], int(m.group(4) or 0)
+
+
+def check_consequence(where: str, chapters: list) -> None:
+    """Shape-only checks on `sets` and `variants`; none read the words."""
+    last = len(chapters) - 1
+    setters: dict[str, list[tuple[int, int, int]]] = {}  # atom -> (ch, beat, delay)
+    reads: list[tuple[str, int, int, str]] = []  # (atom, ch, beat, tag)
+
+    def variants(node: dict, kind: str, i: int, j: int, tag: str) -> None:
+        vs = node.get("variants")
+        if vs is None:
+            return
+        if not isinstance(vs, list):
+            fail(f"{tag}: variants is not a list")
+            return
+        allowed = VARIANT_FIELDS[kind]
+        for n, v in enumerate(vs, 1):
+            vtag = f"{tag} variant {n}"
+            if not isinstance(v, dict):
+                fail(f"{vtag} is not an object")
+                continue
+            when = v.get("when")
+            if not isinstance(when, list) or not when:
+                fail(f"{vtag} has no `when` list of facts")
+            for atom in when or []:
+                got = _fact(atom, vtag, delay_ok=False)
+                if got:
+                    reads.append((got[0], i, j, vtag))
+            for field in v:
+                if field == "when":
+                    continue
+                if field == "choices":
+                    fail(f"{vtag} names choices; a variant never changes the "
+                         "number of choices")
+                elif field not in allowed:
+                    fail(f"{vtag} names {field!r}; a {kind} variant may name "
+                         "only " + ", ".join(allowed))
+                elif field not in node:
+                    fail(f"{vtag} names {field!r}, which the {kind} lacks")
+                elif not v[field] and field != "presences":
+                    fail(f"{vtag} has an empty {field}")
+            if not any(f in allowed for f in v):
+                warn(f"{vtag} changes nothing")
+
+    for i, ch in enumerate(chapters):
+        for j, b in enumerate(ch.get("beats") or []):
+            btag = f"{where}: {ch.get('saveId')} beat {b.get('id')}"
+            if "sets" in b:
+                fail(f"{btag} carries `sets`; only a choice sets facts")
+            variants(b, "beat", i, j, btag)
+            for k, c in enumerate(b.get("choices") or [], 1):
+                ctag = f"{btag} choice {k}"
+                variants(c, "choice", i, j, ctag)
+                sets = c.get("sets")
+                if sets is None:
+                    continue
+                if not isinstance(sets, list):
+                    fail(f"{ctag}: sets is not a list")
+                    continue
+                for atom in sets:
+                    got = _fact(atom, ctag, delay_ok=True)
+                    if not got:
+                        continue
+                    base, delay = got
+                    setters.setdefault(base, []).append((i, j, delay))
+                    if i + delay > last:
+                        warn(f"{ctag}: {atom!r} is delayed past the last "
+                             "chapter, so it is never held")
+
+    read_atoms = {atom for atom, _i, _j, _t in reads}
+    for atom in sorted(setters):
+        if atom not in read_atoms:
+            warn(f"{where}: fact {atom!r} is set but nothing reads it")
+    for atom, i, j, tag in reads:
+        found = setters.get(atom)
+        if not found:
+            fail(f"{tag}: {atom!r} is set by no choice anywhere")
+            continue
+        # held by the time it is read: an earlier chapter (at least N
+        # earlier, with a delay), or an earlier beat of the same chapter
+        if not any((d and s + d <= i) or (not d and (s < i or (s == i and sb < j)))
+                   for s, sb, d in found):
+            fail(f"{tag}: {atom!r} can never be held here — no choice sets it "
+                 "early enough, counting its delay")
 
 
 def _committed(root: str, rel: str) -> str | None:
