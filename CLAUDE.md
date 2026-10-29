@@ -62,7 +62,7 @@ consequences of it:
 
 ```bash
 python3 tools/validate.py            # the world data holds together
-python3 -m compileall -q teller tools # everything parses
+python3 -m compileall -q teller tools sandbox # everything parses
 python3 teller/teller.py --quest     # play it in a terminal
 python3 teller/teller.py --quest --list
 python3 sandbox/ecosystem.py         # the Sounds, one tide-cycle
@@ -127,7 +127,14 @@ generated, never hand-edited, and never `index.html`.
     whose `when` is all held replaces a beat's `enter`/`presences` or a
     choice's `label`/`text`, and nothing else: no fact ever adds, removes
     or reorders a beat or a choice, so positions in saves stay valid.
-    `teller/` ignores both keys and plays the defaults.
+    `teller/` ignores both keys and plays the defaults. The sketch's
+    three open choices were settled on its own recommendations and the
+    one chain it names is on `main`, with the gate's third paragraph
+    approved by Dermot as it stands (27 October 2026, PR #33; the outcome
+    note at the top of the sketch has the detail). `tools/validate.py`
+    warns that `marren.knows.carrow` is set and nothing reads it. That
+    is expected — the sound's variant is his pen — and it is not a
+    warning to silence.
   - A beat or a choice may carry an optional `picture: {src, alt, credit}`,
     shown after its prose. `src` is a path beside `index.html`, normally in
     `reference/`; the picture is shown whole and unaltered (scaled to fit,

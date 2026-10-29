@@ -6,6 +6,22 @@ proposal, and every line that touches the story or the world is his
 decision and is listed as one at the end. The example beat text below is
 illustrative only, not proposed canon.*
 
+*Outcome, 27 October 2026 — set down here on 29 October 2026, because a
+pull request body is not a record (`CLAUDE.md`, under* Work that needs
+the desktop*). The experiment was built as pull request #33 and merged
+the same day. The three open choices in §6 were settled on the
+recommendations given there: (a) the Carrow news runs first; (b) a fact
+may change prose, presences and a choice's label and text, with the count
+and order of beats and choices fixed; (a) no sign on the page beyond the
+prose and the* Present *card. The gate paragraph the pull request drafted
+was approved as it stands (Dermot: "Approved"), so the sentences at the
+gate are his. The optional same-chapter read at the sound (§4, step 2)
+was not built, which is why `tools/validate.py` warns that
+`marren.knows.carrow` is set and nothing reads it: the warning is the
+designed signal that the fact waits on a variant that is his pen. The
+fixed test in §4 has not yet been run with readers. The sketch below is
+kept as it was written.*
+
 ## 1. What the design is judged against
 
 Dermot named the two failures. A branching story with a linear core lets a
