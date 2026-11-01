@@ -56,8 +56,14 @@ on: **Go up the hill**.
 Chapter Two climbs to the High Keep, by the Crown's bridge, where a
 keeper counts you, or round by the wood, where nobody writes anything
 down, to a gate with four islands cut over its arch and only three of
-them named. Its endcard holds **The Second Island** open — the demo
-ends where your world begins.
+them named. Its endcard offers the way on: **Cross to the Second
+Island**.
+
+Chapter Three goes west across the water, by the Guild ferry or a
+herring boat that asks no fare, past the skerries and the narrows,
+to a quay where the Crown keeps its ledger on a post and lets you do
+the counting yourself. Its endcard holds **The Third Island** open —
+the demo ends where your world begins.
 
 ## Playing in a terminal
 

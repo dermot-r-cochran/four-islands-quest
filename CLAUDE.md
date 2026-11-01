@@ -131,10 +131,11 @@ generated, never hand-edited, and never `index.html`.
     three open choices were settled on its own recommendations and the
     one chain it names is on `main`, with the gate's third paragraph
     approved by Dermot as it stands (27 October 2026, PR #33; the outcome
-    note at the top of the sketch has the detail). `tools/validate.py`
-    warns that `marren.knows.carrow` is set and nothing reads it. That
-    is expected — the sound's variant is his pen — and it is not a
-    warning to silence.
+    note at the top of the sketch has the detail). Chapter Three reads
+    `marren.knows.carrow` (the western ferryman has had Carrow already,
+    and the margin of Second Island's ledger carries it, grown), so
+    `tools/validate.py` no longer warns that nothing reads it; a
+    variant on Chapter One's sound beat is still his pen.
   - A beat or a choice may carry an optional `picture: {src, alt, credit}`,
     shown after its prose. `src` is a path beside `index.html`, normally in
     `reference/`; the picture is shown whole and unaltered (scaled to fit,
