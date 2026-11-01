@@ -57,9 +57,13 @@ bare `v` shows the next picture here you have not yet seen. The
 prompt itself carries the step's options after the dash; `--bare` gives a
 plain dash instead.
 
-This repository ships no pictures, so none are ever shown here. The
-capability travels with the shared code because the tool is written
-against the shape, not against any one world. `--images off` disables it
+This repository's pictures are in `reference/`, and a beat or a choice
+may name one, but the quest player shows none of them: the terminal
+player was left alone when pictures came to the browser (the author's
+decision, 2026-09-23, in `CLAUDE.md`), so a named picture appears on
+the page and not here. The capability travels with the shared code
+because the tool is written against the shape, not against any one
+world. `--images off` disables it
 outright; images are never decoded or interpreted, only handed to the
 terminal or the system viewer.
 
