@@ -2,9 +2,11 @@
 
 Pictures and clips the author has made or generated for the Four Sounds,
 filed here so they are in the record before any chapter names them. The
-teller shows a picture only when the record names it, so nothing in here
-changes what a player sees until it is written in. Placement is the
-author's pen.
+page shows a picture only when a beat or a choice names it, and the
+teller shows none in a quest (the author's decision, 2026-09-23, in
+`CLAUDE.md`), so nothing in here changes what a player sees until it is
+written in.
+Placement is the author's pen.
 
 Terms: these files, and the clips in `../media/`, are licensed under
 CC BY-NC-ND 4.0 — share them unchanged, with credit, non-commercially;
