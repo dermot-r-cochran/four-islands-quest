@@ -185,6 +185,26 @@ const EXAMINE = {
     text: "Four islands cut in the stone in a row. Three are named in " +
       "the mason's square capitals. The fourth is there, the same size " +
       "as the others, and left smooth."
+  },
+  skerries: {
+    label: "the skerries",
+    text: "Low black rock between Second and Third, awash at the top of " +
+      "a spring tide and crowded at the bottom of one. Seals on the flat " +
+      "rock, puffins on the turf above it, and gulls on whatever is " +
+      "left, complaining about the arrangement."
+  },
+  narrows: {
+    label: "the narrows",
+    text: "The strait between Second and Third: narrow enough to shout " +
+      "over, quick enough that nobody swims it. At slack water it goes " +
+      "still for long enough that things which cannot swim far find " +
+      "they do not need to."
+  },
+  ledgerPost: {
+    label: "the ledger-post",
+    text: "A post at the head of Second Island's quay, with a lidded box, " +
+      "a Crown ledger inside it, and a pen on a string. The pages are " +
+      "full, in a great many hands, and none of them is the Warden's."
   }
 };
 
@@ -215,7 +235,8 @@ const FACTIONS = {
 
 const CHAPTER_FACTIONS = {
   ch1: ["crown", "guild"],
-  ch2: ["crown"]
+  ch2: ["crown"],
+  ch3: ["crown", "guild"]
 };
 
 const CHAPTERS = [
@@ -360,10 +381,11 @@ const CHAPTERS = [
       "First Sound beyond, and Second and Third trading haze off to " +
       "the west — and southward, if you looked, a smudge that the " +
       "mason over the gate had left smooth.",
-      "The Second Island is not yet written. Add the next chapter " +
-      "to CHAPTERS and this card will offer the way on."
+      "Second Island is across the water to the west, and the Guild " +
+      "will take you there for its fare — though the Guild's is not " +
+      "the only boat in the harbour."
     ],
-    nextLabel: null
+    nextLabel: "Cross to the Second Island"
   },
   heldLine: "The Second Island (held)",
   beats: [
@@ -490,6 +512,188 @@ const CHAPTERS = [
           "which case it's the Crown's already.”",
           "She opened the wicket. “Hall's on the left. Mind the step. " +
           "It's the only thing in here older than the arch.”"
+        ]
+      }
+    ]
+  }
+  ]
+},
+{
+  saveId: "ch3",
+  title: "Chapter Three — The Second Island",
+  logTitle: "Chapter Three — The Second Island",
+  sub: "across the western water, by the Guild ferry or the herring boat",
+  end: {
+    title: "End of Chapter Three",
+    text: [
+      "You were on Second Island, with the moor ahead of you, the " +
+      "narrows to the north, and across them Third Island keeping the " +
+      "other half of the wolves. Behind you, east, the High Keep stood " +
+      "over its harbour — and southward, if you looked, a smudge that " +
+      "nobody on this quay had written down either.",
+      "The Third Island is not yet written. Add the next chapter " +
+      "to CHAPTERS and this card will offer the way on."
+    ],
+    nextLabel: null
+  },
+  heldLine: "The Third Island (held)",
+  beats: [
+  {
+    id: "harbour",
+    log: "The harbour of First Island",
+    presences: ["the Guild ferry", "a herring boat", "the harbour"],
+    examine: ["ferry", "fourLights"],
+    enter: [
+      "The Keep let you out in the morning by the same step it had " +
+      "let you in by, and the harbour lane took you down a good deal " +
+      "faster than it had taken you up. Inside the stone arm of the " +
+      "harbour two boats were making ready to go west, and neither " +
+      "was in any hurry to say so.",
+      "One was the Guild's: tar-black, with the oar and sounding-line " +
+      "burned into her transom, and a ferryman in the stern who had " +
+      "the look of a man who had already heard about you. The other " +
+      "was a herring boat with a brown sail and a crew of three, one " +
+      "of whom was mending a net while the other two watched her do " +
+      "it."
+    ],
+    choices: [
+      {
+        label: "Take the Guild ferry.",
+        text: [
+          "You went to the Guild ferry. “Fare's a coin,” said the " +
+          "ferryman, “or a piece of news I haven't got. Guild rates. " +
+          "Marren sends his best, and most of his news.” You paid the " +
+          "coin, which seemed the safer wager, and stepped down into " +
+          "the boat.",
+          "“Mind the thwart,” said the ferryman. “It's a Guild thwart. " +
+          "It minds the same as Marren's.”"
+        ],
+        variants: [
+          {
+            when: ["marren.knows.carrow"],
+            text: [
+              "You went to the Guild ferry. “Fare's a coin,” said the " +
+              "ferryman, “or a piece of news I haven't got — and before " +
+              "you try it, I've had Carrow. Marren sent it over on the " +
+              "last tide, with a bit added.” You paid the coin and " +
+              "stepped down into the boat.",
+              "“Mind the thwart,” said the ferryman. “It's a Guild " +
+              "thwart. It minds the same as Marren's.”"
+            ]
+          }
+        ]
+      },
+      {
+        label: "Go out with the herring boat.",
+        text: [
+          "You asked at the herring boat. The woman mending the net " +
+          "looked you over and asked whether you could hold a line, " +
+          "which was the whole of the interview. Nobody asked your " +
+          "name. Nobody mentioned a fare.",
+          "“The Guild'll say it's owed,” she said, as the brown sail " +
+          "filled. “The Guild says that about the weather.”"
+        ]
+      }
+    ]
+  },
+  {
+    id: "westwater",
+    log: "The water west of First Island",
+    presences: ["the skerries", "the narrows", "Third Island"],
+    examine: ["skerries", "narrows", "fourLights"],
+    enter: [
+      "West of First Island the water changed its manner. Under " +
+      "Marren it had been a road; out here it was more of an " +
+      "argument, the tide pulling one way round Second Island and the " +
+      "other way round Third, and the boat settling between them like " +
+      "somebody who has learned not to take sides.",
+      "Ahead, Second Island rose green and then brown, with a moor " +
+      "across its back and harriers over the moor. North of it, across " +
+      "a strait narrow enough to shout over, Third Island did the same " +
+      "thing slightly differently. Between them, low in the water, lay " +
+      "the skerries, where something was basking and something else " +
+      "stood about in a black-and-white coat, looking important."
+    ],
+    choices: [
+      {
+        label: "Watch the skerries.",
+        text: [
+          "The basking things were seals, a dozen of them, hauled out " +
+          "on the flat rock with the air of owners who have stopped " +
+          "checking. The important ones were puffins, standing in a row " +
+          "at the edge of the turf, each with a beakful of small silver " +
+          "fish and nowhere in particular to be.",
+          "A fishing eagle went over them, low. Nobody moved. They had " +
+          "seen it before, and it had seen them."
+        ]
+      },
+      {
+        label: "Watch the narrows.",
+        text: [
+          "On the far shore of the narrows, where the turf came down to " +
+          "the stones, something grey trotted along the waterline, " +
+          "stopped, and looked across at the boat. Then a second.",
+          "They were wolves, and they were not interested in you. They " +
+          "were interested in the narrows, and the tide, and whatever " +
+          "the slack water would let them reach on this side. When the " +
+          "boat came round the point, they were gone."
+        ]
+      }
+    ]
+  },
+  {
+    id: "secondquay",
+    log: "Landfall on Second Island",
+    presences: ["the quay of Second Island", "the ledger-post", "the moor"],
+    examine: ["ledgerPost", "narrows", "fourLights"],
+    enter: [
+      "Second Island's quay was smaller than First's and did not mind. " +
+      "There was no Warden at the top of its stairs. There was a post, " +
+      "and on the post a sloping wooden box with a lid, and in the box " +
+      "a ledger, and tied to the box by a length of string, a pen.",
+      "Somebody had cut words into the lid in the same square capitals " +
+      "as the arch over the Keep's gate: NAME, BUSINESS, AND BY WHOSE " +
+      "BOAT. The Crown counted here as well. On Second Island it had " +
+      "simply decided to let you do the counting yourself."
+    ],
+    variants: [
+      {
+        when: ["marren.knows.carrow"],
+        enter: [
+          "Second Island's quay was smaller than First's and did not mind. " +
+          "There was no Warden at the top of its stairs. There was a post, " +
+          "and on the post a sloping wooden box with a lid, and in the box " +
+          "a ledger, and tied to the box by a length of string, a pen.",
+          "Somebody had cut words into the lid in the same square capitals " +
+          "as the arch over the Keep's gate: NAME, BUSINESS, AND BY WHOSE " +
+          "BOAT. The Crown counted here as well. On Second Island it had " +
+          "simply decided to let you do the counting yourself.",
+          "Somebody had used the margin, too. Against yesterday's date, " +
+          "in a hand that had come to its letters late and liked them, " +
+          "it said: Carrow bridge down again. Toll-house too. River " +
+          "moved. Nobody sorry. And under that, in another hand: Marren " +
+          "says."
+        ]
+      }
+    ],
+    choices: [
+      {
+        label: "Write your name, your business and your boat.",
+        text: [
+          "You wrote all three. The pen was a Crown pen and wrote as if " +
+          "it had been told to. When you had finished, the line below " +
+          "yours was already ruled, ready for whoever came next.",
+          "Up the lane the moor began, and over it the harriers went on " +
+          "with their work."
+        ]
+      },
+      {
+        label: "Leave the lid shut.",
+        text: [
+          "You left the lid shut. The post did not object, and there was " +
+          "nobody about to object on its behalf.",
+          "Up the lane the moor began, and over it the harriers went on " +
+          "with their work, counting nothing."
         ]
       }
     ]
