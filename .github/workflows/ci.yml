@@ -77,8 +77,13 @@ jobs:
           # dies of SIGPIPE under pipefail before the player ever runs.
           { for _ in $(seq 200); do echo 1; done; echo q; } > /tmp/in.txt
           python3 teller/teller.py --quest < /tmp/in.txt > /tmp/out.txt
-          grep -q "End of" /tmp/out.txt || { cat /tmp/out.txt; exit 1; }
-          echo "playthrough reached an endcard"
+          # The run has reached the last endcard when the teller prints its
+          # own closing line. The endcard titles ("End of Chapter One") are
+          # world data, so a fork with its own titles would fail on them for
+          # no reason it could see; the teller's line is the same in any
+          # world.
+          grep -q "the played record stops" /tmp/out.txt || { cat /tmp/out.txt; exit 1; }
+          echo "playthrough reached the last endcard"
 
       - name: The shared tool stays world-agnostic
         run: |
