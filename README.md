@@ -256,3 +256,10 @@ statement:
 - **Pictures and clips** (`reference/`, `media/`) — CC BY-NC-ND 4.0.
   Share them unchanged, with credit, non-commercially; a fork replaces
   them the way it replaces the world data.
+
+`provenance.json` lists how each picture and clip here was made
+(generated, photograph, composite and so on), with its IPTC digital source
+type and the record that says so. It covers the files as they stood on 21
+November 2026, which are not re-tagged; a generated or altered file added
+from now on also carries the tag in the file itself, where the format
+allows.
