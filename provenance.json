@@ -1,0 +1,70 @@
+{
+  "about": "Provenance of every image and video file in this repository as it stood on 21 November 2026, taken from the repository's own records. The files themselves are not re-tagged; new generated or altered files are tagged in-file (IPTC Digital Source Type in XMP) when they are added.",
+  "ruling": "Dermot, 21 November 2026: \"If metadata allows then all altered or generated images may be tagged as such, from now on.\" Likewise for videos; for existing files, this list.",
+  "digitalSourceTypeVocabulary": "http://cv.iptc.org/newscodes/digitalsourcetype/",
+  "sources": {
+    "photograph": "the author's own frame as taken, or with darkroom work only (digitalCapture)",
+    "edited-ai": "one of his photographs altered by an image model",
+    "composite-ai": "a composite in which an image model made or placed part of the picture (compositeWithTrainedAlgorithmicMedia)",
+    "generated": "made by an image or video model from a prompt (trainedAlgorithmicMedia)",
+    "composite": "a composite made without an image model (compositeSynthetic)",
+    "card": "a designed graphic, diagram, sheet or screenshot (digitalCreation)",
+    "third-party": "other people's media under their own terms, never claimed by this repository",
+    "unrecorded": "the record does not settle how the file was made; no code is given rather than a guess"
+  },
+  "counts": {
+    "generated": 7
+  },
+  "files": [
+    {
+      "path": "media/fallow-deer-fantasy-world.mp4",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    },
+    {
+      "path": "media/fiona-with-the-fallow-deer.mp4",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    },
+    {
+      "path": "media/odonata-raise-your-banners.mp4",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "MyTunes (version not noted)",
+      "record": "reference/README.md",
+      "note": "A song under a static player card; the audio and card are MyTunes output."
+    },
+    {
+      "path": "media/prism-weavers-over-a-stream.mp4",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    },
+    {
+      "path": "reference/fallow-deer-fantasy-world.png",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    },
+    {
+      "path": "reference/fiona-with-the-fallow-deer.png",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    },
+    {
+      "path": "reference/prism-weavers-over-a-stream.webp",
+      "source": "generated",
+      "digitalSourceType": "trainedAlgorithmicMedia",
+      "tool": "Grok (version not noted)",
+      "record": "reference/README.md"
+    }
+  ]
+}
