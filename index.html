@@ -925,7 +925,7 @@ function renderPresences() {
   ul.innerHTML = "";
   const bs = beats();
   const b = pick(bs[Math.min(state.beat, bs.length - 1)], heldFacts());
-  for (const p of b.presences) {
+  for (const p of b.presences || []) { // a beat may name nobody present
     const li = document.createElement("li");
     li.textContent = p;
     ul.appendChild(li);
@@ -986,10 +986,15 @@ function renderActions() {
   }
   $("endcard").hidden = true;
   const b = beats()[state.beat];
+  /* A beat with no choices may say so as `choices: []` or by leaving the
+     key out beside a `continueLabel`; tools/validate.py passes both and
+     teller/ plays both, so the page does too rather than stop at the
+     beat. */
+  const offered = b.choices || [];
 
   const choices = document.createElement("div");
   const facts = heldFacts();
-  b.choices.forEach((raw, i) => {
+  offered.forEach((raw, i) => {
     const c = pick(raw, facts);
     const btn = document.createElement("button");
     btn.type = "button";
@@ -997,7 +1002,7 @@ function renderActions() {
     btn.addEventListener("click", () => choose(i));
     choices.appendChild(btn);
   });
-  if (b.choices.length === 0) {
+  if (offered.length === 0) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = b.continueLabel || "Go on.";
